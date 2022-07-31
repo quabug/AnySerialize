@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.quabug.any-serialize": {
+      "version": "file:com.quabug.any-serialize",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "5.2.2",
       "depth": 0,
