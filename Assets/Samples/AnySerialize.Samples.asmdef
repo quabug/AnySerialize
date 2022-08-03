@@ -1,0 +1,16 @@
+{
+    "name": "AnySerialize.Samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3ea4545e70041684b9bbf08dd5c6e257"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

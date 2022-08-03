@@ -4,5 +4,8 @@
   "version": "0.0.1",
   "unity": "2020.3",
   "displayName": "AnySerialize",
-  "type": "library"
+  "type": "library",
+  "dependencies": {
+    "com.unity.nuget.mono-cecil": "1.11.4"
+  }
 }
