@@ -1,0 +1,29 @@
+name: publish-nuget-package
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Pack
+      run: |
+        cd StandardLibrary
+        dotnet pack -c Release -o out
+    - name: Publish
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push ./StandardLibrary/out/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json

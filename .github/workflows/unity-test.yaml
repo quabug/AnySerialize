@@ -1,0 +1,29 @@
+name: unity-test
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        backend:
+          - Mono2x
+          - IL2CPP
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
+      - uses: game-ci/unity-test-runner@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          customParameters: -scriptingBackend ${{ matrix.backend }} -testCategory "!benchmark"
+          projectPath: .
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
