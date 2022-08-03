@@ -1,0 +1,26 @@
+{
+    "name": "AnySerialize.Tests",
+    "rootNamespace": "AnySerialize.Tests",
+    "references": [
+        "GUID:953e4ae7cafeb1b4da71f7de0615527f",
+        "GUID:3ea4545e70041684b9bbf08dd5c6e257",
+        "GUID:7039c85d500d81241b725bf3ab268fc0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Mono.Cecil.dll",
+        "Mono.Cecil.Mdb.dll",
+        "Mono.Cecil.Pdb.dll",
+        "Mono.Cecil.Rocks.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
