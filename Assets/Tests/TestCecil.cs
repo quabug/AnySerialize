@@ -125,23 +125,30 @@ namespace AnySerialize.Tests
             // cannot match
             Assert.Throws<InvalidOperationException>(() => intPartial1.ResolveGenericArguments(genericBase));
 
-            var arguments2 = intPartial2.ResolveGenericArguments(genericBase);
-            Assert.AreEqual(2, arguments2.Count);
-            Assert.IsTrue(CecilExtension.IsTypeEqual(ImportReference<double>(), arguments2[0]));
-            Assert.IsTrue(CecilExtension.IsTypeEqual(ImportReference<float>(), arguments2[1]));
+            var (type2, arg2, indices2) = intPartial2.ResolveGenericArguments(genericBase);
+            Assert.AreEqual(2, arg2.Count);
+            Assert.AreEqual(2, indices2.Count);
+            Assert.IsTrue(ImportReference<double>().IsTypeEqual(arg2[0]));
+            Assert.IsTrue(ImportReference<float>().IsTypeEqual(arg2[1]));
+            Assert.AreEqual(2, indices2[0]);
+            Assert.AreEqual(0, indices2[1]);
 
-            var arguments3 = intPartial3.ResolveGenericArguments(genericBase);
-            Assert.AreEqual(3, arguments3.Count);
-            Assert.IsTrue(CecilExtension.IsTypeEqual(ImportReference<int>(), arguments3[0]));
-            Assert.IsTrue(CecilExtension.IsTypeEqual(ImportReference<float>(), arguments3[1]));
-            Assert.IsTrue(CecilExtension.IsTypeEqual(ImportReference<double>(), arguments3[2]));
+            var (type3, arg3, indices3) = intPartial3.ResolveGenericArguments(genericBase);
+            Assert.AreEqual(3, arg3.Count);
+            Assert.AreEqual(3, indices3.Count);
+            Assert.IsTrue(ImportReference<int>().IsTypeEqual(arg3[0]));
+            Assert.IsTrue(ImportReference<float>().IsTypeEqual(arg3[1]));
+            Assert.IsTrue(ImportReference<double>().IsTypeEqual(arg3[2]));
+            Assert.AreEqual(1, indices3[0]);
+            Assert.AreEqual(0, indices3[1]);
+            Assert.AreEqual(2, indices3[2]);
         }
         //
         // [Test]
         // public void should_get_all_types()
         // {
-        //     var type = ImportReference<Test.MultipleGenericObject>().Resolve();
-        //     var allTypes = type.GetSelfAndAllDeclaringTypes();
+        //     var typeDef = ImportReference<Test.MultipleGenericObject>().Resolve();
+        //     var allTypes = typeDef.GetSelfAndAllDeclaringTypes();
         // }
         //
         // [Test]

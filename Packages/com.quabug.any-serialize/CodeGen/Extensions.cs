@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
+using Mono.Collections.Generic;
 using Unity.CompilationPipeline.Common.Diagnostics;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
 
@@ -77,6 +78,19 @@ namespace AnySerialize.CodeGen
             if (loggerAttributes.Any()) logger.LogLevel = (LogLevel)loggerAttributes.First().ConstructorArguments[0].Value;
             return logger;
         }
+        
+        public static TypeTree CreateTypeTree(this ICompiledAssembly compiledAssembly, PostProcessorAssemblyResolver resolver, AssemblyDefinition selfAssembly, ILPostProcessorLogger logger = null)
+        {
+            var referenceAssemblies = compiledAssembly.LoadLibraryAssemblies(resolver);
+            var allTypes = referenceAssemblies.Append(selfAssembly)
+                .Where(asm => !asm.Name.Name.StartsWith("Unity.")
+                              && !asm.Name.Name.StartsWith("UnityEditor.")
+                              && !asm.Name.Name.StartsWith("UnityEngine.")
+                )
+                .SelectMany(asm => asm.MainModule.GetAllTypes())
+            ;
+            return new TypeTree(allTypes, logger);
+        }
     }
 
     internal static class CecilExtension
@@ -87,29 +101,37 @@ namespace AnySerialize.CodeGen
             return $"{type.Name.Split('`')[0]}<{string.Join(",", ((GenericInstanceType)type).GenericArguments.Select(a => a.Name))}>";
         }
 
-        public static IReadOnlyList<TypeReference> ResolveGenericArguments(this TypeDefinition self, TypeReference @base)
+        public static GenericTypeWithParentIndices ResolveGenericArguments(this TypeDefinition self, TypeReference parent)
         {
-            if (!@base.IsGenericInstance)
-                return self.IsGenericInstance ? self.GenericParameters.ToArray() : Array.Empty<TypeReference>();
+            return ResolveGenericArguments(self, new TypeDef(((GenericInstanceType)parent)));
+        }
+        
+        public static GenericTypeWithParentIndices ResolveGenericArguments(this TypeDefinition self, TypeDef parent)
+        {
+            var genericIndicesInParent = new int[self.GenericParameters.Count];
+            for (var i = 0; i < genericIndicesInParent.Length; i++) genericIndicesInParent[i] = -1;
+            if (!parent.GenericTypes.Any()) return new GenericTypeWithParentIndices(new TypeDef(self), genericIndicesInParent);
 
-            var genericBase = (GenericInstanceType) @base;
-            var selfBase = ParentTypes(self).Where(p => IsTypeEqual(p, @base))
+            var (parentTypeDefinition, parentGenericArguments) = parent;
+            
+            var selfBase = ParentTypes(self).Where(p => IsTypeEqual(p, parentTypeDefinition))
                 // let it throw
                 .Select(p => (GenericInstanceType)p)
-                .First(p => IsPartialGenericMatch(p, genericBase))
+                .First(p => IsPartialGenericMatch(p.GenericArguments, parentGenericArguments))
             ;
             var genericArguments = new TypeReference[self.GenericParameters.Count];
-            var selfBaseGenericArguments = selfBase.GenericArguments.ToList();
+            var selfBaseGenericArguments = selfBase.GenericArguments;
             for (var i = 0; i < self.GenericParameters.Count; i++)
             {
                 var genericParameter = self.GenericParameters[i];
-                var index = selfBaseGenericArguments.FindIndex(type => type.Name == genericParameter.Name);
-                if (index >= 0) genericArguments[i] = genericBase.GenericArguments[index];
+                var index = selfBaseGenericArguments.FindIndexOf(type => type.Name == genericParameter.Name);
+                genericIndicesInParent[i] = index;
+                if (index >= 0) genericArguments[i] = parent.GenericTypes[index];
                 else genericArguments[i] = self.GenericParameters[i];
             }
-            return genericArguments;
+            return new GenericTypeWithParentIndices(new TypeDef(self, genericArguments), genericIndicesInParent);
         }
-
+        
         public static IEnumerable<TypeReference> ParentTypes(this TypeDefinition type)
         {
             var parents = Enumerable.Empty<TypeReference>();
@@ -121,14 +143,19 @@ namespace AnySerialize.CodeGen
         public static bool IsPartialGenericMatch(this GenericInstanceType partial, GenericInstanceType concrete)
         {
             if (!IsTypeEqual(partial, concrete))
-                throw new ArgumentException($"{partial} and {concrete} have different type");
-            if (partial.GenericArguments.Count != concrete.GenericArguments.Count)
+                throw new ArgumentException($"{partial} and {concrete} have different typeDef");
+            return IsPartialGenericMatch(partial.GenericArguments, concrete.GenericArguments);
+        }
+        
+        public static bool IsPartialGenericMatch(this IList<TypeReference> partial, IList<TypeReference> concrete)
+        {
+            if (partial.Count != concrete.Count)
                 throw new ArgumentException($"{partial} and {concrete} have different count of generic arguments"); ;
-            if (concrete.GenericArguments.Any(arg => arg.IsGenericParameter))
-                throw new ArgumentException($"{concrete} is not a concrete generic type"); ;
+            if (concrete.Any(arg => arg.IsGenericParameter))
+                throw new ArgumentException($"{concrete} is not a concrete generic typeDef"); ;
 
-            return partial.GenericArguments
-                .Zip(concrete.GenericArguments, (partialArgument, concreteArgument) => (partialArgument, concreteArgument))
+            return partial
+                .Zip(concrete, (partialArgument, concreteArgument) => (partialArgument, concreteArgument))
                 .All(t => t.partialArgument.IsGenericParameter || IsTypeEqual(t.partialArgument, t.concreteArgument))
             ;
         }

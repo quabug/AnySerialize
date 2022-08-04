@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 
 namespace AnySerialize
 {
-    public interface IReadOnlyAnyClass<T> {}
+    public interface IReadOnlyAnyClass<out T> : IReadOnlyAny<T> {}
 
     public static class AnyClassUtility
     {
@@ -50,7 +50,7 @@ namespace AnySerialize
     }
     
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, T1, T2, T3, TAny0, TAny1, TAny2, TAny3> : IReadOnlyAnyClass<T>, IReadOnlyAny<T>
+    public class ReadOnlyAnyClass<T, T0, T1, T2, T3, TAny0, TAny1, TAny2, TAny3> : IReadOnlyAnyClass<T>
         where T : class, new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -82,7 +82,7 @@ namespace AnySerialize
     }
     
     [Serializable]
-    public class ReadOnlyAnyStruct<T, T0, T1, T2, T3, TAny0, TAny1, TAny2, TAny3> : IReadOnlyAnyClass<T>, IReadOnlyAny<T>
+    public class ReadOnlyAnyStruct<T, T0, T1, T2, T3, TAny0, TAny1, TAny2, TAny3> : IReadOnlyAnyClass<T>
         where T : struct
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>

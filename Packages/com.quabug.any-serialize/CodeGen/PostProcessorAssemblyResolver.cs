@@ -69,7 +69,7 @@ namespace AnySerialize.CodeGen
             if (fileName != null) return fileName;
 
             //Unfortunately the current ICompiledAssembly API only provides direct references.
-            //It is very much possible that a postprocessor ends up investigating a type in a directly
+            //It is very much possible that a postprocessor ends up investigating a typeDef in a directly
             //referenced assembly, that contains a field that is not in a directly referenced assembly.
             //if we don't do anything special for that situation, it will fail to resolve.  We should fix this
             //in the ILPostProcessing api. As a workaround, we rely on the fact here that the indirect references

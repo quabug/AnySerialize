@@ -63,6 +63,7 @@ namespace AnySerialize.CodeGen
 
             bool ProcessProperties()
             {
+                var typeTree = compiledAssembly.CreateTypeTree(resolver, assembly, _logger);
                 var modified = false;
                 foreach (var (property, attribute) in
                     from type in module.GetAllTypes()
@@ -77,18 +78,23 @@ namespace AnySerialize.CodeGen
                         _logger.Error($"Cannot process on property {property.DeclaringType.FullName}.{property.Name} without getter");
                         continue;
                     }
-                    GenerateField(module, property);
+                    GenerateField(module, property, typeTree, attribute);
                     modified = true;
                 }
                 return modified;
             }
         }
 
-        private void GenerateField(ModuleDefinition module, PropertyDefinition property)
+        private void GenerateField(ModuleDefinition module, PropertyDefinition property, TypeTree typeTree, CustomAttribute attribute)
         {
             if (property.GetMethod == null) throw new ArgumentException($"{property.Name}.get not exist");
             // TODO: search serialize
-            var anySerializeValueType = module.ImportReference(typeof(AnyValue<>));
+            var isReadOnly = property.SetMethod == null;
+            var searchingBaseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearchingBaseTypeIndex].Value
+                ?? (isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>))
+            ;
+            // new DefaultTypeSearcher().Search(typeTree, searchingBaseType, property, _logger);
+            var anySerializeValueType = module.ImportReference(typeof(IAny<>));
             var fieldType = module.ImportReference(anySerializeValueType.MakeGenericInstanceType(property.PropertyType));
             var serializedField = CreateOrReplaceBackingField(property, fieldType);
             InjectGetter(property, serializedField);

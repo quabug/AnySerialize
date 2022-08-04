@@ -5,6 +5,7 @@ using System.Text;
 using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
+using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
@@ -22,7 +23,7 @@ namespace AnySerialize.CodeGen
     ///                 |
     ///                 +-- F
     ///
-    /// type tree structure: A ( B ( C ) + D ( E + F ) )
+    /// typeDef tree structure: A ( B ( C ) + D ( E + F ) )
     /// interface chain: I(B, D, E)
     /// </summary>
     public class TypeTree
@@ -70,6 +71,8 @@ namespace AnySerialize.CodeGen
                     return (ModuleName.GetHashCode() * 397) ^ Token.GetHashCode();
                 }
             }
+
+            public static implicit operator TypeKey(TypeDefinition typeDefinition) => new TypeKey(typeDefinition);
         }
 
         private class TypeTreeNode
@@ -89,14 +92,16 @@ namespace AnySerialize.CodeGen
 
         private readonly Dictionary<TypeKey, TypeTreeNode> _typeTreeNodeMap;
 
-        private readonly ILPostProcessorLogger _logger = new ILPostProcessorLogger();
+        private readonly ILPostProcessorLogger _logger;
 
         /// <summary>
-        /// Create a type-tree from a collection of <paramref name="sourceTypes"/>
+        /// Create a typeDef-tree from a collection of <paramref name="sourceTypes"/>
         /// </summary>
         /// <param name="sourceTypes">The source types of tree.</param>
+        /// <param name="logger">logger</param>
         public TypeTree([NotNull] IEnumerable<TypeDefinition> sourceTypes, ILPostProcessorLogger logger = null)
         {
+            _logger = logger ?? new ILPostProcessorLogger();
             if (logger != null) _logger = logger;
             _typeTreeNodeMap = new Dictionary<TypeKey, TypeTreeNode>();
             foreach (var type in sourceTypes.Where(t => t.IsClass || t.IsInterface)) CreateTypeTree(type);
@@ -104,44 +109,64 @@ namespace AnySerialize.CodeGen
 
         // TODO:
         // /// <summary>
-        // /// Create a type-tree from a collection of <paramref name="sourceTypes"/>
+        // /// Create a typeDef-tree from a collection of <paramref name="sourceTypes"/>
         // /// </summary>
         // /// <param name="sourceTypes">The source types of tree.</param>
-        // /// <param name="baseTypes">Excluded any types from <paramref name="sourceTypes"/> which is not derived from base type.</param>
+        // /// <param name="baseTypes">Excluded any types from <paramref name="sourceTypes"/> which is not derived from base typeDef.</param>
         // public TypeTree([NotNull] ICollection<TypeDefinition> sourceTypes, [NotNull] ICollection<TypeDefinition> baseTypes)
         // {
         // }
 
         /// <summary>
-        /// Get all derived class type of <paramref name="baseType"/>.
-        /// Ignore generic type argument if <paramref name="baseType"/> is a generic class with certain type of arguments.
+        /// Get all derived class typeDef of <paramref name="baseType"/>.
+        /// Ignore generic typeDef argument if <paramref name="baseType"/> is a generic class with certain typeDef of arguments.
         /// </summary>
         /// <param name="baseType"></param>
-        /// <returns>Any type of classes derived from <paramref name="baseType"/> directly or indirectly.</returns>
+        /// <returns>Any typeDef of classes derived from <paramref name="baseType"/> directly or indirectly.</returns>
         /// <exception cref="ArgumentException"></exception>
         public IEnumerable<TypeDefinition> GetAllDerivedDefinition(TypeDefinition baseType)
         {
-            _typeTreeNodeMap.TryGetValue(new TypeKey(baseType), out var node);
+            _typeTreeNodeMap.TryGetValue(baseType, out var node);
             if (node == null) throw new ArgumentException($"{baseType} is not part of this tree");
-            return GetDescendantsAndSelf(node).Skip(1).Select(n => n.Type);
+            return GetDescendantsAndSelf(node).Select(n => n.Type);
 
-            IEnumerable<TypeTreeNode> GetDescendantsAndSelf(TypeTreeNode self)
-            {
-                yield return self;
-                foreach (var childNode in
-                    from sub in self.Subs
-                    from type in GetDescendantsAndSelf(sub)
-                    select type
-                ) yield return childNode;
-            }
+        }
+        
+        public TypeDef FindMostMatchType(in TypeDef baseTypeDef)
+        {
+            return default;
+            // _typeTreeNodeMap.TryGetValue(baseTypeDef.TypeDefinition, out var self);
+            // if (self == null) throw new ArgumentException($"{baseTypeDef.TypeDefinition} is not part of this tree");
+            //
+            // var matchType = baseTypeDef;
+            // Find(self, baseTypeDef);
+            // void Find(TypeTreeNode node, TypeDef parent)
+            // {
+            //     var generic = node.TypeDef.ResolveGenericArguments(parent);
+            //     if (!node.TypeDef.IsAbstract && node.TypeDef.IsClass && generic.GenericTypes[0].Is)
+            //     {
+            //     }
+            //     
+            //     foreach (var childNode in node.Subs) Find(childNode, generic);
+            // }
+        }
+        
+        IEnumerable<TypeTreeNode> GetDescendantsAndSelf(TypeTreeNode self)
+        {
+            yield return self;
+            foreach (var childNode in
+                from sub in self.Subs
+                from type in GetDescendantsAndSelf(sub)
+                select type
+            ) yield return childNode;
         }
 
         /// <summary>
-        /// Get directly derived class type of <paramref name="baseType"/>.
-        /// Ignore generic type argument if <paramref name="baseType"/> is a generic class with certain type argument.
+        /// Get directly derived class typeDef of <paramref name="baseType"/>.
+        /// Ignore generic typeDef argument if <paramref name="baseType"/> is a generic class with certain typeDef argument.
         /// </summary>
         /// <param name="baseType"></param>
-        /// <returns>Any type of classes derived from <paramref name="baseType"/> directly.</returns>
+        /// <returns>Any typeDef of classes derived from <paramref name="baseType"/> directly.</returns>
         /// <exception cref="ArgumentException"></exception>
         public IEnumerable<TypeDefinition> GetDirectDerivedDefinition(TypeDefinition baseType)
         {
@@ -151,12 +176,12 @@ namespace AnySerialize.CodeGen
         }
 
         /// <summary>
-        /// Get all derived class type of <paramref name="rootType"/>.
-        /// Will make new TypeReference if derived type is generic.
+        /// Get all derived class typeDef of <paramref name="rootType"/>.
+        /// Will make new TypeReference if derived typeDef is generic.
         /// </summary>
         /// <param name="rootType"></param>
         /// <param name="publicOnly">including public only classes or also including private ones.</param>
-        /// <returns>Any type of classes derived from <paramref name="rootType"/> directly or indirectly.</returns>
+        /// <returns>Any typeDef of classes derived from <paramref name="rootType"/> directly or indirectly.</returns>
         public IEnumerable<TypeReference> GetOrCreateAllDerivedReference(TypeReference rootType, bool publicOnly = true)
         {
             return GetDirectDerivedDefinition(rootType.Resolve()).SelectMany(t => RecursiveProcess(t, rootType));
@@ -167,14 +192,14 @@ namespace AnySerialize.CodeGen
                 var baseCtor = type.GetConstructors().FirstOrDefault(ctor => !ctor.HasParameters);
                 if (baseCtor == null) return Enumerable.Empty<TypeReference>();
 
-                IReadOnlyList<TypeReference> genericArguments = Array.Empty<TypeReference>();
+                IList<TypeReference> genericArguments = Array.Empty<TypeReference>();
                 try
                 {
-                    genericArguments = type.ResolveGenericArguments(baseType);
+                    genericArguments = type.ResolveGenericArguments(baseType).TypeDef.GenericTypes;
                 }
                 catch
                 {
-                    // logger.Debug($"cannot resolve {typeReference.ToReadableName()} : {baseType.ToReadableName()}: {ex}");
+                    // logger.Debug($"cannot resolve {typeReference.ToReadableName()} : {baseGenericType.ToReadableName()}: {ex}");
                     return Enumerable.Empty<TypeReference>();
                 }
 
@@ -230,7 +255,7 @@ namespace AnySerialize.CodeGen
 
             var baseTypeDef = type.BaseType?.Resolve();
             if (baseTypeDef == null && type.BaseType != null)
-                _logger.Warning($"Invalid base type definition {type.BaseType}({type.BaseType.Module}) on {type.Name}");
+                _logger.Warning($"Invalid base typeDef definition {type.BaseType}({type.BaseType.Module}) on {type.Name}");
             var parent = CreateTypeTree(baseTypeDef);
             var uniqueInterfaces = new HashSet<TypeDefinition>(self.Interfaces, new TypeDefinitionTokenComparer());
             if (parent != null)
@@ -259,7 +284,7 @@ namespace AnySerialize.CodeGen
             catch
             {
                 var duplicate = _typeTreeNodeMap[new TypeKey(type)];
-                _logger.Error($"Duplicate type? {type} {duplicate.Type}");
+                _logger.Error($"Duplicate typeDef? {type} {duplicate.Type}");
             }
             return self;
         }
