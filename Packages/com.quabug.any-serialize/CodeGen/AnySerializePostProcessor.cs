@@ -65,12 +65,13 @@ namespace AnySerialize.CodeGen
             {
                 var typeTree = compiledAssembly.CreateTypeTree(resolver, assembly, _logger);
                 var modified = false;
-                foreach (var (property, attribute) in
+                foreach (var property in
                     from type in module.GetAllTypes()
                     where type.IsClass && !type.IsAbstract
                     from property in type.Properties.ToArray() // able to change `Properties` during looping
                     from attribute in property.GetAttributesOf<AnySerializeAttribute>()
-                    select (property, attribute)
+                    where attribute != null
+                    select property
                 )
                 {
                     if (property.GetMethod == null)
@@ -78,22 +79,18 @@ namespace AnySerialize.CodeGen
                         _logger.Error($"Cannot process on property {property.DeclaringType.FullName}.{property.Name} without getter");
                         continue;
                     }
-                    GenerateField(module, property, typeTree, attribute);
+                    GenerateField(module, property, typeTree);
                     modified = true;
                 }
                 return modified;
             }
         }
 
-        private void GenerateField(ModuleDefinition module, PropertyDefinition property, TypeTree typeTree, CustomAttribute attribute)
+        private void GenerateField(ModuleDefinition module, PropertyDefinition property, TypeTree typeTree)
         {
             if (property.GetMethod == null) throw new ArgumentException($"{property.Name}.get not exist");
             // TODO: search serialize
-            var isReadOnly = property.SetMethod == null;
-            var searchingBaseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearchingBaseTypeIndex].Value
-                ?? (isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>))
-            ;
-            new DefaultTypeSearcher().Search(typeTree, searchingBaseType, property, _logger);
+            new DefaultTypeSearcher().Search(typeTree, property, _logger);
             var anySerializeValueType = module.ImportReference(typeof(IAny<>));
             var fieldType = module.ImportReference(anySerializeValueType.MakeGenericInstanceType(property.PropertyType));
             var serializedField = CreateOrReplaceBackingField(property, fieldType);

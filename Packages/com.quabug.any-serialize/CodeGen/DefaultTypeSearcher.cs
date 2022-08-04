@@ -7,13 +7,18 @@ namespace AnySerialize.CodeGen
 {
     internal interface ITypeSearcher
     {
-        TypeDefinition Search(TypeTree typeTree, Type baseType, PropertyDefinition property, ILPostProcessorLogger logger = null);
+        TypeDefinition Search(TypeTree typeTree, PropertyDefinition property, ILPostProcessorLogger logger = null);
     }
     
     internal class DefaultTypeSearcher : ITypeSearcher
     {
-        public TypeDefinition Search(TypeTree typeTree, Type baseType, PropertyDefinition property, ILPostProcessorLogger logger = null)
+        public TypeDefinition Search(TypeTree typeTree, PropertyDefinition property, ILPostProcessorLogger logger = null)
         {
+            var isReadOnly = property.SetMethod == null;
+            var attribute = property.GetAttributesOf<AnySerializeAttribute>().Single();
+            var baseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearchingBaseTypeIndex].Value
+                ?? (isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>))
+            ;
             var baseTypeDefinition = property.Module.ImportReference(baseType).Resolve();
             logger?.Warning($"{baseTypeDefinition.FullName}<{string.Join(",", baseTypeDefinition.GenericParameters.Select(g => g.Name))}> {property.FullName}");
             // TODO: only support base typeDef with one and only one property typeDef parameter?
