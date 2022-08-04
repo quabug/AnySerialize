@@ -10,6 +10,7 @@ using Mono.Cecil.Rocks;
 using Mono.Collections.Generic;
 using Unity.CompilationPipeline.Common.Diagnostics;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
+using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
@@ -103,7 +104,8 @@ namespace AnySerialize.CodeGen
 
         public static GenericTypeWithParentIndices ResolveGenericArguments(this TypeDefinition self, TypeReference parent)
         {
-            return ResolveGenericArguments(self, new TypeDef(((GenericInstanceType)parent)));
+            Assert.IsTrue(parent.IsGenericInstance);
+            return ResolveGenericArguments(self, new TypeDef((GenericInstanceType)parent));
         }
         
         public static GenericTypeWithParentIndices ResolveGenericArguments(this TypeDefinition self, TypeDef parent)

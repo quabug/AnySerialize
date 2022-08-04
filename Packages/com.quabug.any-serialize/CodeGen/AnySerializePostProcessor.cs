@@ -93,7 +93,7 @@ namespace AnySerialize.CodeGen
             var searchingBaseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearchingBaseTypeIndex].Value
                 ?? (isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>))
             ;
-            // new DefaultTypeSearcher().Search(typeTree, searchingBaseType, property, _logger);
+            new DefaultTypeSearcher().Search(typeTree, searchingBaseType, property, _logger);
             var anySerializeValueType = module.ImportReference(typeof(IAny<>));
             var fieldType = module.ImportReference(anySerializeValueType.MakeGenericInstanceType(property.PropertyType));
             var serializedField = CreateOrReplaceBackingField(property, fieldType);
