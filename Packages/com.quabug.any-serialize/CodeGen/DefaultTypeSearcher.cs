@@ -25,7 +25,7 @@ namespace AnySerialize.CodeGen
             Assert.IsFalse(baseTypeDefinition.IsGenericInstance && baseTypeDefinition.GenericParameters.Count == 1);
             var propertyTypeParameter = baseTypeDefinition.GenericParameters[0];
             var matchType = typeTree.FindMostMatchType(new TypeDef(baseTypeDefinition, property.PropertyType.Yield()));
-            logger?.Warning($"{propertyTypeParameter.FullName} {matchType.Type.Name}");
+            logger?.Warning($"{propertyTypeParameter?.FullName} {matchType.Type?.Name}");
             return matchType.Type;
         }
     }
