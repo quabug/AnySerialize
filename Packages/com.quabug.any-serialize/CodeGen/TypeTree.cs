@@ -23,7 +23,7 @@ namespace AnySerialize.CodeGen
     ///                 |
     ///                 +-- F
     ///
-    /// typeDef tree structure: A ( B ( C ) + D ( E + F ) )
+    /// type tree structure: A ( B ( C ) + D ( E + F ) )
     /// interface chain: I(B, D, E)
     /// </summary>
     public class TypeTree
@@ -134,21 +134,21 @@ namespace AnySerialize.CodeGen
         
         public TypeDef FindMostMatchType(in TypeDef baseTypeDef)
         {
-            return default;
-            // _typeTreeNodeMap.TryGetValue(baseTypeDef.TypeDefinition, out var self);
-            // if (self == null) throw new ArgumentException($"{baseTypeDef.TypeDefinition} is not part of this tree");
-            //
-            // var matchType = baseTypeDef;
-            // Find(self, baseTypeDef);
-            // void Find(TypeTreeNode node, TypeDef parent)
-            // {
-            //     var generic = node.TypeDef.ResolveGenericArguments(parent);
-            //     if (!node.TypeDef.IsAbstract && node.TypeDef.IsClass && generic.GenericTypes[0].Is)
-            //     {
-            //     }
-            //     
-            //     foreach (var childNode in node.Subs) Find(childNode, generic);
-            // }
+            _typeTreeNodeMap.TryGetValue(baseTypeDef.Type, out var self);
+            if (self == null) throw new ArgumentException($"{baseTypeDef.Type} is not part of this tree");
+            
+            var matchType = baseTypeDef;
+            Find(self, baseTypeDef);
+            
+            void Find(TypeTreeNode node, TypeDef parent)
+            {
+                var generic = node.TypeDef.ResolveGenericArguments(parent);
+                if (!node.TypeDef.IsAbstract && node.TypeDef.IsClass && generic.GenericTypes[0].Is)
+                {
+                }
+                
+                foreach (var childNode in node.Subs) Find(childNode, generic);
+            }
         }
         
         IEnumerable<TypeTreeNode> GetDescendantsAndSelf(TypeTreeNode self)
@@ -172,6 +172,13 @@ namespace AnySerialize.CodeGen
         {
             _typeTreeNodeMap.TryGetValue(new TypeKey(baseType), out var node);
             if (node == null) throw new ArgumentException($"{baseType} is not part of this tree");
+            return node.Subs.Select(sub => sub.Type);
+        }
+        
+        public IEnumerable<TypeDefinition> GetDirectDerivedDefinition(TypeDef baseType)
+        {
+            _typeTreeNodeMap.TryGetValue(new TypeKey(baseType.Type), out var node);
+            if (node == null) throw new ArgumentException($"{baseType.Type} is not part of this tree");
             return node.Subs.Select(sub => sub.Type);
         }
 

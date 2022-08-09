@@ -102,17 +102,11 @@ namespace AnySerialize.CodeGen
             return $"{type.Name.Split('`')[0]}<{string.Join(",", ((GenericInstanceType)type).GenericArguments.Select(a => a.Name))}>";
         }
 
-        public static GenericTypeWithParentIndices ResolveGenericArguments(this TypeDefinition self, TypeReference parent)
-        {
-            Assert.IsTrue(parent.IsGenericInstance);
-            return ResolveGenericArguments(self, new TypeDef((GenericInstanceType)parent));
-        }
-        
-        public static GenericTypeWithParentIndices ResolveGenericArguments(this TypeDefinition self, TypeDef parent)
+        public static (TypeDef ) ResolveGenericArguments(this TypeDef self, TypeDef parent)
         {
             var genericIndicesInParent = new int[self.GenericParameters.Count];
             for (var i = 0; i < genericIndicesInParent.Length; i++) genericIndicesInParent[i] = -1;
-            if (!parent.GenericTypes.Any()) return new GenericTypeWithParentIndices(new TypeDef(self), genericIndicesInParent);
+            if (!parent.GenericTypes.Any()) return new TypeDefWithParentIndices(new TypeDef(self), genericIndicesInParent);
 
             var (parentTypeDefinition, parentGenericArguments) = parent;
             
@@ -131,7 +125,7 @@ namespace AnySerialize.CodeGen
                 if (index >= 0) genericArguments[i] = parent.GenericTypes[index];
                 else genericArguments[i] = self.GenericParameters[i];
             }
-            return new GenericTypeWithParentIndices(new TypeDef(self, genericArguments), genericIndicesInParent);
+            return new TypeDefWithParentIndices(new TypeDef(self, genericArguments), genericIndicesInParent);
         }
         
         public static IEnumerable<TypeReference> ParentTypes(this TypeDefinition type)

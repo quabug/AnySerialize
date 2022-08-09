@@ -1,46 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Mono.Cecil;
 
 namespace AnySerialize.CodeGen
 {
-    public readonly ref struct TypeDef
+    public readonly struct TypeDef
     {
-        public readonly TypeDefinition Type;
-        public readonly IList<TypeReference> GenericTypes;
+        [NotNull] public readonly TypeDefinition Type;
+        [NotNull, ItemCanBeNull] public readonly IReadOnlyList<TypeReference> GenericArguments;
+        [NotNull, ItemNotNull] public readonly IReadOnlyList<GenericParameter> GenericParameters;
         
-        public TypeDef(TypeDefinition type) : this(type, Enumerable.Empty<TypeReference>()) {}
-        public TypeDef(GenericInstanceType genericType) : this(genericType.Resolve(), genericType.GenericArguments) {}
-        public TypeDef(TypeDefinition type, IEnumerable<TypeReference> genericTypes)
+        public bool IsGenericType => GenericParameters.Any();
+        public bool IsPartialGenericType => GenericArguments.Any(argument => argument == null);
+        
+        public TypeDef([NotNull] TypeDefinition type)
+            : this(type, Enumerable.Empty<GenericParameter>())
+        {}
+        
+        public TypeDef([NotNull] GenericInstanceType genericType)
+            : this(genericType.Resolve(), genericType.GenericParameters, genericType.GenericArguments)
+        {}
+        
+        public TypeDef([NotNull] TypeReference type)
+            : this(
+                type.Resolve(),
+                type.IsGenericInstance ? ((GenericInstanceType)type).GenericParameters : Enumerable.Empty<GenericParameter>(),
+                type.IsGenericInstance ? ((GenericInstanceType)type).GenericArguments : Enumerable.Empty<TypeReference>()
+            )
+        {}
+        
+        public TypeDef([NotNull] InterfaceImplementation @interface)
+            : this(@interface.InterfaceType)
+        {}
+        
+        public TypeDef([NotNull] TypeDefinition type, [NotNull, ItemNotNull] IEnumerable<GenericParameter> genericParameters)
+            : this(type, genericParameters, genericParameters.Select(p => (TypeReference)null))
+        {}
+        
+        public TypeDef(
+            [NotNull] TypeDefinition type,
+            [NotNull, ItemNotNull] IEnumerable<GenericParameter> genericParameters,
+            [NotNull, ItemCanBeNull] IEnumerable<TypeReference> genericArguments
+        )
         {
             Type = type;
-            GenericTypes = genericTypes.ToArray();
+            GenericParameters = genericParameters.ToArray();
+            GenericArguments = genericArguments.ToArray();
         }
 
-        public void Deconstruct(out TypeDefinition type, out IList<TypeReference> genericTypes)
+        public void Deconstruct(out TypeDefinition type, out IReadOnlyList<GenericParameter> genericParameters, out IReadOnlyList<TypeReference> genericArguments)
         {
             type = Type;
-            genericTypes = GenericTypes;
-        }
-    }
-
-    public readonly ref struct GenericTypeWithParentIndices
-    {
-        public readonly TypeDef TypeDef;
-        public readonly IReadOnlyList<int> Indices;
-
-        public GenericTypeWithParentIndices(in TypeDef typeDef, IReadOnlyList<int> indices)
-        {
-            TypeDef = typeDef;
-            Indices = indices;
+            genericParameters = GenericParameters;
+            genericArguments = GenericArguments;
         }
         
-        public void Deconstruct(out TypeDefinition type, out IList<TypeReference> genericTypes, out IReadOnlyList<int> indices)
-        {
-            type = TypeDef.Type;
-            genericTypes = TypeDef.GenericTypes;
-            indices = Indices;
-        }
+        public static implicit operator TypeDef(TypeReference typeReference) => new TypeDef(typeReference);
+        public static implicit operator TypeDef(TypeDefinition typeDefinition) => new TypeDef(typeDefinition);
+        public static implicit operator TypeDef(InterfaceImplementation interfaceImplementation) => new TypeDef(interfaceImplementation);
     }
 }
