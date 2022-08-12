@@ -104,6 +104,7 @@ namespace AnySerialize.CodeGen
 
         public static (TypeDef ) ResolveGenericArguments(this TypeDef self, TypeDef parent)
         {
+            Path
             var genericIndicesInParent = new int[self.GenericParameters.Count];
             for (var i = 0; i < genericIndicesInParent.Length; i++) genericIndicesInParent[i] = -1;
             if (!parent.GenericTypes.Any()) return new TypeDefWithParentIndices(new TypeDef(self), genericIndicesInParent);

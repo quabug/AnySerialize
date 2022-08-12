@@ -124,12 +124,11 @@ namespace AnySerialize.CodeGen
         /// <param name="baseType"></param>
         /// <returns>Any typeDef of classes derived from <paramref name="baseType"/> directly or indirectly.</returns>
         /// <exception cref="ArgumentException"></exception>
-        public IEnumerable<TypeDefinition> GetAllDerivedDefinition(TypeDefinition baseType)
+        public IEnumerable<(TypeDefinition type, IReadOnlyList<int> genericIndices> GetAllDerivedDefinition(TypeDef baseType)
         {
-            _typeTreeNodeMap.TryGetValue(baseType, out var node);
+            _typeTreeNodeMap.TryGetValue(baseType.Type, out var node);
             if (node == null) throw new ArgumentException($"{baseType} is not part of this tree");
             return GetDescendantsAndSelf(node).Select(n => n.Type);
-
         }
         
         public TypeDef FindMostMatchType(in TypeDef baseTypeDef)

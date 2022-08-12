@@ -1,21 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using JetBrains.Annotations;
 using Mono.Cecil;
+using Mono.Collections.Generic;
 
 namespace AnySerialize.CodeGen
 {
-    public readonly struct TypeDef
+    public readonly ref struct TypeDef
     {
         [NotNull] public readonly TypeDefinition Type;
-        [NotNull, ItemCanBeNull] public readonly IReadOnlyList<TypeReference> GenericArguments;
-        [NotNull, ItemNotNull] public readonly IReadOnlyList<GenericParameter> GenericParameters;
+        [NotNull, ItemCanBeNull] public readonly Collection<TypeReference> GenericArguments;
+        [NotNull, ItemNotNull] public readonly Collection<GenericParameter> GenericParameters;
         
         public bool IsGenericType => GenericParameters.Any();
         public bool IsPartialGenericType => GenericArguments.Any(argument => argument == null);
         
         public TypeDef([NotNull] TypeDefinition type)
-            : this(type, Enumerable.Empty<GenericParameter>())
+            : this(type, type.GenericParameters)
         {}
         
         public TypeDef([NotNull] GenericInstanceType genericType)
@@ -25,8 +25,8 @@ namespace AnySerialize.CodeGen
         public TypeDef([NotNull] TypeReference type)
             : this(
                 type.Resolve(),
-                type.IsGenericInstance ? ((GenericInstanceType)type).GenericParameters : Enumerable.Empty<GenericParameter>(),
-                type.IsGenericInstance ? ((GenericInstanceType)type).GenericArguments : Enumerable.Empty<TypeReference>()
+                type.IsGenericInstance ? ((GenericInstanceType)type).GenericParameters : new Collection<GenericParameter>(),
+                type.IsGenericInstance ? ((GenericInstanceType)type).GenericArguments : new Collection<TypeReference>()
             )
         {}
         
@@ -34,22 +34,22 @@ namespace AnySerialize.CodeGen
             : this(@interface.InterfaceType)
         {}
         
-        public TypeDef([NotNull] TypeDefinition type, [NotNull, ItemNotNull] IEnumerable<GenericParameter> genericParameters)
-            : this(type, genericParameters, genericParameters.Select(p => (TypeReference)null))
+        public TypeDef([NotNull] TypeDefinition type, [NotNull, ItemNotNull] Collection<GenericParameter> genericParameters)
+            : this(type, genericParameters, new Collection<TypeReference>(new TypeReference[genericParameters.Count]))
         {}
         
         public TypeDef(
             [NotNull] TypeDefinition type,
-            [NotNull, ItemNotNull] IEnumerable<GenericParameter> genericParameters,
-            [NotNull, ItemCanBeNull] IEnumerable<TypeReference> genericArguments
+            [NotNull, ItemNotNull] Collection<GenericParameter> genericParameters,
+            [NotNull, ItemCanBeNull] Collection<TypeReference> genericArguments
         )
         {
             Type = type;
-            GenericParameters = genericParameters.ToArray();
-            GenericArguments = genericArguments.ToArray();
+            GenericParameters = genericParameters;
+            GenericArguments = genericArguments;
         }
 
-        public void Deconstruct(out TypeDefinition type, out IReadOnlyList<GenericParameter> genericParameters, out IReadOnlyList<TypeReference> genericArguments)
+        public void Deconstruct(out TypeDefinition type, out Collection<GenericParameter> genericParameters, out Collection<TypeReference> genericArguments)
         {
             type = Type;
             genericParameters = GenericParameters;
