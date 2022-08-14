@@ -101,33 +101,6 @@ namespace AnySerialize.CodeGen
             if (!type.IsGenericInstance) return type.Name;
             return $"{type.Name.Split('`')[0]}<{string.Join(",", ((GenericInstanceType)type).GenericArguments.Select(a => a.Name))}>";
         }
-
-        public static (TypeDef ) ResolveGenericArguments(this TypeDef self, TypeDef parent)
-        {
-            Path
-            var genericIndicesInParent = new int[self.GenericParameters.Count];
-            for (var i = 0; i < genericIndicesInParent.Length; i++) genericIndicesInParent[i] = -1;
-            if (!parent.GenericTypes.Any()) return new TypeDefWithParentIndices(new TypeDef(self), genericIndicesInParent);
-
-            var (parentTypeDefinition, parentGenericArguments) = parent;
-            
-            var selfBase = ParentTypes(self).Where(p => IsTypeEqual(p, parentTypeDefinition))
-                // let it throw
-                .Select(p => (GenericInstanceType)p)
-                .First(p => IsPartialGenericMatch(p.GenericArguments, parentGenericArguments))
-            ;
-            var genericArguments = new TypeReference[self.GenericParameters.Count];
-            var selfBaseGenericArguments = selfBase.GenericArguments;
-            for (var i = 0; i < self.GenericParameters.Count; i++)
-            {
-                var genericParameter = self.GenericParameters[i];
-                var index = selfBaseGenericArguments.FindIndexOf(type => type.Name == genericParameter.Name);
-                genericIndicesInParent[i] = index;
-                if (index >= 0) genericArguments[i] = parent.GenericTypes[index];
-                else genericArguments[i] = self.GenericParameters[i];
-            }
-            return new TypeDefWithParentIndices(new TypeDef(self, genericArguments), genericIndicesInParent);
-        }
         
         public static IEnumerable<TypeReference> ParentTypes(this TypeDefinition type)
         {
@@ -155,6 +128,23 @@ namespace AnySerialize.CodeGen
                 .Zip(concrete, (partialArgument, concreteArgument) => (partialArgument, concreteArgument))
                 .All(t => t.partialArgument.IsGenericParameter || IsTypeEqual(t.partialArgument, t.concreteArgument))
             ;
+        }
+        
+        public static bool IsPartialGenericOf(
+            [NotNull, ItemNotNull] this IReadOnlyList<TypeReference> partial,
+            [NotNull, ItemNotNull] IReadOnlyList<TypeReference> generic
+        )
+        {
+            if (partial.Count != generic.Count)
+                throw new ArgumentException("partial and generic have different count of generic arguments"); ;
+
+            for (var i = 0; i < partial.Count; i++)
+            {
+                var partialArgument = partial[i];
+                var genericArgument = generic[i];
+                if (!genericArgument.IsGenericParameter && !IsTypeEqual(genericArgument, partialArgument)) return false;
+            }
+            return true;
         }
 
         public static bool IsTypeEqual(this TypeReference lhs, TypeReference rhs)

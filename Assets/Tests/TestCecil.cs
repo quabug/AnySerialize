@@ -113,36 +113,36 @@ namespace AnySerialize.Tests
             Assert.IsFalse(CecilExtension.IsPartialGenericMatch(intFloatPartial2, intGeneric));
         }
 
-        [Test]
-        public void should_resolve_generic_arguments()
-        {
-            var genericBase = (GenericInstanceType)ImportReference(typeof(Generic<float, int, double, int>));
-
-            var intPartial1 = ImportReference(typeof(IntPartial)).Resolve();
-            var intPartial2 = ImportReference(typeof(IntPartial<,>)).Resolve();
-            var intPartial3 = ImportReference(typeof(IntPartial<,,>)).Resolve();
-
-            // cannot match
-            Assert.Throws<InvalidOperationException>(() => intPartial1.ResolveGenericArguments(genericBase));
-
-            var (type2, arg2, indices2) = intPartial2.ResolveGenericArguments(genericBase);
-            Assert.AreEqual(2, arg2.Count);
-            Assert.AreEqual(2, indices2.Count);
-            Assert.IsTrue(ImportReference<double>().IsTypeEqual(arg2[0]));
-            Assert.IsTrue(ImportReference<float>().IsTypeEqual(arg2[1]));
-            Assert.AreEqual(2, indices2[0]);
-            Assert.AreEqual(0, indices2[1]);
-
-            var (type3, arg3, indices3) = intPartial3.ResolveGenericArguments(genericBase);
-            Assert.AreEqual(3, arg3.Count);
-            Assert.AreEqual(3, indices3.Count);
-            Assert.IsTrue(ImportReference<int>().IsTypeEqual(arg3[0]));
-            Assert.IsTrue(ImportReference<float>().IsTypeEqual(arg3[1]));
-            Assert.IsTrue(ImportReference<double>().IsTypeEqual(arg3[2]));
-            Assert.AreEqual(1, indices3[0]);
-            Assert.AreEqual(0, indices3[1]);
-            Assert.AreEqual(2, indices3[2]);
-        }
+        // [Test]
+        // public void should_resolve_generic_arguments()
+        // {
+        //     var genericBase = (GenericInstanceType)ImportReference(typeof(Generic<float, int, double, int>));
+        //
+        //     var intPartial1 = ImportReference(typeof(IntPartial)).Resolve();
+        //     var intPartial2 = ImportReference(typeof(IntPartial<,>)).Resolve();
+        //     var intPartial3 = ImportReference(typeof(IntPartial<,,>)).Resolve();
+        //
+        //     // cannot match
+        //     Assert.Throws<InvalidOperationException>(() => intPartial1.ResolveGenericArguments(genericBase));
+        //
+        //     var (type2, arg2, indices2) = intPartial2.ResolveGenericArguments(genericBase);
+        //     Assert.AreEqual(2, arg2.Count);
+        //     Assert.AreEqual(2, indices2.Count);
+        //     Assert.IsTrue(ImportReference<double>().IsTypeEqual(arg2[0]));
+        //     Assert.IsTrue(ImportReference<float>().IsTypeEqual(arg2[1]));
+        //     Assert.AreEqual(2, indices2[0]);
+        //     Assert.AreEqual(0, indices2[1]);
+        //
+        //     var (type3, arg3, indices3) = intPartial3.ResolveGenericArguments(genericBase);
+        //     Assert.AreEqual(3, arg3.Count);
+        //     Assert.AreEqual(3, indices3.Count);
+        //     Assert.IsTrue(ImportReference<int>().IsTypeEqual(arg3[0]));
+        //     Assert.IsTrue(ImportReference<float>().IsTypeEqual(arg3[1]));
+        //     Assert.IsTrue(ImportReference<double>().IsTypeEqual(arg3[2]));
+        //     Assert.AreEqual(1, indices3[0]);
+        //     Assert.AreEqual(0, indices3[1]);
+        //     Assert.AreEqual(2, indices3[2]);
+        // }
         //
         // [Test]
         // public void should_get_all_types()
