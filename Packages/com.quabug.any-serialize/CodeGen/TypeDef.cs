@@ -16,7 +16,7 @@ namespace AnySerialize.CodeGen
         
         public TypeDef([NotNull] TypeDefinition type) : this(type, type.GenericParameters.Select(p => (TypeReference)p)) {}
         public TypeDef([NotNull] GenericInstanceType genericType) : this(genericType.Resolve(), genericType.GenericArguments) {}
-        public TypeDef([NotNull] TypeReference type) : this(type.Resolve(), type.IsGenericInstance ? ((GenericInstanceType)type).GenericArguments : Enumerable.Empty<TypeReference>()) {}
+        public TypeDef([NotNull] TypeReference type) : this(type.Resolve(), type.IsGenericInstance ? ((GenericInstanceType)type).GenericArguments : type.GenericParameters) {}
         public TypeDef([NotNull] InterfaceImplementation @interface) : this(@interface.InterfaceType) {}
         public TypeDef([NotNull] TypeDefinition type, [NotNull, ItemNotNull] IEnumerable<TypeReference> genericArguments)
         {
@@ -62,6 +62,13 @@ namespace AnySerialize.CodeGen
         public override int GetHashCode()
         {
             return HashCode.Combine(Type, GenericArguments);
+        }
+
+        public override string ToString()
+        {
+            var name = Type.FullName;
+            if (GenericArguments.Any()) name += $"<{string.Join(",", GenericArguments.Select(arg => arg.FullName))}>";
+            return name;
         }
     }
 

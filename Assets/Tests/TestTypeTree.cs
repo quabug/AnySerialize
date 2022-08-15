@@ -41,6 +41,7 @@ namespace AnySerialize.Tests
         }
 
         interface I {}
+        interface II : I {}
         class A {}
             class AA : A {}
                 class AAA : AA, I {}
@@ -51,7 +52,7 @@ namespace AnySerialize.Tests
                         class AAABB : AAAB {}
                     class AAAC : AAA {}
             class AB : A {}
-                class ABA : AB, I {}
+                class ABA : AB, II {}
                     class ABAA : ABA, I {}
                     class ABAB : ABA {}
                 class ABB : AB, I {}
@@ -124,9 +125,11 @@ namespace AnySerialize.Tests
         {
             var derivedTypes = _tree
                 .GetOrCreateAllDerivedReference(_module.ImportReference(@base), publicOnly: false)
+                .Distinct()
+                .Select(type => type.ToString())
                 .ToArray()
             ;
-            Assert.That(derivedTypes, Is.EquivalentTo(types.Select(type => new TypeDef(_module.ImportReference(type)))));
+            Assert.That(derivedTypes, Is.EquivalentTo(types.Select(type => new TypeDef(_module.ImportReference(type)).ToString())));
         }
 
         void CheckDerivedIgnoreGenericParameters(Type @base, params Type[] types)

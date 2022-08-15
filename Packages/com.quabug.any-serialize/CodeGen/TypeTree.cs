@@ -133,7 +133,7 @@ namespace AnySerialize.CodeGen
         {
             _typeTreeNodeMap.TryGetValue(baseType.Type, out var node);
             if (node == null) throw new ArgumentException($"{baseType.Type} is not part of this tree");
-            return GetDescendantsAndSelf(node, baseType.GenericArguments).Select(n => n.TypeDef);
+            return GetDescendantsAndSelf(node, baseType.GenericArguments).Skip(1).Select(n => n.TypeDef);
         }
         
         public TypeDef FindMostMatchType(TypeDef baseTypeDef)
@@ -160,7 +160,7 @@ namespace AnySerialize.CodeGen
         {
             // var implementations = self.Type.GetImplementationsOf(new TypeDef(self.Type, baseGenericTypes));
             // if (!implementations.Any()) yield break;
-            // yield return self;
+            yield return self;
             //
             // var implementation = implementations.First();
             // var selfGenericTypes = new TypeReference[self.Type.GenericParameters.Count];
@@ -176,6 +176,7 @@ namespace AnySerialize.CodeGen
         
         IEnumerable<TypeTreeNode> GetDescendantsAndSelf(TypeTreeNode self)
         {
+            yield return self;
             foreach (var childNode in
                 from sub in self.ChildrenNodes
                 from type in GetDescendantsAndSelf(sub)
@@ -235,7 +236,7 @@ namespace AnySerialize.CodeGen
                 ArrayPool<TypeReference>.Shared.Return(genericArguments);
 
                 return baseType.Yield().Concat(
-                    GetDirectDerivedDefinition(type).SelectMany(t => RecursiveProcess(t.Type, baseType))
+                    GetDirectDerivedDefinition(baseType).SelectMany(t => RecursiveProcess(t.Type, baseType))
                 );
             }
         }
@@ -274,10 +275,14 @@ namespace AnySerialize.CodeGen
                 //            will resolve to null
                 var definition = @base.Resolve();
                 if (definition == null)
+                {
                     _logger.Warning($"Invalid type definition {@base}({@base.Module}) on {type}");
-                
-                var parentNode = CreateTypeTree(definition);
-                parentNode.ChildrenNodes.Add(self);
+                }
+                else
+                {
+                    var parentNode = CreateTypeTree(definition);
+                    parentNode.ChildrenNodes.Add(self);
+                }
             }
 
             try
@@ -290,6 +295,15 @@ namespace AnySerialize.CodeGen
                 _logger.Error($"Duplicate type? {type} {duplicate.TypeDef.Type}");
             }
             return self;
+        }
+
+        private IEnumerable<TypeDef> GetAllInterfaces([NotNull] TypeTreeNode node)
+        {
+            return node.Interfaces.Concat(
+                node.Interfaces.Append(node.BaseDef)
+                    .Where(@base => @base != null)
+                    .SelectMany(@base => GetAllInterfaces(_typeTreeNodeMap[@base.Type]))
+            );
         }
     }
 }
