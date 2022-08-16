@@ -133,7 +133,7 @@ namespace AnySerialize.CodeGen
         {
             _typeTreeNodeMap.TryGetValue(baseType.Type, out var node);
             if (node == null) throw new ArgumentException($"{baseType.Type} is not part of this tree");
-            return GetDescendantsAndSelf(node, baseType.GenericArguments).Skip(1).Select(n => n.TypeDef);
+            return GetDescendants(node, baseType);
         }
         
         public TypeDef FindMostMatchType(TypeDef baseTypeDef)
@@ -156,32 +156,16 @@ namespace AnySerialize.CodeGen
             // }
         }
         
-        IEnumerable<TypeTreeNode> GetDescendantsAndSelf(TypeTreeNode self, IReadOnlyList<TypeReference> baseGenericTypes)
+        IEnumerable<TypeDef> GetDescendantsAndSelf(TypeTreeNode self, TypeDef @base)
         {
-            // var implementations = self.Type.GetImplementationsOf(new TypeDef(self.Type, baseGenericTypes));
-            // if (!implementations.Any()) yield break;
-            yield return self;
-            //
-            // var implementation = implementations.First();
-            // var selfGenericTypes = new TypeReference[self.Type.GenericParameters.Count];
-            //
-            // self.Type.GenericParameters.Select(p => p.Name)
-            //
-            foreach (var childNode in
-                from sub in self.ChildrenNodes
-                from type in GetDescendantsAndSelf(sub)
-                select type
-            ) yield return childNode;
+            // TODO: handle multiple implementations?
+            var type = CreateTypeDefWithBaseGenericArguments(self.TypeDef, @base).FirstOrDefault();
+            return type == null ? Enumerable.Empty<TypeDef>() : type.Yield().Concat(GetDescendants(self, type));
         }
-        
-        IEnumerable<TypeTreeNode> GetDescendantsAndSelf(TypeTreeNode self)
+
+        IEnumerable<TypeDef> GetDescendants(TypeTreeNode self, TypeDef @base)
         {
-            yield return self;
-            foreach (var childNode in
-                from sub in self.ChildrenNodes
-                from type in GetDescendantsAndSelf(sub)
-                select type
-            ) yield return childNode;
+            return self.ChildrenNodes.SelectMany(child => GetDescendantsAndSelf(child, @base));
         }
 
         /// <summary>
@@ -214,30 +198,45 @@ namespace AnySerialize.CodeGen
                 var baseCtor = type.Type.GetConstructors().FirstOrDefault(ctor => !ctor.HasParameters);
                 if (baseCtor == null) return Enumerable.Empty<TypeDef>();
 
-                // TODO: handle multiple derived from same base type
-                var implementation = type.GetImplementationsOf(baseType).FirstOrDefault();
-                if (implementation == null) return Enumerable.Empty<TypeDef>();
-                var genericArguments = ArrayPool<TypeReference>.Shared.Rent(type.GenericArguments.Count);
-                for (var i = 0; i < type.GenericArguments.Count; i++)
-                {
-                    var arg = type.GenericArguments[i];
-                    if (arg.IsGenericParameter)
-                    {
-                        var index = implementation.GenericArguments.FindIndex(t => t.IsGenericParameter && t.Name == arg.Name);
-                        var isGenericType = index < 0 || baseType.GenericArguments[index].IsGenericParameter;
-                        genericArguments[i] = isGenericType ? arg : baseType.GenericArguments[index];
-                    }
-                    else if (arg.IsGenericInstance)
-                    {
-                        genericArguments[i] = arg;
-                    }
-                }
-                baseType = new TypeDef(type.Type, genericArguments.Take(type.GenericArguments.Count));
-                ArrayPool<TypeReference>.Shared.Return(genericArguments);
+                // TODO: handle multiple implementations?
+                var newType = CreateTypeDefWithBaseGenericArguments(type, baseType).FirstOrDefault();
+                if (newType == null) return Enumerable.Empty<TypeDef>();
 
-                return baseType.Yield().Concat(
-                    GetDirectDerivedDefinition(baseType).SelectMany(t => RecursiveProcess(t.Type, baseType))
+                return newType.Yield().Concat(
+                    GetDirectDerivedDefinition(newType).SelectMany(t => RecursiveProcess(t.Type, newType))
                 );
+            }
+        }
+
+        private IEnumerable<TypeDef> CreateTypeDefWithBaseGenericArguments(TypeDef self, TypeDef baseType)
+        {
+            return self.GetImplementationsOf(baseType).Select(CreateTypeDefFromImplementation);
+
+            TypeDef CreateTypeDefFromImplementation(TypeDef implementation)
+            {
+                var genericArguments = ArrayPool<TypeReference>.Shared.Rent(self.GenericArguments.Count);
+                try
+                {
+                    for (var i = 0; i < self.GenericArguments.Count; i++)
+                    {
+                        var arg = self.GenericArguments[i];
+                        if (arg.IsGenericParameter)
+                        {
+                            var index = implementation.GenericArguments.FindIndex(t => t.IsGenericParameter && t.Name == arg.Name);
+                            var isGenericType = index < 0 || baseType.GenericArguments[index].IsGenericParameter;
+                            genericArguments[i] = isGenericType ? arg : baseType.GenericArguments[index];
+                        }
+                        else if (arg.IsGenericInstance)
+                        {
+                            genericArguments[i] = arg;
+                        }
+                    }
+                    return new TypeDef(self.Type, genericArguments.Take(self.GenericArguments.Count));
+                }
+                finally
+                {
+                    ArrayPool<TypeReference>.Shared.Return(genericArguments);
+                }
             }
         }
 
@@ -295,6 +294,11 @@ namespace AnySerialize.CodeGen
                 _logger.Error($"Duplicate type? {type} {duplicate.TypeDef.Type}");
             }
             return self;
+        }
+        
+        public IEnumerable<TypeDef> GetAllInterfaces([NotNull] TypeDefinition type)
+        {
+            return GetAllInterfaces(_typeTreeNodeMap[type]);
         }
 
         private IEnumerable<TypeDef> GetAllInterfaces([NotNull] TypeTreeNode node)

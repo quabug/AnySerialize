@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -12,7 +13,7 @@ namespace AnySerialize.CodeGen
         [NotNull, ItemNotNull] public IReadOnlyList<TypeReference> GenericArguments { get; }
         
         public bool IsGenericType => GenericArguments.Any();
-        public bool IsPartialGenericType => GenericArguments.Any(argument => argument.IsGenericParameter);
+        public bool IsConcreteType => !IsGenericType || GenericArguments.All(argument => argument.IsConcreteType());
         
         public TypeDef([NotNull] TypeDefinition type) : this(type, type.GenericParameters.Select(p => (TypeReference)p)) {}
         public TypeDef([NotNull] GenericInstanceType genericType) : this(genericType.Resolve(), genericType.GenericArguments) {}
@@ -80,28 +81,45 @@ namespace AnySerialize.CodeGen
             if (ReferenceEquals(lhs, rhs)) return true;
             if (!lhs.Type.IsTypeEqual(rhs.Type)) return false;
             if (lhs.GenericArguments.Count != rhs.GenericArguments.Count) return false;
-            for (var i = 0; i < lhs.GenericArguments.Count; i++) if (!lhs.GenericArguments[i].IsTypeEqual(rhs.GenericArguments[i])) return false;
-            return true;
+            return !lhs.GenericArguments.Where((t, i) => !t.IsTypeEqual(rhs.GenericArguments[i])).Any();
         }
 
-        // TODO: test
         // TODO: Covariant and contravariant?
         public static bool IsPartialGenericTypeOf(this TypeDef partial, TypeDef generic)
         {
             return partial.Type.IsTypeEqual(generic.Type) && partial.GenericArguments.IsPartialGenericOf(generic.GenericArguments);
         }
 
-        // TODO: test
         public static bool IsImplementationOf(this TypeDef self, TypeDef generic)
         {
             return self.GetImplementationsOf(generic).Any();
         }
         
-        // TODO: test
         public static IEnumerable<TypeDef> GetImplementationsOf(this TypeDef self, TypeDef generic)
         {
-            foreach (var selfBase in self.Type.Interfaces.Select(i => i.InterfaceType).Append(self.Type.BaseType))
-                if (generic.IsPartialGenericTypeOf(selfBase)) yield return selfBase;
+            foreach (var selfBase in self.Type.Interfaces.Select(i => i.InterfaceType).Append(self.Type.BaseType).Where(t => t != null))
+            {
+                if (!selfBase.Resolve().IsTypeEqual(generic.Type)) continue;
+                if (!selfBase.IsGenericInstance)
+                    yield return selfBase;
+                else if (((GenericInstanceType)selfBase).GenericArguments.Zip(generic.GenericArguments, (s, g) => (s, g)).All(t => IsMatch(t.s, t.g)))
+                    yield return selfBase;
+            }
+        
+            static bool IsMatch(TypeReference selfArgument, TypeReference genericArgument)
+            {
+                if (selfArgument.IsGenericParameter || genericArgument.IsGenericParameter) return true;
+                if (!selfArgument.IsGenericInstance && !genericArgument.IsGenericInstance) return selfArgument.Resolve().IsTypeEqual(genericArgument.Resolve());
+                if (!(selfArgument.IsGenericInstance && genericArgument.IsGenericInstance)) return false;
+                if (!selfArgument.Resolve().IsTypeEqual(genericArgument.Resolve())) return false;
+                for (var i = 0; i < selfArgument.GenericParameters.Count; i++)
+                {
+                    var s = ((GenericInstanceType)selfArgument).GenericArguments[i];
+                    var g = ((GenericInstanceType)genericArgument).GenericArguments[i];
+                    if (!IsMatch(s, g)) return false;
+                }
+                return true;
+            }
         }
     }
 }

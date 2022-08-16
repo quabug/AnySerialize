@@ -112,17 +112,17 @@ namespace AnySerialize.CodeGen
 
         public static bool IsPartialGenericMatch(this GenericInstanceType partial, GenericInstanceType concrete)
         {
-            if (!IsTypeEqual(partial, concrete))
-                throw new ArgumentException($"{partial} and {concrete} have different typeDef");
+            if (!IsTypeEqual(partial.Resolve(), concrete.Resolve()))
+                throw new ArgumentException($"{partial} and {concrete} have different type");
             return IsPartialGenericMatch(partial.GenericArguments, concrete.GenericArguments);
         }
         
         public static bool IsPartialGenericMatch(this IList<TypeReference> partial, IList<TypeReference> concrete)
         {
             if (partial.Count != concrete.Count)
-                throw new ArgumentException($"{partial} and {concrete} have different count of generic arguments"); ;
+                throw new ArgumentException($"{partial} and {concrete} have different count of generic arguments");
             if (concrete.Any(arg => arg.IsGenericParameter))
-                throw new ArgumentException($"{concrete} is not a concrete generic typeDef"); ;
+                throw new ArgumentException($"{concrete} is not a concrete generic type");
 
             return partial
                 .Zip(concrete, (partialArgument, concreteArgument) => (partialArgument, concreteArgument))
@@ -149,31 +149,54 @@ namespace AnySerialize.CodeGen
 
         public static bool IsTypeEqual(this TypeReference lhs, TypeReference rhs)
         {
+            if (lhs.IsGenericParameter && rhs.IsGenericParameter) return true;
+            if (lhs.IsGenericParameter || rhs.IsGenericParameter) return false;
+            if (lhs.GenericParameters.Count != rhs.GenericParameters.Count) return false;
+            if (lhs.IsGenericInstance && rhs.IsGenericInstance) return IsTypeEqual((GenericInstanceType)lhs, (GenericInstanceType)rhs);
             return IsTypeEqual(lhs.Resolve(), rhs.Resolve());
         }
 
         public static bool IsTypeEqual(this TypeDefinition lhs, TypeDefinition rhs)
         {
-            return lhs != null && rhs != null &&
-                   lhs.MetadataToken == rhs.MetadataToken &&
-                   lhs.Module.Name == rhs.Module.Name
-                ;
+            if (lhs == null || rhs == null) throw new ArgumentNullException();
+            return lhs.MetadataToken == rhs.MetadataToken && lhs.Module.Name == rhs.Module.Name;
+        }
+        
+        public static bool IsTypeEqual(this GenericInstanceType lhs, GenericInstanceType rhs)
+        {
+            if (lhs == null || rhs == null) throw new ArgumentNullException();
+            if (lhs.GenericArguments.Count != rhs.GenericArguments.Count) return false;
+            if (!IsTypeEqual(lhs.Resolve(), rhs.Resolve())) return false;
+            return !lhs.GenericArguments.Where((t, i) => !t.IsTypeEqual(rhs.GenericArguments[i])).Any();
         }
 
+        public static bool IsConcreteType([NotNull] this TypeReference type)
+        {
+            if (type == null) throw new ArgumentNullException();
+            if (type.IsGenericParameter) return false;
+            if (!type.IsGenericInstance) return true;
+            return ((GenericInstanceType)type).IsConcreteType();
+        }
 
-        //.method public hidebysig specialname rtspecialname instance void
-        //  .ctor() cil managed
-        //{
-        //  .maxstack 8
+        public static bool IsConcreteType([NotNull] this GenericInstanceType type)
+        {
+            if (type == null) throw new ArgumentNullException();
+            return type.GenericArguments.All(arg => arg.IsConcreteType());
+        }
 
-        //  IL_0000: ldarg.0      // this
-        //  IL_0001: call         instance void class [AnySerialize.Tests]AnySerialize.Tests.MultipleGeneric/Object`2<int32, float32>::.ctor()
-        //  IL_0006: nop
-        //  IL_0007: ret
-
-        //} // end of method Object::.ctor
         public static void AddEmptyCtor(this TypeDefinition type, MethodReference baseCtor)
         {
+            //.method public hidebysig specialname rtspecialname instance void
+            //  .ctor() cil managed
+            //{
+            //  .maxstack 8
+
+            //  IL_0000: ldarg.0      // this
+            //  IL_0001: call         instance void class [AnySerialize.Tests]AnySerialize.Tests.MultipleGeneric/Object`2<int32, float32>::.ctor()
+            //  IL_0006: nop
+            //  IL_0007: ret
+
+            //} // end of method Object::.ctor
             var attributes = MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName;
             var ctor = new MethodDefinition(".ctor", attributes, baseCtor.ReturnType);
             ctor.Body.Instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
