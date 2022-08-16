@@ -90,7 +90,7 @@ namespace AnySerialize.CodeGen
         {
             if (property.GetMethod == null) throw new ArgumentException($"{property.Name}.get not exist");
             // TODO: search serialize
-            // new DefaultTypeSearcher().Search(typeTree, property, _logger);
+            new DefaultTypeSearcher().Search(typeTree, property, _logger);
             var anySerializeValueType = module.ImportReference(typeof(IAny<>));
             var fieldType = module.ImportReference(anySerializeValueType.MakeGenericInstanceType(property.PropertyType));
             var serializedField = CreateOrReplaceBackingField(property, fieldType);

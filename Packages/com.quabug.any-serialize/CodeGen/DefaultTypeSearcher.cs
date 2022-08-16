@@ -21,13 +21,14 @@ namespace AnySerialize.CodeGen
             ;
             var baseTypeDefinition = property.Module.ImportReference(baseType).Resolve();
             logger?.Warning($"{baseTypeDefinition.FullName}<{string.Join(",", baseTypeDefinition.GenericParameters.Select(g => g.Name))}> {property.FullName}");
-            // TODO: only support base typeDef with one and only one property typeDef parameter?
+            // TODO: only support base type with one and only one property typeDef parameter?
             Assert.IsTrue(baseTypeDefinition.GenericParameters.Count == 1);
             var propertyTypeParameter = baseTypeDefinition.GenericParameters[0];
             var targetType = new TypeDef(baseTypeDefinition, property.PropertyType.Yield());
-            var matchType = typeTree.FindMostMatchType(targetType);
-            logger?.Warning($"{propertyTypeParameter?.FullName} {matchType.Type?.Name}");
-            return matchType.Type;
+            var matchTypes = typeTree.GetOrCreateAllDerivedReference(targetType);
+            return null;
+            // logger?.Warning($"{propertyTypeParameter?.FullName} {matchType?.Type.Name}");
+            // return matchType?.Type;
         }
     }
 }

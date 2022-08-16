@@ -136,26 +136,6 @@ namespace AnySerialize.CodeGen
             return GetDescendants(node, baseType);
         }
         
-        public TypeDef FindMostMatchType(TypeDef baseTypeDef)
-        {
-            throw new NotImplementedException();
-            // _typeTreeNodeMap.TryGetValue(baseTypeDef.Type, out var self);
-            // if (self == null) throw new ArgumentException($"{baseTypeDef.Type} is not part of this tree");
-            //
-            // var matchType = baseTypeDef;
-            // Find(self, baseTypeDef);
-            //
-            // void Find(TypeTreeNode node, TypeDef parent)
-            // {
-            //     var generic = node.TypeDef.ResolveGenericArguments(parent);
-            //     if (!node.TypeDef.IsAbstract && node.TypeDef.IsClass && generic.GenericTypes[0].Is)
-            //     {
-            //     }
-            //     
-            //     foreach (var childNode in node.Subs) Find(childNode, generic);
-            // }
-        }
-        
         IEnumerable<TypeDef> GetDescendantsAndSelf(TypeTreeNode self, TypeDef @base)
         {
             // TODO: handle multiple implementations?
