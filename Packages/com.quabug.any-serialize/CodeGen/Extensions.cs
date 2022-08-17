@@ -151,9 +151,11 @@ namespace AnySerialize.CodeGen
         {
             if (lhs.IsGenericParameter && rhs.IsGenericParameter) return true;
             if (lhs.IsGenericParameter || rhs.IsGenericParameter) return false;
-            if (lhs.GenericParameters.Count != rhs.GenericParameters.Count) return false;
-            if (lhs.IsGenericInstance && rhs.IsGenericInstance) return IsTypeEqual((GenericInstanceType)lhs, (GenericInstanceType)rhs);
-            return IsTypeEqual(lhs.Resolve(), rhs.Resolve());
+            if (lhs.IsGenericInstance && rhs.IsGenericInstance)
+                return lhs.GenericParameters.Count == rhs.GenericParameters.Count && IsTypeEqual((GenericInstanceType)lhs, (GenericInstanceType)rhs);
+            if (!lhs.IsArray && !rhs.IsArray) return IsTypeEqual(lhs.Resolve(), rhs.Resolve());
+            if (lhs.IsArray || rhs.IsArray) return false;
+            return IsTypeEqual(lhs.GetElementType(), rhs.GetElementType());
         }
 
         public static bool IsTypeEqual(this TypeDefinition lhs, TypeDefinition rhs)

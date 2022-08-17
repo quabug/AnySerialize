@@ -1,20 +1,40 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using AnySerialize.CodeGen;
+using Mono.Cecil;
 using NUnit.Framework;
-using UnityEngine.TestTools;
+using UnityEditor;
 
 namespace AnySerialize.Tests
 {
     public class TestDefaultTypeSearcher : CecilTestBase
     {
-        [Test]
-        public void should_resolve_unity_type()
+        private DefaultTypeSearcher _searcher;
+        private TypeTree _typeTree;
+        
+        protected override void OnSetUp()
         {
-            var type = ImportReference<ExitPlayMode>().Resolve();
-            Assert.AreEqual(1, type.Interfaces.Count);
-            var interfaceReference = type.Interfaces.First();
-            Assert.NotNull(interfaceReference);
-            Assert.NotNull(interfaceReference.InterfaceType);
-            Assert.NotNull(interfaceReference.InterfaceType.Resolve());
+            var serializerTypes = TypeCache.GetTypesDerivedFrom<IAny>();
+            _typeTree = new TypeTree(serializerTypes.Select(type => _module.ImportReference(type).Resolve()));
+            _searcher = new DefaultTypeSearcher();
+        }
+
+        [Test]
+        public void should_match_primitive_type_to_any_value()
+        {
+            Assert.That(_searcher.Search(_typeTree, CreateProperty<int>()), Is.EqualTo(new TypeDef(_module.ImportReference(typeof(AnyValue<int>)))));
+            Assert.That(_searcher.Search(_typeTree, CreateProperty<float>()), Is.EqualTo(new TypeDef(_module.ImportReference(typeof(AnyValue<float>)))));
+            Assert.That(_searcher.Search(_typeTree, CreateProperty<long>()), Is.EqualTo(new TypeDef(_module.ImportReference(typeof(AnyValue<long>)))));
+        }
+
+        private PropertyDefinition CreateProperty<T>(Type searchingBaseType = null, string propertyName = "test")
+        {
+            var propertyType = _module.ImportReference(typeof(T));
+            var property = new PropertyDefinition(propertyName, PropertyAttributes.None, propertyType);
+            property.DeclaringType = propertyType.Resolve();
+            var attribute = property.AddCustomAttribute<AnySerializeAttribute>(_module, typeof(Type));
+            attribute.ConstructorArguments.Add(new CustomAttributeArgument(_module.ImportReference(typeof(Type)), searchingBaseType));
+            return property;
         }
     }
 }

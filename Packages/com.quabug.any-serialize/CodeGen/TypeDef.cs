@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -109,8 +108,10 @@ namespace AnySerialize.CodeGen
             static bool IsMatch(TypeReference selfArgument, TypeReference genericArgument)
             {
                 if (selfArgument.IsGenericParameter || genericArgument.IsGenericParameter) return true;
-                if (!selfArgument.IsGenericInstance && !genericArgument.IsGenericInstance) return selfArgument.Resolve().IsTypeEqual(genericArgument.Resolve());
+                if (!selfArgument.IsGenericInstance && !genericArgument.IsGenericInstance) return selfArgument.IsTypeEqual(genericArgument);
                 if (!(selfArgument.IsGenericInstance && genericArgument.IsGenericInstance)) return false;
+                if (selfArgument.IsArray && genericArgument.IsArray) return IsMatch(selfArgument.GetElementType(), genericArgument.GetElementType());
+                if (selfArgument.IsArray || genericArgument.IsArray) return false;
                 if (!selfArgument.Resolve().IsTypeEqual(genericArgument.Resolve())) return false;
                 for (var i = 0; i < selfArgument.GenericParameters.Count; i++)
                 {
@@ -120,6 +121,20 @@ namespace AnySerialize.CodeGen
                 }
                 return true;
             }
+        }
+
+        public static bool IsMatchConstraint(this TypeDef type)
+        {
+            if (!type.IsGenericType) return true;
+            for (var i = 0; i < type.GenericArguments.Count; i++)
+            {
+                var parameter = type.Type.GenericParameters[i];
+                var argument = type.GenericArguments[i];
+            }
+            if (!constraintType.IsGenericParameter || checkType.IsGenericParameter) return true;
+            var constraintGenericParameter = (GenericParameter)constraintType;
+            if (!constraintGenericParameter.HasConstraints) return true;
+            return constraintGenericParameter.Constraints.All(constraint => constraint.ConstraintType.IsTypeEqual(checkType));
         }
     }
 }

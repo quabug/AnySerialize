@@ -16,7 +16,7 @@ namespace AnySerialize.CodeGen
 
         public PostProcessorAssemblyResolver([NotNull] IEnumerable<string> references)
         {
-            _references = references.ToArray();
+            _references = references.Distinct().ToArray();
         }
 
         public void Dispose()
@@ -78,6 +78,9 @@ namespace AnySerialize.CodeGen
             foreach (var parentDir in _references.Select(Path.GetDirectoryName).Distinct())
             {
                 var candidate = Path.Combine(parentDir, name.Name + ".dll");
+                if (File.Exists(candidate))
+                    return candidate;
+                candidate = Path.Combine(parentDir, "Facades", name.Name + ".dll");
                 if (File.Exists(candidate))
                     return candidate;
             }

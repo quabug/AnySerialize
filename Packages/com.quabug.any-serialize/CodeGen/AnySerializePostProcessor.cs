@@ -21,6 +21,7 @@ namespace AnySerialize.CodeGen
 
         public override bool WillProcess(ICompiledAssembly compiledAssembly)
         {
+            return false;
             var thisAssemblyName = GetType().Assembly.GetName().Name;
             var runtimeAssemblyName = typeof(AnySerializeAttribute).Assembly.GetName().Name;
             return compiledAssembly.Name != thisAssemblyName &&

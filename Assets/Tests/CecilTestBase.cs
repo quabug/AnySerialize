@@ -15,10 +15,11 @@ namespace AnySerialize.Tests
             var assemblyLocation = GetType().Assembly.Location;
             _assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyLocation, new ReaderParameters
             {
-                AssemblyResolver = new AnySerialize.CodeGen.PostProcessorAssemblyResolver(new []
+                AssemblyResolver = new CodeGen.PostProcessorAssemblyResolver(new []
                 {
                     GetType().Assembly.Location
                     , typeof(object).Assembly.Location
+                    , typeof(Object).Assembly.Location
                     , typeof(AnotherAssembly).Assembly.Location
                 })
             });

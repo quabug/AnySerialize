@@ -7,12 +7,12 @@ namespace AnySerialize.CodeGen
 {
     internal interface ITypeSearcher
     {
-        TypeDefinition Search(TypeTree typeTree, PropertyDefinition property, ILPostProcessorLogger logger = null);
+        TypeDef Search(TypeTree typeTree, PropertyDefinition property, ILPostProcessorLogger logger = null);
     }
     
     internal class DefaultTypeSearcher : ITypeSearcher
     {
-        public TypeDefinition Search(TypeTree typeTree, PropertyDefinition property, ILPostProcessorLogger logger = null)
+        public TypeDef Search(TypeTree typeTree, PropertyDefinition property, ILPostProcessorLogger logger = null)
         {
             var isReadOnly = property.SetMethod == null;
             var attribute = property.GetAttributesOf<AnySerializeAttribute>().Single();
@@ -25,7 +25,7 @@ namespace AnySerialize.CodeGen
             Assert.IsTrue(baseTypeDefinition.GenericParameters.Count == 1);
             var propertyTypeParameter = baseTypeDefinition.GenericParameters[0];
             var targetType = new TypeDef(baseTypeDefinition, property.PropertyType.Yield());
-            var matchTypes = typeTree.GetOrCreateAllDerivedReference(targetType);
+            var matchTypes = typeTree.GetOrCreateAllDerivedReference(targetType).ToArray();
             return null;
             // logger?.Warning($"{propertyTypeParameter?.FullName} {matchType?.Type.Name}");
             // return matchType?.Type;
