@@ -14,6 +14,10 @@ jobs:
         backend:
           - Mono2x
           - IL2CPP
+        unityVersion:
+          - 2020.3.38f1
+          - 2021.3.8f1
+          - 2022.1.13f1
     steps:
       - uses: actions/checkout@master
       - uses: actions/cache@v2
@@ -24,6 +28,7 @@ jobs:
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
+          customImage: unityci/editor:${{ matrix.unityVersion }}-base-1
           customParameters: -scriptingBackend ${{ matrix.backend }} -testCategory "!benchmark"
           projectPath: .
           githubToken: ${{ secrets.GITHUB_TOKEN }}
