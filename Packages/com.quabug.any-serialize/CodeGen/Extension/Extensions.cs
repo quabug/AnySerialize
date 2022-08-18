@@ -159,53 +159,5 @@ namespace AnySerialize.CodeGen
             ;
             static bool IsAttributeOf(CustomAttribute attribute) => attribute.AttributeType.FullName == typeof(T).FullName;
         }
-
-        public static bool IsImplementationOf(this TypeReference self, TypeReference generic)
-        {
-            return self.GetImplementationsOf(generic).Any();
-        }
-        
-        public static IEnumerable<TypeReference> GetImplementationsOf(this TypeReference self, TypeReference generic)
-        {
-            var selfDef = self.Resolve();
-            var genericDef = generic.Resolve();
-            foreach (var parentType in selfDef.GetParentTypes())
-            {
-                if (!parentType.Resolve().IsTypeEqual(genericDef)) continue;
-                if (!parentType.IsGenericType())
-                    yield return parentType;
-                else if (parentType.GetGenericParametersOrArguments().Zip(generic.GetGenericParametersOrArguments(), (s, g) => (s, g)).All(t => IsMatch(t.s, t.g)))
-                    yield return parentType;
-            }
-        
-            static bool IsMatch(TypeReference selfArgument, TypeReference genericArgument)
-            {
-                if (selfArgument.IsGenericParameter || genericArgument.IsGenericParameter) return true;
-                if (selfArgument.IsArray && genericArgument.IsArray) return IsMatch(selfArgument.GetElementType(), genericArgument.GetElementType());
-                if (selfArgument.IsArray || genericArgument.IsArray) return false;
-                if (!selfArgument.IsGenericType() && !genericArgument.IsGenericType()) return selfArgument.IsTypeEqual(genericArgument);
-                if (!(selfArgument.IsGenericType() && genericArgument.IsGenericType())) return false;
-                if (!selfArgument.Resolve().IsTypeEqual(genericArgument.Resolve())) return false;
-                if (selfArgument.GetGenericParametersOrArgumentsCount() != genericArgument.GetGenericParametersOrArgumentsCount()) return false;
-                return selfArgument.GetGenericParametersOrArguments()
-                    .Zip(genericArgument.GetGenericParametersOrArguments(), (s, g) => (s, g))
-                    .All(t => IsMatch(t.s, t.g))
-                ;
-            }
-        }
-        //
-        // public static bool IsMatchConstraint(this TypeReference type)
-        // {
-        //     if (!type.IsGenericType) return true;
-        //     for (var i = 0; i < type.GenericArguments.Count; i++)
-        //     {
-        //         var parameter = type.Type.GenericParameters[i];
-        //         var argument = type.GenericArguments[i];
-        //     }
-        //     if (!constraintType.IsGenericParameter || checkType.IsGenericParameter) return true;
-        //     var constraintGenericParameter = (GenericParameter)constraintType;
-        //     if (!constraintGenericParameter.HasConstraints) return true;
-        //     return constraintGenericParameter.Constraints.All(constraint => constraint.ConstraintType.IsTypeEqual(checkType));
-        // }
     }
 }
