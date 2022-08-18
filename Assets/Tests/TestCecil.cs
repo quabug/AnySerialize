@@ -101,15 +101,15 @@ namespace AnySerialize.Tests
             var intPartial2 = (GenericInstanceType)ImportReference(typeof(IntPartial<,>)).Resolve().BaseType;
             var intPartial3 = (GenericInstanceType)ImportReference(typeof(IntPartial<,,>)).Resolve().BaseType;
 
-            Assert.IsTrue(CecilExtension.IsPartialGenericMatch(intPartial, intGeneric));
-            Assert.IsTrue(CecilExtension.IsPartialGenericMatch(intPartial2, intGeneric));
-            Assert.IsTrue(CecilExtension.IsPartialGenericMatch(intPartial3, intGeneric));
+            Assert.IsTrue(intPartial.IsPartialGenericMatch(intGeneric));
+            Assert.IsTrue(intPartial2.IsPartialGenericMatch(intGeneric));
+            Assert.IsTrue(intPartial3.IsPartialGenericMatch(intGeneric));
 
             var intFloatPartial = (GenericInstanceType)ImportReference(typeof(IntFloatPartial)).Resolve().BaseType;
             var intFloatPartial2 = (GenericInstanceType)ImportReference(typeof(IntFloatPartial<,>)).Resolve().BaseType;
 
-            Assert.IsFalse(CecilExtension.IsPartialGenericMatch(intFloatPartial, intGeneric));
-            Assert.IsFalse(CecilExtension.IsPartialGenericMatch(intFloatPartial2, intGeneric));
+            Assert.IsFalse(intFloatPartial.IsPartialGenericMatch(intGeneric));
+            Assert.IsFalse(intFloatPartial2.IsPartialGenericMatch(intGeneric));
         }
 
         // [Test]

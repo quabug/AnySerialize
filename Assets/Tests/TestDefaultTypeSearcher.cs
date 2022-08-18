@@ -22,9 +22,9 @@ namespace AnySerialize.Tests
         [Test]
         public void should_match_primitive_type_to_any_value()
         {
-            Assert.That(_searcher.Search(_typeTree, CreateProperty<int>()), Is.EqualTo(new TypeDef(_module.ImportReference(typeof(AnyValue<int>)))));
-            Assert.That(_searcher.Search(_typeTree, CreateProperty<float>()), Is.EqualTo(new TypeDef(_module.ImportReference(typeof(AnyValue<float>)))));
-            Assert.That(_searcher.Search(_typeTree, CreateProperty<long>()), Is.EqualTo(new TypeDef(_module.ImportReference(typeof(AnyValue<long>)))));
+            Assert.That(_searcher.Search(_typeTree, CreateProperty<int>()), Is.EqualTo(_module.ImportReference(typeof(AnyValue<int>))));
+            Assert.That(_searcher.Search(_typeTree, CreateProperty<float>()), Is.EqualTo(_module.ImportReference(typeof(AnyValue<float>))));
+            Assert.That(_searcher.Search(_typeTree, CreateProperty<long>()), Is.EqualTo(_module.ImportReference(typeof(AnyValue<long>))));
         }
 
         private PropertyDefinition CreateProperty<T>(Type searchingBaseType = null, string propertyName = "test")

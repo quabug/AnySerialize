@@ -126,20 +126,18 @@ namespace AnySerialize.Tests
             var derivedTypes = _tree
                 .GetOrCreateAllDerivedReference(_module.ImportReference(@base), publicOnly: false)
                 .Distinct()
-                .Select(type => type.ToString())
-                .ToArray()
+                .Select(t => t.ToString())
             ;
-            Assert.That(derivedTypes, Is.EquivalentTo(types.Select(type => new TypeDef(_module.ImportReference(type)).ToString())));
+            Assert.That(derivedTypes, Is.EquivalentTo(types.Select(type => _module.ImportReference(type).ToString())));
         }
 
         void CheckDerivedIgnoreGenericParameters(Type @base, params Type[] types)
         {
             var tokens = _tree
                 .GetAllDerivedDefinition(_module.ImportReference(@base).Resolve())
-                .Select(type => type.Type.MetadataToken)
-                .ToArray()
+                .Select(type => type.ToString())
             ;
-            Assert.That(tokens, Is.EquivalentTo(types.Select(type => _module.ImportReference(type).Resolve().MetadataToken)));
+            Assert.That(tokens, Is.EquivalentTo(types.Select(type => _module.ImportReference(type).Resolve().ToString())));
         }
     }
 }
