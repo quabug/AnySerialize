@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 
 namespace AnySerialize
@@ -13,10 +12,11 @@ namespace AnySerialize
         {
             get
             {
-                if (_cache.Length != _value.Length) _cache = _value.Select(v => v.Value).ToArray();
-#if UNITY_EDITOR
-                for (var i = 0; i < _cache.Length; i++) _cache[i] = _value[i].Value;
+#if !UNITY_EDITOR
+                if (_cache.Length == _value.Length) return _cache;
 #endif
+                if (_cache.Length != _value.Length) _cache = new T[_value.Length];
+                for (var i = 0; i < _cache.Length; i++) _cache[i] = _value[i].Value;
                 return _cache;
             }
         }
