@@ -14,8 +14,7 @@
         "Mono.Cecil.dll",
         "Mono.Cecil.Mdb.dll",
         "Mono.Cecil.Pdb.dll",
-        "Mono.Cecil.Rocks.dll",
-        "System.Buffers.dll"
+        "Mono.Cecil.Rocks.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [],
