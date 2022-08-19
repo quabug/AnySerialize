@@ -39,7 +39,7 @@ namespace AnySerialize.Tests
         public void should_find_replace_type_for_class_type()
         {
             var type = _searcher.Search(_typeTree, CreateProperty<A>());
-            Assert.That(type, Is.EqualTo(_module.ImportReference(typeof(ReadOnlyAnyClass<A, int, int, float, float, AnyValue<int>, AnyValue<int>, AnyValue<float>, AnyValue<float>>))));
+            Assert.That(type, Is.EqualTo(_module.ImportReference(typeof(ReadOnlyAnyClass<A, int, AnyValue<int>, int, AnyValue<int>, float, AnyValue<float>, float, AnyValue<float>>))));
         }
 
         private PropertyDefinition CreateProperty<T>(Type searchingBaseType = null, string propertyName = "test")

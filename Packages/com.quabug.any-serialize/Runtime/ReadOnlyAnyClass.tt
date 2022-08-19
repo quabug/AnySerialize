@@ -1,0 +1,76 @@
+<#@ template language="C#" #>
+
+using System;
+using System.Reflection;
+using UnityEngine;
+
+namespace AnySerialize
+{
+<#
+    for (var i = 1; i < 21; i++)
+    {
+#>
+    [Serializable]
+    public class ReadOnlyAnyClass<T<# for (var n = 0; n < i; n++) { #>, T<#= n #>, TAny<#= n #><# } #>> : IReadOnlyAnyClass<T>
+        where T : new()
+<#
+        for (var n = 0; n < i; n++)
+        {
+#>
+        where TAny<#= n #> : IReadOnlyAny<T<#= n #>>
+<#
+        }
+#>
+    {
+        private readonly BindingFlags _fieldFlags;
+        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
+        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+        
+<#
+        for (var n = 0; n < i; n++)
+        {
+#>
+        [SerializeField] private TAny<#= n #> _field<#= n #>;
+<#
+        }
+#>
+
+        public T Value
+        {
+            get
+            {
+                var fields = this.GetOrderedFields(_fieldFlags);
+                var value = new T();
+#if !ENABLE_IL2CPP
+                if (typeof(T).IsValueType)
+                {
+                    var valueRef = __makeref(value);
+<#
+        for (var n = 0; n < i; n++)
+        {
+#>
+                    fields[<#= n #>].SetValueDirect(valueRef, _field<#= n #>.Value);
+<#
+        }
+#>
+                    return value;
+                }
+#endif
+                object valueObject = value;
+<#
+        for (var n = 0; n < i; n++)
+        {
+#>
+                fields[<#= n #>].SetValue(valueObject, _field<#= n #>.Value);
+<#
+        }
+#>
+                return (T)valueObject;
+            }
+        }
+    }
+
+<#
+    }
+#>
+}
