@@ -51,7 +51,7 @@ namespace AnySerialize
     
     [Serializable]
     public class ReadOnlyAnyClass<T, T0, T1, T2, T3, TAny0, TAny1, TAny2, TAny3> : IReadOnlyAnyClass<T>
-        where T : class, new()
+        where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
         where TAny2 : IReadOnlyAny<T2>
@@ -72,53 +72,23 @@ namespace AnySerialize
             {
                 var fields = this.GetOrderedFields(_fieldFlags);
                 var value = new T();
-                fields[0].SetValue(value, _field0.Value);
-                fields[1].SetValue(value, _field1.Value);
-                fields[2].SetValue(value, _field2.Value);
-                fields[3].SetValue(value, _field3.Value);
-                return value;
-            }
-        }
-    }
-    
-    [Serializable]
-    public class ReadOnlyAnyStruct<T, T0, T1, T2, T3, TAny0, TAny1, TAny2, TAny3> : IReadOnlyAnyClass<T>
-        where T : struct
-        where TAny0 : IReadOnlyAny<T0>
-        where TAny1 : IReadOnlyAny<T1>
-        where TAny2 : IReadOnlyAny<T2>
-        where TAny3 : IReadOnlyAny<T3>
-    {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyStruct() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyStruct(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-        
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-
-        public T Value
-        {
-            get
-            {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = default(T);
-#if ENABLE_IL2CPP
+#if !ENABLE_IL2CPP
+                if (typeof(T).IsValueType)
+                {
+                    var valueRef = __makeref(value);
+                    fields[0].SetValueDirect(valueRef, _field0.Value);
+                    fields[1].SetValueDirect(valueRef, _field1.Value);
+                    fields[2].SetValueDirect(valueRef, _field2.Value);
+                    fields[3].SetValueDirect(valueRef, _field3.Value);
+                    return value;
+                }
+#endif
                 object valueObject = value;
                 fields[0].SetValue(valueObject, _field0.Value);
                 fields[1].SetValue(valueObject, _field1.Value);
                 fields[2].SetValue(valueObject, _field2.Value);
                 fields[3].SetValue(valueObject, _field3.Value);
                 return (T)valueObject;
-#else
-                var valueRef = __makeref(value);
-                fields[0].SetValueDirect(valueRef, _field0.Value);
-                fields[1].SetValueDirect(valueRef, _field1.Value);
-                fields[2].SetValueDirect(valueRef, _field2.Value);
-                fields[3].SetValueDirect(valueRef, _field3.Value);
-                return value;
-#endif
             }
         }
     }

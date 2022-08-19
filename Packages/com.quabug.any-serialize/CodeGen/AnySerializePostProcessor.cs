@@ -21,7 +21,6 @@ namespace AnySerialize.CodeGen
 
         public override bool WillProcess(ICompiledAssembly compiledAssembly)
         {
-            return false;
             var thisAssemblyName = GetType().Assembly.GetName().Name;
             var runtimeAssemblyName = typeof(AnySerializeAttribute).Assembly.GetName().Name;
             return compiledAssembly.Name != thisAssemblyName &&
@@ -92,7 +91,7 @@ namespace AnySerialize.CodeGen
             if (property.GetMethod == null) throw new ArgumentException($"{property.Name}.get not exist");
             // TODO: search serialize
             new DefaultTypeSearcher().Search(typeTree, property, _logger);
-            var anySerializeValueType = module.ImportReference(typeof(IAny<>));
+            var anySerializeValueType = module.ImportReference(typeof(AnyValue<>));
             var fieldType = module.ImportReference(anySerializeValueType.MakeGenericInstanceType(property.PropertyType));
             var serializedField = CreateOrReplaceBackingField(property, fieldType);
             InjectGetter(property, serializedField);

@@ -39,7 +39,7 @@ namespace AnySerialize
             Debug.Log(string.Join(", ", array.Value.SelectMany(a => a)));
             Debug.Log(string.Join(", ", dict.Value.Select(t => $"[{t.Key},{string.Join(", ", t.Value.Select(n => $"[{n.Key},{n.Value}]"))}]")));
             var intB = IntB.Value;
-            Debug.Log($"intB: {nameof(B<int>.TValue)}={intB.TValue} {nameof(B<int>.TArray)}={string.Join(",", intB.TArray)} {nameof(B<int>.TArrayArray)}={string.Join(",", intB.TArrayArray.SelectMany(a => a))} {nameof(intB.Float)}={intB.Float}");
+            Debug.Log($"intB: {nameof(B<int>.ReadOnlyTValue)}={intB.ReadOnlyTValue} {nameof(B<int>.TArray)}={string.Join(",", intB.TArray)} {nameof(B<int>.TArrayArray)}={string.Join(",", intB.TArrayArray.SelectMany(a => a))} {nameof(intB.ReadOnlyProperty)}={intB.ReadOnlyProperty}");
             
             Debug.Log(Vector4Any.Value.ToString());
             
@@ -49,7 +49,8 @@ namespace AnySerialize
         [SerializeField] private ReadOnlyAnyArray<string[], ReadOnlyAnyArray<string, AnyValue<string>>> array;
         [SerializeField] private ReadOnlyAnyDictionary<string, Dict, AnyValue<string>, AnySerializeDict, AnyValue<SerializeKeyValuePair<string, Dict, AnyValue<string>, AnySerializeDict>>> dict;
         [SerializeField] private ReadOnlyAnyClass<B<int>, int, int[], int[][], float, AnyValue<int>, AnySerializeArray, AnySerializeArrayArray, AnyValue<float>> IntB;
-        [SerializeField] private ReadOnlyAnyStruct<Vector4, float, float, float, float, AnyValue<float>, AnyValue<float>, AnyValue<float>, AnyValue<float>> Vector4Any;
+        
+        [SerializeField] private ReadOnlyAnyClass<Vector4, float, float, float, float, AnyValue<float>, AnyValue<float>, AnyValue<float>, AnyValue<float>> Vector4Any;
         [SerializeField] private ReadOnlyAnyLazy<int[][], AnySerializeArrayArray> LazyIntArrayArray;
     }
     
@@ -67,9 +68,9 @@ namespace AnySerialize
     [Serializable]
     public class B<T> : IB<T>
     {
-        public T TValue;
+        public readonly T ReadOnlyTValue;
         public T[] TArray;
         public T[][] TArrayArray;
-        public float Float;
+        public float ReadOnlyProperty { get; }
     }
 }

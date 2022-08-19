@@ -20,11 +20,26 @@ namespace AnySerialize.Tests
         }
 
         [Test]
-        public void should_match_primitive_type_to_any_value()
+        public void should_find_replace_type_for_primitive_type()
         {
             Assert.That(_searcher.Search(_typeTree, CreateProperty<int>()), Is.EqualTo(_module.ImportReference(typeof(AnyValue<int>))));
             Assert.That(_searcher.Search(_typeTree, CreateProperty<float>()), Is.EqualTo(_module.ImportReference(typeof(AnyValue<float>))));
             Assert.That(_searcher.Search(_typeTree, CreateProperty<long>()), Is.EqualTo(_module.ImportReference(typeof(AnyValue<long>))));
+        }
+
+        class A
+        {
+            public int ReadWriteField;
+            public readonly int ReadOnlyField;
+            public float ReadWriteProperty { get; set; }
+            public float ReadOnlyProperty { get; }
+        }
+        
+        [Test]
+        public void should_find_replace_type_for_class_type()
+        {
+            var type = _searcher.Search(_typeTree, CreateProperty<A>());
+            Assert.That(type, Is.EqualTo(_module.ImportReference(typeof(ReadOnlyAnyClass<A, int, int, float, float, AnyValue<int>, AnyValue<int>, AnyValue<float>, AnyValue<float>>))));
         }
 
         private PropertyDefinition CreateProperty<T>(Type searchingBaseType = null, string propertyName = "test")

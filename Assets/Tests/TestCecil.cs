@@ -82,34 +82,40 @@ namespace AnySerialize.Tests
         }
 
         class Generic<T1, T2, T3, T4> {}
-        class IntPartial<T1, T2, T3, T4> : Generic<T2, T3, T1, T4> {}
-        class IntPartial<T1, T2, T3> : Generic<T2, T1, T3, int> {}
-        class IntPartial<T1, T3> : Generic<T3, int, T1, int> {}
-        class IntPartial : Generic<int, int, int, int> {}
+        class Int4<T1, T2, T3, T4> : Generic<T2, T3, T1, T4> {}
+        class Int3<T1, T2, T3> : Generic<T2, T1, T3, int> {}
+        class Int2<T1, T3> : Generic<T3, int, T1, int> {}
+        class Int0 : Generic<int, int, int, int> {}
 
-        class IntFloatPartial : Generic<int, float, float, int> {}
-        class IntFloatPartial<T1> : Generic<T1, float, float, int> {}
-        class IntFloatPartial<T1, T2> : Generic<int, float, T1, T2> {}
-        class IntFloatPartial<T1, T2, T3> : Generic<T1, float, T3, T2> {}
+        class IntFloat0 : Generic<int, float, float, int> {}
+        class IntFloat1<T1> : Generic<T1, float, float, int> {}
+        class IntFloat2<T1, T2> : Generic<int, float, T1, T2> {}
+        class IntFloat3<T1, T2, T3> : Generic<T1, float, T3, T2> {}
 
         [Test]
         public void should_check_whether_or_not_a_partial_type_is_match_to_a_concrete_generic_type()
         {
-            var intGeneric = (GenericInstanceType)ImportReference(typeof(Generic<int, int, int, int>));
+            var partial = (GenericInstanceType)ImportReference(typeof(Generic<int, float, int, int>));
 
-            var intPartial = (GenericInstanceType)ImportReference(typeof(IntPartial)).Resolve().BaseType;
-            var intPartial2 = (GenericInstanceType)ImportReference(typeof(IntPartial<,>)).Resolve().BaseType;
-            var intPartial3 = (GenericInstanceType)ImportReference(typeof(IntPartial<,,>)).Resolve().BaseType;
+            var int0 = (GenericInstanceType)ImportReference(typeof(Int0)).Resolve().BaseType;
+            var int2 = (GenericInstanceType)ImportReference(typeof(Int2<,>)).Resolve().BaseType;
+            var int3 = (GenericInstanceType)ImportReference(typeof(Int3<,,>)).Resolve().BaseType;
+            var int4 = (GenericInstanceType)ImportReference(typeof(Int4<,,,>)).Resolve().BaseType;
 
-            Assert.IsTrue(intPartial.IsPartialGenericMatch(intGeneric));
-            Assert.IsTrue(intPartial2.IsPartialGenericMatch(intGeneric));
-            Assert.IsTrue(intPartial3.IsPartialGenericMatch(intGeneric));
+            Assert.IsFalse(partial.IsPartialGenericTypeOf(int0));
+            Assert.IsFalse(partial.IsPartialGenericTypeOf(int2));
+            Assert.IsTrue(partial.IsPartialGenericTypeOf(int3));
+            Assert.IsTrue(partial.IsPartialGenericTypeOf(int4));
 
-            var intFloatPartial = (GenericInstanceType)ImportReference(typeof(IntFloatPartial)).Resolve().BaseType;
-            var intFloatPartial2 = (GenericInstanceType)ImportReference(typeof(IntFloatPartial<,>)).Resolve().BaseType;
+            var intFloat0 = (GenericInstanceType)ImportReference(typeof(IntFloat0)).Resolve().BaseType;
+            var intFloat1 = (GenericInstanceType)ImportReference(typeof(IntFloat1<>)).Resolve().BaseType;
+            var intFloat2 = (GenericInstanceType)ImportReference(typeof(IntFloat2<,>)).Resolve().BaseType;
+            var intFloat3 = (GenericInstanceType)ImportReference(typeof(IntFloat3<,,>)).Resolve().BaseType;
 
-            Assert.IsFalse(intFloatPartial.IsPartialGenericMatch(intGeneric));
-            Assert.IsFalse(intFloatPartial2.IsPartialGenericMatch(intGeneric));
+            Assert.IsFalse(partial.IsPartialGenericTypeOf(intFloat0));
+            Assert.IsFalse(partial.IsPartialGenericTypeOf(intFloat1));
+            Assert.IsTrue(partial.IsPartialGenericTypeOf(intFloat2));
+            Assert.IsTrue(partial.IsPartialGenericTypeOf(intFloat3));
         }
 
         // [Test]
@@ -156,5 +162,21 @@ namespace AnySerialize.Tests
         //     var obj = ImportReference(typeof(MultipleGeneric.Object<,>)).Resolve();
         //     var genericType = obj.CreateGenericTypeReference(new[] {_module.TypeSystem.Int32, _module.TypeSystem.Int32});
         // }
+        
+        class Constraint<T0, T1, T2>
+            where T0 : class, new()
+            where T1 : struct
+            where T2 : Int2<int, int>, IAny, IAny<int>, new()
+        {}
+
+        [Test]
+        public void should_have_type_constraint()
+        {
+            var type = _module.ImportReference(typeof(Constraint<,,>)).Resolve();
+            // ???? `class` or `new` not count as constraint?
+            Assert.That(type.GenericParameters[0].Constraints.Count, Is.EqualTo(0));
+            Assert.That(type.GenericParameters[1].Constraints.Count, Is.EqualTo(1));
+            Assert.That(type.GenericParameters[2].Constraints.Count, Is.EqualTo(3));
+        }
     }
 }

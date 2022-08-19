@@ -15,7 +15,10 @@ namespace AnySerialize.Tests
         public void should_check_is_generic_type()
         {
             Assert.IsTrue(_module.ImportReference(typeof(IGeneric<,>)).IsGenericType());
+            Assert.IsFalse(_module.ImportReference(typeof(IGeneric<int,float>[])).IsGenericType());
+            Assert.IsFalse(_module.ImportReference(typeof(IGeneric<int,float>[][])).IsGenericType());
             Assert.IsFalse(_module.ImportReference(typeof(TIntSub)).IsGenericType());
+            Assert.IsFalse(_module.ImportReference(typeof(TIntSub[])).IsGenericType());
             Assert.IsTrue(_module.ImportReference(typeof(TComplex<>)).Resolve().Interfaces[0].InterfaceType.IsGenericType());
             Assert.IsTrue(_module.ImportReference(typeof(TComplex<>)).Resolve().Interfaces[1].InterfaceType.IsGenericType());
             Assert.IsTrue(_module.ImportReference(typeof(TComplex<>)).Resolve().Interfaces[2].InterfaceType.IsGenericType());
@@ -27,8 +30,11 @@ namespace AnySerialize.Tests
             Assert.IsFalse(_module.ImportReference(typeof(IGeneric<,>)).IsConcreteType());
             Assert.IsFalse(_module.ImportReference(typeof(TInt<>)).Resolve().Interfaces[0].InterfaceType.IsConcreteType());
             Assert.IsTrue(_module.ImportReference(typeof(IGeneric<int, float>)).IsConcreteType());
+            Assert.IsTrue(_module.ImportReference(typeof(IGeneric<int, float>[])).IsConcreteType());
+            Assert.IsTrue(_module.ImportReference(typeof(IGeneric<int, float>[][])).IsConcreteType());
             Assert.IsTrue(_module.ImportReference(typeof(TIntSub)).IsConcreteType());
             Assert.IsTrue(_module.ImportReference(typeof(IGeneric<IGeneric<int, float>, float>)).IsConcreteType());
+            Assert.IsTrue(_module.ImportReference(typeof(IGeneric<IGeneric<int, float>, float>[][])).IsConcreteType());
             Assert.IsFalse(_module.ImportReference(typeof(TComplex<>)).Resolve().Interfaces[0].InterfaceType.IsConcreteType());
             Assert.IsFalse(_module.ImportReference(typeof(TComplex<>)).Resolve().Interfaces[1].InterfaceType.IsConcreteType());
             Assert.IsTrue(_module.ImportReference(typeof(TComplex<>)).Resolve().Interfaces[2].InterfaceType.IsConcreteType());

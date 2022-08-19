@@ -169,7 +169,7 @@ namespace AnySerialize.CodeGen
 
                 // TODO: handle multiple implementations?
                 var newType = CreateTypeDefWithBaseGenericArguments(type, baseType).FirstOrDefault();
-                if (newType == null) return Enumerable.Empty<TypeReference>();
+                if (newType == null || !newType.IsMatchTypeConstraints()) return Enumerable.Empty<TypeReference>();
 
                 return newType.Yield().Concat(
                     GetDirectDerivedDefinition(newType).SelectMany(t => RecursiveProcess(t, newType))
@@ -185,31 +185,27 @@ namespace AnySerialize.CodeGen
             {
                 if (!self.IsGenericType()) return self;
                 
-                var genericArguments = ArrayPool<TypeReference>.Shared.Rent(self.GenericParameters.Count);
+                // TODO: array pool on MacOS not working?
+                //       (0,0): error System.TypeLoadException: Could not load type 'System.Buffers.ArrayPool`1' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+                // var genericArguments = ArrayPool<TypeReference>.Shared.Rent(self.GenericParameters.Count);
+                var genericArguments = new TypeReference[self.GenericParameters.Count];
                 self.GetGenericParametersOrArguments(genericArguments);
-                try
+                for (var i = 0; i < self.GenericParameters.Count; i++)
                 {
-                    for (var i = 0; i < self.GenericParameters.Count; i++)
+                    var arg = genericArguments[i];
+                    if (arg.IsGenericParameter)
                     {
-                        var arg = genericArguments[i];
-                        if (arg.IsGenericParameter)
-                        {
-                            var index = implementation.GetGenericParametersOrArguments().FindIndex(t =>  t.IsGenericParameter && t.Name == arg.Name);
-                            var isGenericType = index < 0 || !baseType.IsGenericInstance;
-                            genericArguments[i] = isGenericType ? arg : ((GenericInstanceType)baseType).GenericArguments[index];
-                        }
+                        var index = implementation.GetGenericParametersOrArguments().FindIndex(t =>  t.IsGenericParameter && t.Name == arg.Name);
+                        var isGenericType = index < 0 || !baseType.IsGenericInstance;
+                        genericArguments[i] = isGenericType ? arg : ((GenericInstanceType)baseType).GenericArguments[index];
                     }
+                }
 
-                    if (genericArguments.Take(self.GenericParameters.Count).All(arg => arg.IsGenericParameter)) return self;
-                    
-                    var instance = new GenericInstanceType(self);
-                    foreach (var arg in genericArguments.Take(self.GenericParameters.Count)) instance.GenericArguments.Add(arg);
-                    return instance;
-                }
-                finally
-                {
-                    ArrayPool<TypeReference>.Shared.Return(genericArguments);
-                }
+                if (genericArguments.Take(self.GenericParameters.Count).All(arg => arg.IsGenericParameter)) return self;
+                
+                var instance = new GenericInstanceType(self);
+                foreach (var arg in genericArguments.Take(self.GenericParameters.Count)) instance.GenericArguments.Add(arg);
+                return instance;
             }
         }
 

@@ -14,40 +14,23 @@ namespace AnySerialize.CodeGen
             return type switch
             {
                 null => throw new ArgumentNullException(),
+                GenericParameter => false,
                 GenericInstanceType genericInstanceType => genericInstanceType.GenericArguments.All(arg => arg.IsConcreteType()),
-                TypeSpecification typeSpecification => typeSpecification.GetElementType().IsConcreteType(),
-                GenericParameter _ => false,
-                _ => true
+                TypeSpecification typeSpecification => typeSpecification.ElementType.IsConcreteType(),
+                _ => !type.HasGenericParameters
             };
         }
 
         [Pure]
         public static bool IsGenericType([NotNull] this TypeReference type)
         {
-            if (type == null) throw new ArgumentNullException();
-            return type.HasGenericParameters || type.IsGenericInstance;
-        }
-
-        [Pure]
-        public static bool IsPartialGenericMatch(this GenericInstanceType partial, GenericInstanceType concrete)
-        {
-            if (!partial.Resolve().IsTypeEqual(concrete.Resolve()))
-                throw new ArgumentException($"{partial} and {concrete} have different type");
-            return IsPartialGenericMatch(partial.GenericArguments, concrete.GenericArguments);
-        }
-        
-        [Pure]
-        public static bool IsPartialGenericMatch(this IList<TypeReference> partial, IList<TypeReference> concrete)
-        {
-            if (partial.Count != concrete.Count)
-                throw new ArgumentException($"{partial} and {concrete} have different count of generic arguments");
-            if (concrete.Any(arg => arg.IsGenericParameter))
-                throw new ArgumentException($"{concrete} is not a concrete generic type");
-
-            return partial
-                .Zip(concrete, (partialArgument, concreteArgument) => (partialArgument, concreteArgument))
-                .All(t => t.partialArgument.IsGenericParameter || t.partialArgument.IsTypeEqual(t.concreteArgument))
-            ;
+            return type switch
+            {
+                null => throw new ArgumentNullException(),
+                GenericParameter => true,
+                GenericInstanceType => true,
+                _ => type.HasGenericParameters
+            };
         }
         
         // TODO: Covariant and contravariant?
@@ -94,19 +77,13 @@ namespace AnySerialize.CodeGen
         [Pure]
         public static bool IsMatchTypeConstraints([NotNull] this TypeReference type)
         {
-            if (type.HasGenericParameters) return true;
-            if (type.IsGenericInstance) return ((GenericInstanceType)type).IsMatchTypeConstraints();
-            throw new ArgumentException();
-        }
-        
-        [Pure]
-        public static bool IsMatchTypeConstraints([NotNull] this GenericInstanceType type)
-        {
-            var def = type.Resolve();
-            return type.GenericArguments
-                .Zip(def.GenericParameters, (argument, parameter) => (argument, parameter))
-                .All(t => IsArgumentMatch(t.argument, t.parameter))
-            ;
+            return type switch
+            {
+                GenericInstanceType genericInstanceType => genericInstanceType.GenericArguments
+                    .Zip(genericInstanceType.ElementType.GenericParameters, (argument, parameter) => (argument, parameter))
+                    .All(t => IsArgumentMatch(t.argument, t.parameter)),
+                _ => true
+            };
         
             static bool IsArgumentMatch(TypeReference genericArgument, GenericParameter genericParameter)
             {
@@ -120,13 +97,14 @@ namespace AnySerialize.CodeGen
         [Pure]
         public static bool IsDerivedFrom([NotNull] this TypeReference derived, [NotNull] TypeReference @base)
         {
-            throw new NotImplementedException();
+            // TODO:
+            return derived.Resolve().IsDerivedFrom(@base.Resolve());
         }
         
         [Pure]
         public static bool IsDerivedFrom([NotNull] this TypeDefinition derived, [NotNull] TypeDefinition @base)
         {
-            throw new NotImplementedException();
+            return derived.GetAllInterfacesAndBases().Any(type => type.Resolve().IsTypeEqual(@base));
         }
 
         public static bool IsImplementationOf(this TypeReference self, TypeReference generic)
@@ -134,16 +112,16 @@ namespace AnySerialize.CodeGen
             return self.GetImplementationsOf(generic).Any();
         }
         
-        public static IEnumerable<TypeReference> GetImplementationsOf(this TypeReference self, TypeReference generic)
+        public static IEnumerable<TypeReference> GetImplementationsOf(this TypeReference self, TypeReference @base)
         {
             var selfDef = self.Resolve();
-            var genericDef = generic.Resolve();
+            var genericDef = @base.Resolve();
             foreach (var parentType in selfDef.GetParentTypes())
             {
                 if (!parentType.Resolve().IsTypeEqual(genericDef)) continue;
                 if (!parentType.IsGenericType())
                     yield return parentType;
-                else if (parentType.GetGenericParametersOrArguments().Zip(generic.GetGenericParametersOrArguments(), (s, g) => (s, g)).All(t => IsMatch(t.s, t.g)))
+                else if (parentType.GetGenericParametersOrArguments().Zip(@base.GetGenericParametersOrArguments(), (s, g) => (s, g)).All(t => IsMatch(t.s, t.g)))
                     yield return parentType;
             }
         
@@ -162,19 +140,5 @@ namespace AnySerialize.CodeGen
                 ;
             }
         }
-        //
-        // public static bool IsMatchConstraint(this TypeReference type)
-        // {
-        //     if (!type.IsGenericType) return true;
-        //     for (var i = 0; i < type.GenericArguments.Count; i++)
-        //     {
-        //         var parameter = type.Type.GenericParameters[i];
-        //         var argument = type.GenericArguments[i];
-        //     }
-        //     if (!constraintType.IsGenericParameter || checkType.IsGenericParameter) return true;
-        //     var constraintGenericParameter = (GenericParameter)constraintType;
-        //     if (!constraintGenericParameter.HasConstraints) return true;
-        //     return constraintGenericParameter.Constraints.All(constraint => constraint.ConstraintType.IsTypeEqual(checkType));
-        // }
     }
 }
