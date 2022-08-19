@@ -44,6 +44,7 @@ namespace AnySerialize
 #if !UNITY_EDITOR
                 if (_cache != null) return (T)_cache;
 #endif
+<# // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`? #>
                 _cache ??= new T();
                 var fields = this.GetOrderedFields(_fieldFlags);
 <#
@@ -55,7 +56,6 @@ namespace AnySerialize
         }
 #>
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }

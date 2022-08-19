@@ -29,7 +29,6 @@ namespace AnySerialize
                 var fields = this.GetOrderedFields(_fieldFlags);
                 fields[0].SetValue(_cache, _field0.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -61,7 +60,6 @@ namespace AnySerialize
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -96,7 +94,6 @@ namespace AnySerialize
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -134,7 +131,6 @@ namespace AnySerialize
                 fields[2].SetValue(_cache, _field2.Value);
                 fields[3].SetValue(_cache, _field3.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -175,7 +171,6 @@ namespace AnySerialize
                 fields[3].SetValue(_cache, _field3.Value);
                 fields[4].SetValue(_cache, _field4.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -219,7 +214,6 @@ namespace AnySerialize
                 fields[4].SetValue(_cache, _field4.Value);
                 fields[5].SetValue(_cache, _field5.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -266,7 +260,6 @@ namespace AnySerialize
                 fields[5].SetValue(_cache, _field5.Value);
                 fields[6].SetValue(_cache, _field6.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -316,7 +309,6 @@ namespace AnySerialize
                 fields[6].SetValue(_cache, _field6.Value);
                 fields[7].SetValue(_cache, _field7.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -369,7 +361,6 @@ namespace AnySerialize
                 fields[7].SetValue(_cache, _field7.Value);
                 fields[8].SetValue(_cache, _field8.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -425,7 +416,6 @@ namespace AnySerialize
                 fields[8].SetValue(_cache, _field8.Value);
                 fields[9].SetValue(_cache, _field9.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -484,7 +474,6 @@ namespace AnySerialize
                 fields[9].SetValue(_cache, _field9.Value);
                 fields[10].SetValue(_cache, _field10.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -546,7 +535,6 @@ namespace AnySerialize
                 fields[10].SetValue(_cache, _field10.Value);
                 fields[11].SetValue(_cache, _field11.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -611,7 +599,6 @@ namespace AnySerialize
                 fields[11].SetValue(_cache, _field11.Value);
                 fields[12].SetValue(_cache, _field12.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -679,7 +666,6 @@ namespace AnySerialize
                 fields[12].SetValue(_cache, _field12.Value);
                 fields[13].SetValue(_cache, _field13.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -750,7 +736,6 @@ namespace AnySerialize
                 fields[13].SetValue(_cache, _field13.Value);
                 fields[14].SetValue(_cache, _field14.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -824,7 +809,6 @@ namespace AnySerialize
                 fields[14].SetValue(_cache, _field14.Value);
                 fields[15].SetValue(_cache, _field15.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -901,7 +885,6 @@ namespace AnySerialize
                 fields[15].SetValue(_cache, _field15.Value);
                 fields[16].SetValue(_cache, _field16.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -981,7 +964,6 @@ namespace AnySerialize
                 fields[16].SetValue(_cache, _field16.Value);
                 fields[17].SetValue(_cache, _field17.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -1064,7 +1046,6 @@ namespace AnySerialize
                 fields[17].SetValue(_cache, _field17.Value);
                 fields[18].SetValue(_cache, _field18.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -1150,7 +1131,6 @@ namespace AnySerialize
                 fields[18].SetValue(_cache, _field18.Value);
                 fields[19].SetValue(_cache, _field19.Value);
                 return (T)_cache;
-                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
