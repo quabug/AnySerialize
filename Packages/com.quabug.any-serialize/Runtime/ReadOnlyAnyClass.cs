@@ -13,6 +13,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
 
@@ -20,19 +22,14 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -46,6 +43,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -54,21 +53,15 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -83,6 +76,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -92,23 +87,16 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -124,6 +112,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -134,25 +124,17 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -169,6 +151,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -180,27 +164,18 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -218,6 +193,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -230,29 +207,19 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -271,6 +238,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -284,31 +253,20 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -328,6 +286,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -342,33 +302,21 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -389,6 +337,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -404,35 +354,22 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -454,6 +391,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -470,37 +409,23 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -523,6 +448,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -540,39 +467,24 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -596,6 +508,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -614,41 +528,25 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    fields[11].SetValueDirect(valueRef, _field11.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                fields[11].SetValue(valueObject, _field11.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                fields[11].SetValue(_cache, _field11.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -673,6 +571,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -692,43 +592,26 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    fields[11].SetValueDirect(valueRef, _field11.Value);
-                    fields[12].SetValueDirect(valueRef, _field12.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                fields[11].SetValue(valueObject, _field11.Value);
-                fields[12].SetValue(valueObject, _field12.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                fields[11].SetValue(_cache, _field11.Value);
+                fields[12].SetValue(_cache, _field12.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -754,6 +637,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -774,45 +659,27 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    fields[11].SetValueDirect(valueRef, _field11.Value);
-                    fields[12].SetValueDirect(valueRef, _field12.Value);
-                    fields[13].SetValueDirect(valueRef, _field13.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                fields[11].SetValue(valueObject, _field11.Value);
-                fields[12].SetValue(valueObject, _field12.Value);
-                fields[13].SetValue(valueObject, _field13.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                fields[11].SetValue(_cache, _field11.Value);
+                fields[12].SetValue(_cache, _field12.Value);
+                fields[13].SetValue(_cache, _field13.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -839,6 +706,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -860,47 +729,28 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    fields[11].SetValueDirect(valueRef, _field11.Value);
-                    fields[12].SetValueDirect(valueRef, _field12.Value);
-                    fields[13].SetValueDirect(valueRef, _field13.Value);
-                    fields[14].SetValueDirect(valueRef, _field14.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                fields[11].SetValue(valueObject, _field11.Value);
-                fields[12].SetValue(valueObject, _field12.Value);
-                fields[13].SetValue(valueObject, _field13.Value);
-                fields[14].SetValue(valueObject, _field14.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                fields[11].SetValue(_cache, _field11.Value);
+                fields[12].SetValue(_cache, _field12.Value);
+                fields[13].SetValue(_cache, _field13.Value);
+                fields[14].SetValue(_cache, _field14.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -928,6 +778,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -950,49 +802,29 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    fields[11].SetValueDirect(valueRef, _field11.Value);
-                    fields[12].SetValueDirect(valueRef, _field12.Value);
-                    fields[13].SetValueDirect(valueRef, _field13.Value);
-                    fields[14].SetValueDirect(valueRef, _field14.Value);
-                    fields[15].SetValueDirect(valueRef, _field15.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                fields[11].SetValue(valueObject, _field11.Value);
-                fields[12].SetValue(valueObject, _field12.Value);
-                fields[13].SetValue(valueObject, _field13.Value);
-                fields[14].SetValue(valueObject, _field14.Value);
-                fields[15].SetValue(valueObject, _field15.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                fields[11].SetValue(_cache, _field11.Value);
+                fields[12].SetValue(_cache, _field12.Value);
+                fields[13].SetValue(_cache, _field13.Value);
+                fields[14].SetValue(_cache, _field14.Value);
+                fields[15].SetValue(_cache, _field15.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -1021,6 +853,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -1044,51 +878,30 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    fields[11].SetValueDirect(valueRef, _field11.Value);
-                    fields[12].SetValueDirect(valueRef, _field12.Value);
-                    fields[13].SetValueDirect(valueRef, _field13.Value);
-                    fields[14].SetValueDirect(valueRef, _field14.Value);
-                    fields[15].SetValueDirect(valueRef, _field15.Value);
-                    fields[16].SetValueDirect(valueRef, _field16.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                fields[11].SetValue(valueObject, _field11.Value);
-                fields[12].SetValue(valueObject, _field12.Value);
-                fields[13].SetValue(valueObject, _field13.Value);
-                fields[14].SetValue(valueObject, _field14.Value);
-                fields[15].SetValue(valueObject, _field15.Value);
-                fields[16].SetValue(valueObject, _field16.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                fields[11].SetValue(_cache, _field11.Value);
+                fields[12].SetValue(_cache, _field12.Value);
+                fields[13].SetValue(_cache, _field13.Value);
+                fields[14].SetValue(_cache, _field14.Value);
+                fields[15].SetValue(_cache, _field15.Value);
+                fields[16].SetValue(_cache, _field16.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -1118,6 +931,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -1142,53 +957,31 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    fields[11].SetValueDirect(valueRef, _field11.Value);
-                    fields[12].SetValueDirect(valueRef, _field12.Value);
-                    fields[13].SetValueDirect(valueRef, _field13.Value);
-                    fields[14].SetValueDirect(valueRef, _field14.Value);
-                    fields[15].SetValueDirect(valueRef, _field15.Value);
-                    fields[16].SetValueDirect(valueRef, _field16.Value);
-                    fields[17].SetValueDirect(valueRef, _field17.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                fields[11].SetValue(valueObject, _field11.Value);
-                fields[12].SetValue(valueObject, _field12.Value);
-                fields[13].SetValue(valueObject, _field13.Value);
-                fields[14].SetValue(valueObject, _field14.Value);
-                fields[15].SetValue(valueObject, _field15.Value);
-                fields[16].SetValue(valueObject, _field16.Value);
-                fields[17].SetValue(valueObject, _field17.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                fields[11].SetValue(_cache, _field11.Value);
+                fields[12].SetValue(_cache, _field12.Value);
+                fields[13].SetValue(_cache, _field13.Value);
+                fields[14].SetValue(_cache, _field14.Value);
+                fields[15].SetValue(_cache, _field15.Value);
+                fields[16].SetValue(_cache, _field16.Value);
+                fields[17].SetValue(_cache, _field17.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -1219,6 +1012,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -1244,55 +1039,32 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    fields[11].SetValueDirect(valueRef, _field11.Value);
-                    fields[12].SetValueDirect(valueRef, _field12.Value);
-                    fields[13].SetValueDirect(valueRef, _field13.Value);
-                    fields[14].SetValueDirect(valueRef, _field14.Value);
-                    fields[15].SetValueDirect(valueRef, _field15.Value);
-                    fields[16].SetValueDirect(valueRef, _field16.Value);
-                    fields[17].SetValueDirect(valueRef, _field17.Value);
-                    fields[18].SetValueDirect(valueRef, _field18.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                fields[11].SetValue(valueObject, _field11.Value);
-                fields[12].SetValue(valueObject, _field12.Value);
-                fields[13].SetValue(valueObject, _field13.Value);
-                fields[14].SetValue(valueObject, _field14.Value);
-                fields[15].SetValue(valueObject, _field15.Value);
-                fields[16].SetValue(valueObject, _field16.Value);
-                fields[17].SetValue(valueObject, _field17.Value);
-                fields[18].SetValue(valueObject, _field18.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                fields[11].SetValue(_cache, _field11.Value);
+                fields[12].SetValue(_cache, _field12.Value);
+                fields[13].SetValue(_cache, _field13.Value);
+                fields[14].SetValue(_cache, _field14.Value);
+                fields[15].SetValue(_cache, _field15.Value);
+                fields[16].SetValue(_cache, _field16.Value);
+                fields[17].SetValue(_cache, _field17.Value);
+                fields[18].SetValue(_cache, _field18.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }
@@ -1324,6 +1096,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
         [SerializeField] private TAny0 _field0;
         [SerializeField] private TAny1 _field1;
@@ -1350,57 +1124,33 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-                    fields[0].SetValueDirect(valueRef, _field0.Value);
-                    fields[1].SetValueDirect(valueRef, _field1.Value);
-                    fields[2].SetValueDirect(valueRef, _field2.Value);
-                    fields[3].SetValueDirect(valueRef, _field3.Value);
-                    fields[4].SetValueDirect(valueRef, _field4.Value);
-                    fields[5].SetValueDirect(valueRef, _field5.Value);
-                    fields[6].SetValueDirect(valueRef, _field6.Value);
-                    fields[7].SetValueDirect(valueRef, _field7.Value);
-                    fields[8].SetValueDirect(valueRef, _field8.Value);
-                    fields[9].SetValueDirect(valueRef, _field9.Value);
-                    fields[10].SetValueDirect(valueRef, _field10.Value);
-                    fields[11].SetValueDirect(valueRef, _field11.Value);
-                    fields[12].SetValueDirect(valueRef, _field12.Value);
-                    fields[13].SetValueDirect(valueRef, _field13.Value);
-                    fields[14].SetValueDirect(valueRef, _field14.Value);
-                    fields[15].SetValueDirect(valueRef, _field15.Value);
-                    fields[16].SetValueDirect(valueRef, _field16.Value);
-                    fields[17].SetValueDirect(valueRef, _field17.Value);
-                    fields[18].SetValueDirect(valueRef, _field18.Value);
-                    fields[19].SetValueDirect(valueRef, _field19.Value);
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
-                fields[0].SetValue(valueObject, _field0.Value);
-                fields[1].SetValue(valueObject, _field1.Value);
-                fields[2].SetValue(valueObject, _field2.Value);
-                fields[3].SetValue(valueObject, _field3.Value);
-                fields[4].SetValue(valueObject, _field4.Value);
-                fields[5].SetValue(valueObject, _field5.Value);
-                fields[6].SetValue(valueObject, _field6.Value);
-                fields[7].SetValue(valueObject, _field7.Value);
-                fields[8].SetValue(valueObject, _field8.Value);
-                fields[9].SetValue(valueObject, _field9.Value);
-                fields[10].SetValue(valueObject, _field10.Value);
-                fields[11].SetValue(valueObject, _field11.Value);
-                fields[12].SetValue(valueObject, _field12.Value);
-                fields[13].SetValue(valueObject, _field13.Value);
-                fields[14].SetValue(valueObject, _field14.Value);
-                fields[15].SetValue(valueObject, _field15.Value);
-                fields[16].SetValue(valueObject, _field16.Value);
-                fields[17].SetValue(valueObject, _field17.Value);
-                fields[18].SetValue(valueObject, _field18.Value);
-                fields[19].SetValue(valueObject, _field19.Value);
-                return (T)valueObject;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
+                fields[0].SetValue(_cache, _field0.Value);
+                fields[1].SetValue(_cache, _field1.Value);
+                fields[2].SetValue(_cache, _field2.Value);
+                fields[3].SetValue(_cache, _field3.Value);
+                fields[4].SetValue(_cache, _field4.Value);
+                fields[5].SetValue(_cache, _field5.Value);
+                fields[6].SetValue(_cache, _field6.Value);
+                fields[7].SetValue(_cache, _field7.Value);
+                fields[8].SetValue(_cache, _field8.Value);
+                fields[9].SetValue(_cache, _field9.Value);
+                fields[10].SetValue(_cache, _field10.Value);
+                fields[11].SetValue(_cache, _field11.Value);
+                fields[12].SetValue(_cache, _field12.Value);
+                fields[13].SetValue(_cache, _field13.Value);
+                fields[14].SetValue(_cache, _field14.Value);
+                fields[15].SetValue(_cache, _field15.Value);
+                fields[16].SetValue(_cache, _field16.Value);
+                fields[17].SetValue(_cache, _field17.Value);
+                fields[18].SetValue(_cache, _field18.Value);
+                fields[19].SetValue(_cache, _field19.Value);
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }

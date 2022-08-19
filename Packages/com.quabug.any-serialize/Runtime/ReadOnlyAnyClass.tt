@@ -25,6 +25,8 @@ namespace AnySerialize
         private readonly BindingFlags _fieldFlags;
         public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
         public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
+
+        private object _cache;
         
 <#
         for (var n = 0; n < i; n++)
@@ -39,33 +41,21 @@ namespace AnySerialize
         {
             get
             {
-                var fields = this.GetOrderedFields(_fieldFlags);
-                var value = new T();
-#if !ENABLE_IL2CPP
-                if (typeof(T).IsValueType)
-                {
-                    var valueRef = __makeref(value);
-<#
-        for (var n = 0; n < i; n++)
-        {
-#>
-                    fields[<#= n #>].SetValueDirect(valueRef, _field<#= n #>.Value);
-<#
-        }
-#>
-                    return value;
-                }
+#if !UNITY_EDITOR
+                if (_cache != null) return (T)_cache;
 #endif
-                object valueObject = value;
+                _cache ??= new T();
+                var fields = this.GetOrderedFields(_fieldFlags);
 <#
         for (var n = 0; n < i; n++)
         {
 #>
-                fields[<#= n #>].SetValue(valueObject, _field<#= n #>.Value);
+                fields[<#= n #>].SetValue(_cache, _field<#= n #>.Value);
 <#
         }
 #>
-                return (T)valueObject;
+                return (T)_cache;
+                // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`?
             }
         }
     }

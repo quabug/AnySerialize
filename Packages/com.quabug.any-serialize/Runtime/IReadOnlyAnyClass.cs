@@ -46,5 +46,4 @@ namespace AnySerialize
             return fields;
         }
     }
-    
 }
