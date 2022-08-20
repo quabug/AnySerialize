@@ -25,7 +25,17 @@ namespace AnySerialize.CodeGen
             // TODO: only support base type with one and only one property typeDef parameter?
             Assert.IsTrue(baseTypeReference.GenericParameters.Count == 1);
             var targetType = baseTypeReference.MakeGenericInstanceType(property.PropertyType);
-            return typeTree.GetOrCreateAllDerivedReference(targetType).First();
+            TypeReference closestType = null;
+            foreach (var type in typeTree.GetOrCreateAllDerivedReference(targetType))
+            {
+                var typeDef = type.Resolve();
+                if (!type.IsGenericType() && !typeDef.IsAbstract)
+                {
+                    closestType = type;
+                    break;
+                }
+            }
+            return closestType;
         }
     }
 }

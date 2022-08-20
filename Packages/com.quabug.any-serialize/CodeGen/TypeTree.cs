@@ -126,7 +126,7 @@ namespace AnySerialize.CodeGen
         IEnumerable<TypeReference> GetDescendantsAndSelf(TypeTreeNode self, TypeReference @base)
         {
             // TODO: handle multiple implementations?
-            var type = CreateTypeDefWithBaseGenericArguments(self.Type, @base).FirstOrDefault();
+            var type = CreateTypeWithBaseGenericArguments(self.Type, @base).FirstOrDefault();
             return type == null ? Enumerable.Empty<TypeReference>() : type.Yield().Concat(GetDescendants(self, type));
         }
 
@@ -167,7 +167,7 @@ namespace AnySerialize.CodeGen
                 if (baseCtor == null) return Enumerable.Empty<TypeReference>();
 
                 // TODO: handle multiple implementations?
-                var newType = CreateTypeDefWithBaseGenericArguments(type, baseType).FirstOrDefault();
+                var newType = CreateTypeWithBaseGenericArguments(type, baseType).FirstOrDefault();
                 if (newType == null || !newType.IsMatchTypeConstraints()) return Enumerable.Empty<TypeReference>();
 
                 return newType.Yield().Concat(
@@ -176,11 +176,11 @@ namespace AnySerialize.CodeGen
             }
         }
 
-        private IEnumerable<TypeReference> CreateTypeDefWithBaseGenericArguments(TypeReference self, TypeReference baseType)
+        private IEnumerable<TypeReference> CreateTypeWithBaseGenericArguments(TypeReference self, TypeReference baseType)
         {
-            return self.GetImplementationsOf(baseType).Select(CreateTypeDefFromImplementation);
+            return self.GetImplementationsOf(baseType).Select(CreateTypeFromImplementation);
 
-            TypeReference CreateTypeDefFromImplementation(TypeReference implementation)
+            TypeReference CreateTypeFromImplementation(TypeReference implementation)
             {
                 if (!self.IsGenericType()) return self;
                 

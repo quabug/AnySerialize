@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Mono.Cecil;
+using Mono.Cecil.Rocks;
+using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
@@ -77,19 +79,20 @@ namespace AnySerialize.CodeGen
         [Pure]
         public static bool IsMatchTypeConstraints([NotNull] this TypeReference type)
         {
-            return type switch
-            {
-                GenericInstanceType genericInstanceType => genericInstanceType.GenericArguments
-                    .Zip(genericInstanceType.ElementType.GenericParameters, (argument, parameter) => (argument, parameter))
-                    .All(t => IsArgumentMatch(t.argument, t.parameter)),
-                _ => true
-            };
+            if (type is not GenericInstanceType genericInstanceType) return true;
+            return genericInstanceType.GenericArguments
+                .Zip(genericInstanceType.ElementType.GenericParameters, (argument, parameter) => (argument, parameter))
+                .All(t => IsArgumentMatch(t.argument, t.parameter))
+            ;
         
             static bool IsArgumentMatch(TypeReference genericArgument, GenericParameter genericParameter)
             {
                 if (!genericParameter.HasConstraints) return true;
                 if (genericArgument.IsGenericParameter) return true;
-                return genericParameter.Constraints.Select(constraint => constraint.ConstraintType).All(genericArgument.IsDerivedFrom);
+                return genericParameter.Constraints
+                    .Select(constraint => constraint.ConstraintType)
+                    .All(genericArgument.IsDerivedFrom)
+                ;
             }
         }
 
@@ -97,8 +100,12 @@ namespace AnySerialize.CodeGen
         [Pure]
         public static bool IsDerivedFrom([NotNull] this TypeReference derived, [NotNull] TypeReference @base)
         {
-            // TODO:
-            return derived.Resolve().IsDerivedFrom(@base.Resolve());
+            if (!derived.Resolve().IsDerivedFrom(@base.Resolve())) return false;
+            if (derived.GetGenericParametersOrArgumentsCount() != @base.GetGenericParametersOrArgumentsCount()) return false;
+            return derived.GetGenericParametersOrArguments()
+                .Zip(@base.GetGenericParametersOrArguments(), (d, b) => (d, b))
+                .All(t => t.d.IsTypeEqual(t.b))
+            ;
         }
         
         [Pure]
@@ -139,6 +146,69 @@ namespace AnySerialize.CodeGen
                     .All(t => IsMatch(t.s, t.g))
                 ;
             }
+        }
+        
+        [Pure, NotNull]
+        public static TypeReference FillGenericTypesByReferenceGenericIndex([NotNull] this TypeReference self, [NotNull] TypeReference referenceGeneric)
+        {
+            Assert.AreEqual(self.Resolve(), referenceGeneric.Resolve());
+            
+            if (self is ArrayType arrayType && referenceGeneric is ArrayType referenceArray)
+            {
+                var elementType = FillGenericTypesByReferenceGenericIndex(arrayType.ElementType, referenceArray.ElementType);
+                return new ArrayType(elementType, arrayType.Rank);
+            }
+            if (!self.IsGenericType()) return self;
+            
+            Assert.IsTrue(referenceGeneric.IsGenericInstance);
+
+            var referenceGenericInstance = (GenericInstanceType)referenceGeneric;
+            
+            // TODO: array pool on MacOS not working?
+            //       (0,0): error System.TypeLoadException: Could not load type 'System.Buffers.ArrayPool`1' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+            // var genericArguments = ArrayPool<TypeReference>.Shared.Rent(self.GenericParameters.Count);
+            var genericArguments = self.GetGenericParametersOrArguments().ToArray();
+            for (var i = 0; i < genericArguments.Length; i++)
+            {
+                var arg = genericArguments[i];
+                var refArg = referenceGenericInstance.GenericArguments[i];
+                if (!refArg.IsGenericParameter) genericArguments[i] = arg.IsGenericParameter
+                    ? refArg : FillGenericTypesByReferenceGenericIndex(arg, refArg)
+                ;
+            }
+            return genericArguments.All(arg => arg.IsGenericParameter) ? self : self.MakeGenericInstanceType(genericArguments);
+        }
+        
+        [Pure, NotNull]
+        public static TypeReference FillGenericTypesByReferenceGenericName([NotNull] this TypeReference self, [NotNull] GenericInstanceType referenceGeneric)
+        {
+            if (self is ArrayType arrayType)
+            {
+                var elementType = FillGenericTypesByReferenceGenericName(arrayType.ElementType, referenceGeneric);
+                return new ArrayType(elementType, arrayType.Rank);
+            }
+            if (!self.IsGenericType()) return self;
+            
+            // TODO: array pool on MacOS not working?
+            //       (0,0): error System.TypeLoadException: Could not load type 'System.Buffers.ArrayPool`1' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+            // var genericArguments = ArrayPool<TypeReference>.Shared.Rent(self.GenericParameters.Count);
+            var genericArguments = self.GetGenericParametersOrArguments().ToArray();
+            for (var i = 0; i < genericArguments.Length; i++)
+            {
+                var arg = genericArguments[i];
+                if (arg.IsGenericParameter)
+                {
+                    var typeIndex = referenceGeneric.ElementType.GenericParameters
+                        .FindIndex(t =>  t.IsGenericParameter && t.Name == arg.Name)
+                    ;
+                    genericArguments[i] = typeIndex < 0 ? arg : referenceGeneric.GenericArguments[typeIndex];
+                }
+                else
+                {
+                    genericArguments[i] = FillGenericTypesByReferenceGenericName(arg, referenceGeneric);
+                }
+            }
+            return genericArguments.All(arg => arg.IsGenericParameter) ? self : self.MakeGenericInstanceType(genericArguments);
         }
     }
 }

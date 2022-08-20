@@ -69,9 +69,9 @@ namespace AnySerialize
     {
 #>
 
-    public class AnySerialize_<#= type.Name #> : AnyValue<<#= type.FullName #>> {}
-    public class AnySerialize_<#= type.Name #>Array : AnyValue<<#= type.FullName #>[]> {}
-    public class AnySerialize_<#= type.Name #>List : AnyValue<List<<#= type.FullName #>>> {}
+    public class AnyValue_<#= type.Name #> : AnyValue<<#= type.FullName #>> {}
+    public class AnyArray_<#= type.Name #> : AnyValue<<#= type.FullName #>[]> {}
+    public class AnyList_<#= type.Name #> : AnyValue<List<<#= type.FullName #>>> {}
 <#+
     }
 #>

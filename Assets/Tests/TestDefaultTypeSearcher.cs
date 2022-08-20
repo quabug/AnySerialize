@@ -14,17 +14,21 @@ namespace AnySerialize.Tests
         
         protected override void OnSetUp()
         {
-            var serializerTypes = TypeCache.GetTypesDerivedFrom<IAny>();
-            _typeTree = new TypeTree(serializerTypes.Select(type => _module.ImportReference(type).Resolve()));
+            var serializerTypes = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type => typeof(IAny).IsAssignableFrom(type))
+            ;
+            _typeTree = new TypeTree(serializerTypes.Select(type => ImportReference(type).Resolve()));
             _searcher = new DefaultTypeSearcher();
         }
 
         [Test]
         public void should_find_replace_type_for_primitive_type()
         {
-            Assert.That(_searcher.Search(_typeTree, CreateProperty<int>()), Is.EqualTo(_module.ImportReference(typeof(AnyValue<int>))));
-            Assert.That(_searcher.Search(_typeTree, CreateProperty<float>()), Is.EqualTo(_module.ImportReference(typeof(AnyValue<float>))));
-            Assert.That(_searcher.Search(_typeTree, CreateProperty<long>()), Is.EqualTo(_module.ImportReference(typeof(AnyValue<long>))));
+            AssertTypeEqual(_searcher.Search(_typeTree, CreateProperty<int>()), ImportReference(typeof(AnyValue_Int32)));
+            AssertTypeEqual(_searcher.Search(_typeTree, CreateProperty<float>()), ImportReference(typeof(AnyValue_Single)));
+            AssertTypeEqual(_searcher.Search(_typeTree, CreateProperty<long>()), ImportReference(typeof(AnyValue_Int64)));
         }
 
         class A
@@ -39,16 +43,16 @@ namespace AnySerialize.Tests
         public void should_find_replace_type_for_class_type()
         {
             var type = _searcher.Search(_typeTree, CreateProperty<A>());
-            Assert.That(type, Is.EqualTo(_module.ImportReference(typeof(ReadOnlyAnyClass<A, int, AnyValue<int>, int, AnyValue<int>, float, AnyValue<float>, float, AnyValue<float>>))));
+            AssertTypeEqual(type, ImportReference(typeof(ReadOnlyAnyClass<A, int, AnyValue<int>, int, AnyValue<int>, float, AnyValue<float>, float, AnyValue<float>>)));
         }
 
         private PropertyDefinition CreateProperty<T>(Type searchingBaseType = null, string propertyName = "test")
         {
-            var propertyType = _module.ImportReference(typeof(T));
+            var propertyType = ImportReference(typeof(T));
             var property = new PropertyDefinition(propertyName, PropertyAttributes.None, propertyType);
             property.DeclaringType = propertyType.Resolve();
             var attribute = property.AddCustomAttribute<AnySerializeAttribute>(_module, typeof(Type));
-            attribute.ConstructorArguments.Add(new CustomAttributeArgument(_module.ImportReference(typeof(Type)), searchingBaseType));
+            attribute.ConstructorArguments.Add(new CustomAttributeArgument(ImportReference(typeof(Type)), searchingBaseType));
             return property;
         }
     }
