@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -9,14 +8,6 @@ using Mono.Cecil.Rocks;
 
 namespace AnySerialize.CodeGen
 {
-    internal static class ReflectionExtension
-    {
-        public static string ToReadableName(this Type type)
-        {
-            return type.IsGenericType ? Regex.Replace(type.ToString(), @"(\w+)`\d+\[(.*)\]", "$1<$2>") : type.ToString();
-        }
-    }
-
     internal static class CecilExtension
     {
         public static string ToReadableName(this TypeReference type)

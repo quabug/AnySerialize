@@ -7,8 +7,6 @@ namespace AnySerialize.Tests
 {
     public class TestTypeTree : CecilTestBase
     {
-        private TypeTree _tree;
-
         interface IGeneric<T, U> {}
         class TInt<T> : IGeneric<T, int> {}
         class IntU<U> : IGeneric<int, U> {}
@@ -17,27 +15,30 @@ namespace AnySerialize.Tests
         class AnotherTFloat<T> : IGeneric<T, float> {}
         class TIntSub : TInt<int> {}
 
-        protected override void OnSetUp()
-        {
-            _tree = new TypeTree(_module.GetTypes());
-        }
-
         [Test]
         public void should_get_derived_from_generic_interface()
         {
-            CheckDerivedIgnoreGenericParameters(typeof(IGeneric<,>), typeof(TInt<>), typeof(IntU<>), typeof(IntInt), typeof(TFloat<>), typeof(AnotherTFloat<>), typeof(TIntSub));
+            var tree = LoadTree(typeof(IGeneric<,>));
+            CheckDerivedIgnoreGenericParameters(tree, typeof(IGeneric<,>), typeof(TInt<>), typeof(IntU<>), typeof(IntInt), typeof(TFloat<>), typeof(AnotherTFloat<>), typeof(TIntSub));
         }
 
         [Test]
         public void should_get_derived_from_generic_interface_by_ignoring_generic_parameters()
         {
-            CheckDerivedIgnoreGenericParameters(typeof(IGeneric<int,int>), typeof(TInt<int>), typeof(IntU<int>), typeof(IntInt), typeof(TFloat<int>), typeof(AnotherTFloat<int>), typeof(TIntSub));
+            var tree = LoadTree(typeof(IGeneric<,>));
+            CheckDerivedIgnoreGenericParameters(tree, typeof(IGeneric<int,int>), typeof(TInt<int>), typeof(IntU<int>), typeof(IntInt), typeof(TFloat<int>), typeof(AnotherTFloat<int>), typeof(TIntSub));
         }
 
         [Test]
         public void should_get_derived_from_concrete_generic_interface()
         {
-            CheckDerived(typeof(IGeneric<int,int>), typeof(TInt<int>), typeof(IntU<int>), typeof(IntInt), typeof(TIntSub));
+            var tree = LoadTree(typeof(IGeneric<,>));
+            CheckDerived(tree, typeof(IGeneric<int,int>),
+                ("TInt<Int32>", "IGeneric<T,Int32>"),
+                (nameof(TIntSub), "TInt<Int32>"),
+                ("IntU<Int32>", "IGeneric<Int32,U>"),
+                (nameof(IntInt), "IGeneric<Int32,Int32>")
+            );
         }
 
         interface I {}
@@ -61,82 +62,88 @@ namespace AnySerialize.Tests
         [Test]
         public void should_get_derived_from_class()
         {
-            CheckDerived(
+            var tree = LoadTree(typeof(A));
+            CheckDerived(tree,
                 typeof(A),
-                    typeof(AA),
-                        typeof(AAA),
-                            typeof(AAAA),
-                                typeof(AAAAA),
-                            typeof(AAAB),
-                                typeof(AAABA),
-                                typeof(AAABB),
-                            typeof(AAAC),
-                    typeof(AB),
-                        typeof(ABA),
-                            typeof(ABAA),
-                            typeof(ABAB),
-                        typeof(ABB),
-                        typeof(ABC)
+                    (nameof(AA), nameof(A)),
+                        (nameof(AAA), nameof(AA)),
+                            (nameof(AAAA), nameof(AAA)),
+                                (nameof(AAAAA), nameof(AAAA)),
+                            (nameof(AAAB), nameof(AAA)),
+                                (nameof(AAABA), nameof(AAAB)),
+                                (nameof(AAABB), nameof(AAAB)),
+                            (nameof(AAAC), nameof(AAA)),
+                    (nameof(AB), nameof(A)),
+                        (nameof(ABA), nameof(AB)),
+                            (nameof(ABAA), nameof(ABA)),
+                            (nameof(ABAB), nameof(ABA)),
+                        (nameof(ABB), nameof(AB)),
+                        (nameof(ABC), nameof(AB))
             );
 
-            CheckDerived(
+            CheckDerived(tree,
                         typeof(AAA),
-                            typeof(AAAA),
-                                typeof(AAAAA),
-                            typeof(AAAB),
-                                typeof(AAABA),
-                                typeof(AAABB),
-                            typeof(AAAC)
+                            (nameof(AAAA), nameof(AAA)),
+                                (nameof(AAAAA), nameof(AAAA)),
+                            (nameof(AAAB), nameof(AAA)),
+                                (nameof(AAABA), nameof(AAAB)),
+                                (nameof(AAABB), nameof(AAAB)),
+                            (nameof(AAAC), nameof(AAA))
             );
 
-            CheckDerived(
+            CheckDerived(tree,
                     typeof(AB),
-                        typeof(ABA),
-                            typeof(ABAA),
-                            typeof(ABAB),
-                        typeof(ABB),
-                        typeof(ABC)
+                        (nameof(ABA), nameof(AB)),
+                            (nameof(ABAA), nameof(ABA)),
+                            (nameof(ABAB), nameof(ABA)),
+                        (nameof(ABB), nameof(AB)),
+                        (nameof(ABC), nameof(AB))
             );
         }
 
         [Test]
         public void should_get_derived_from_interface()
         {
-            CheckDerived(
+            var tree = LoadTree(typeof(A));
+            CheckDerived(tree,
                 typeof(I),
-                    typeof(II),
-                        typeof(ABA),
-                            typeof(ABAA),
-                            typeof(ABAB),
-                    // typeof(AA),
-                        typeof(AAA),
-                            typeof(AAAA), // AAA
-                                typeof(AAAAA),
-                            typeof(AAAB),
-                                typeof(AAABA),
-                                typeof(AAABB),
-                            typeof(AAAC),
-                    // typeof(AB),
-                        typeof(ABA),
-                            typeof(ABAA), // ABA
-                            typeof(ABAB),
-                        typeof(ABB)
-                        // typeof(ABC)
+                        (nameof(AAA), nameof(I)),
+                            (nameof(AAAA), nameof(AAA)),
+                                (nameof(AAAAA), nameof(AAAA)),
+                            (nameof(AAAB), nameof(AAA)),
+                                (nameof(AAABA), nameof(AAAB)),
+                                (nameof(AAABB), nameof(AAAB)),
+                            (nameof(AAAC), nameof(AAA)),
+                
+                            (nameof(AAAA), nameof(I)),
+                                (nameof(AAAAA), nameof(AAAA)),
+                
+                    (nameof(II), nameof(I)),
+                        (nameof(ABA), nameof(II)),
+                            (nameof(ABAA), nameof(ABA)),
+                            (nameof(ABAB), nameof(ABA)),
+                
+                        (nameof(ABA), nameof(I)),
+                            (nameof(ABAA), nameof(ABA)),
+                            (nameof(ABAB), nameof(ABA)),
+                            
+                        (nameof(ABAA), nameof(I)),
+                        (nameof(ABB), nameof(I))
             );
         }
 
-        void CheckDerived(Type @base, params Type[] types)
+        void CheckDerived(TypeTree tree, Type @base, params (string type, string impl)[] types)
         {
-            var derivedTypes = _tree
+            var derivedTypes = tree
                 .GetOrCreateAllDerivedReferences(_module.ImportReference(@base))
-                .Select(t => t.derivedType.Name)
+                .Select(t => (t.derivedType.ToReadableName(), t.implementation.ToReadableName()))
             ;
-            Assert.That(derivedTypes, Is.EquivalentTo(types.Select(type => type.Name)));
+            Assert.That(derivedTypes, Is.EquivalentTo(types));
         }
 
-        void CheckDerivedIgnoreGenericParameters(Type @base, params Type[] types)
+        void CheckDerivedIgnoreGenericParameters(TypeTree tree, Type @base, params Type[] types)
         {
-            var tokens = _tree
+            var tokens = tree
                 .GetAllDerivedDefinition(_module.ImportReference(@base).Resolve())
                 .Select(type => type.Name)
             ;

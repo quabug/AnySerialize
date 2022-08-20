@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using AnySerialize.CodeGen;
 using Mono.Cecil;
 using NUnit.Framework;
@@ -31,6 +33,31 @@ namespace AnySerialize.Tests
             OnSetUp();
         }
 
+        protected TypeTree LoadTree(params Type[] roots)
+        {
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type => roots.Any(root => root.IsGenericType
+                    ? IsImplementationOfGenericBase(type, root)
+                    : root.IsAssignableFrom(type))
+                )
+                .Select(ImportDefinition)
+            ;
+            return new TypeTree(types);
+
+            bool IsImplementationOfGenericBase(Type self, Type genericBase)
+            {
+                var genericBaseDef = genericBase.GetGenericTypeDefinition();
+                if (genericBase.IsInterface) return self.GetInterfaces().Any(@interface => @interface.IsGenericType && @interface.GetGenericTypeDefinition() == genericBaseDef);
+                while (self != null)
+                {
+                    if (self.GetGenericTypeDefinition() == genericBaseDef) return true;
+                    self = self.BaseType;
+                }
+                return false;
+            }
+        }
+
         protected virtual void OnSetUp() {}
 
         protected TypeReference ImportReference<T>() => ImportReference(typeof(T));
@@ -46,6 +73,9 @@ namespace AnySerialize.Tests
                 throw;
             }
         }
+        
+        protected TypeDefinition ImportDefinition<T>() => ImportDefinition(typeof(T));
+        protected TypeDefinition ImportDefinition(Type type) => ImportReference(type).Resolve();
 
         protected void AssertTypeEqual(TypeReference lhs, TypeReference rhs)
         {

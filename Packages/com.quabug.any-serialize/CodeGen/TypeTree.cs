@@ -85,17 +85,15 @@ namespace AnySerialize.CodeGen
 
         private readonly Dictionary<TypeKey, TypeTreeNode> _typeTreeNodeMap;
 
-        private readonly ILPostProcessorLogger _logger;
+        public ILPostProcessorLogger Logger { get; set; } = new ILPostProcessorLogger();
 
         /// <summary>
         /// Create a type-tree from a collection of <paramref name="sourceTypes"/>
         /// </summary>
         /// <param name="sourceTypes">The source types of tree.</param>
         /// <param name="logger">logger</param>
-        public TypeTree([NotNull] IEnumerable<TypeDefinition> sourceTypes, ILPostProcessorLogger logger = null)
+        public TypeTree([NotNull, ItemNotNull] IEnumerable<TypeDefinition> sourceTypes)
         {
-            _logger = logger ?? new ILPostProcessorLogger();
-            if (logger != null) _logger = logger;
             _typeTreeNodeMap = new Dictionary<TypeKey, TypeTreeNode>();
             foreach (var type in sourceTypes.Where(t => t.IsClass || t.IsInterface)) CreateTypeTree(type);
         }
@@ -230,20 +228,21 @@ namespace AnySerialize.CodeGen
             if (_typeTreeNodeMap.TryGetValue(type, out var node)) return node;
 
             var self = new TypeTreeNode(type);
-            foreach (var @base in type.Interfaces.Select(i => i.InterfaceType).Append(type.BaseType).Where(@base => @base != null))
+            foreach (var @base in type.GetParentTypes())
             {
                 // HACK: some interface cannot be resolved? has been stripped by Unity?
                 //       e.g. the interface `IEditModeTestYieldInstruction` of `ExitPlayMode`
                 //            will resolve to null
-                var definition = @base.Resolve();
-                if (definition == null)
+                var baseDef = @base.Resolve();
+                if (baseDef == null)
                 {
-                    _logger.Warning($"Invalid type definition {@base}({@base.Module}) on {type}");
+                    Logger.Warning($"Invalid type definition {@base}({@base.Module}) on {type}");
                 }
                 else
                 {
-                    var parentNode = CreateTypeTree(definition);
-                    parentNode.ChildrenNodes.Add(self);
+                    var parentNode = CreateTypeTree(baseDef);
+                    if (parentNode.ChildrenNodes.All(n => !n.Type.IsTypeEqual(type)))
+                        parentNode.ChildrenNodes.Add(self);
                 }
             }
 
@@ -254,7 +253,7 @@ namespace AnySerialize.CodeGen
             catch
             {
                 var duplicate = _typeTreeNodeMap[type];
-                _logger.Error($"Duplicate type? {type} {duplicate.Type}");
+                Logger.Error($"Duplicate type? {type} {duplicate.Type}");
             }
             return self;
         }

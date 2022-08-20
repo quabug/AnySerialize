@@ -49,7 +49,7 @@ namespace AnySerialize.CodeGen
                     )
                     .SelectMany(asm => asm.MainModule.GetAllTypes())
                 ;
-            return new TypeTree(allTypes, logger);
+            return new TypeTree(allTypes) { Logger = logger };
         }
     }
 }
