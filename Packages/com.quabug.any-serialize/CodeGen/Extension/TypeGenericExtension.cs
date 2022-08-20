@@ -16,7 +16,7 @@ namespace AnySerialize.CodeGen
             return type switch
             {
                 null => throw new ArgumentNullException(),
-                GenericParameter => false,
+                GenericParameter _ => false,
                 GenericInstanceType genericInstanceType => genericInstanceType.GenericArguments.All(arg => arg.IsConcreteType()),
                 TypeSpecification typeSpecification => typeSpecification.ElementType.IsConcreteType(),
                 _ => !type.HasGenericParameters
@@ -29,8 +29,8 @@ namespace AnySerialize.CodeGen
             return type switch
             {
                 null => throw new ArgumentNullException(),
-                GenericParameter => true,
-                GenericInstanceType => true,
+                GenericParameter _ => true,
+                GenericInstanceType _ => true,
                 _ => type.HasGenericParameters
             };
         }
@@ -79,7 +79,7 @@ namespace AnySerialize.CodeGen
         [Pure]
         public static bool IsMatchTypeConstraints([NotNull] this TypeReference type)
         {
-            if (type is not GenericInstanceType genericInstanceType) return true;
+            if (!(type is GenericInstanceType genericInstanceType)) return true;
             return genericInstanceType.GenericArguments
                 .Zip(genericInstanceType.ElementType.GenericParameters, (argument, parameter) => (argument, parameter))
                 .All(t => IsArgumentMatch(t.argument, t.parameter))
