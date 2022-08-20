@@ -1,7 +1,6 @@
 <#@ template language="C#" #>
 
 using System;
-using System.Reflection;
 using UnityEngine;
 
 namespace AnySerialize
@@ -22,10 +21,6 @@ namespace AnySerialize
         }
 #>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
 <#
@@ -46,7 +41,7 @@ namespace AnySerialize
 #endif
 <# // TODO: optimize set value of struct by `__makeref` and `SetValueDirect`? #>
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
 <#
         for (var n = 0; n < i; n++)
         {

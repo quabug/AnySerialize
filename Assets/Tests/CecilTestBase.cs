@@ -19,13 +19,13 @@ namespace AnySerialize.Tests
             var assemblyLocation = GetType().Assembly.Location;
             _assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyLocation, new ReaderParameters
             {
-                AssemblyResolver = new CodeGen.PostProcessorAssemblyResolver(new []
-                {
+                AssemblyResolver = new CodeGen.PostProcessorAssemblyResolver(
                     GetType().Assembly.Location
                     , typeof(object).Assembly.Location
                     , typeof(Object).Assembly.Location
+                    , typeof(UnityEngine.Object).Assembly.Location
                     , typeof(AnotherAssembly).Assembly.Location
-                })
+                )
             });
             _module = _assemblyDefinition.MainModule;
             OnSetUp();

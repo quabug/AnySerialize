@@ -102,10 +102,10 @@ namespace AnySerialize.CodeGen
 
         // TODO:
         // /// <summary>
-        // /// Create a typeDef-tree from a collection of <paramref name="sourceTypes"/>
+        // /// Create a type-tree from a collection of <paramref name="sourceTypes"/>
         // /// </summary>
         // /// <param name="sourceTypes">The source types of tree.</param>
-        // /// <param name="baseTypes">Excluded any types from <paramref name="sourceTypes"/> which is not derived from base typeDef.</param>
+        // /// <param name="baseTypes">Excluded any types from <paramref name="sourceTypes"/> which is not derived from base type.</param>
         // public TypeTree([NotNull] ICollection<TypeDefinition> sourceTypes, [NotNull] ICollection<TypeDefinition> baseTypes)
         // {
         // }
@@ -125,9 +125,7 @@ namespace AnySerialize.CodeGen
         
         IEnumerable<TypeReference> GetDescendantsAndSelf(TypeTreeNode self, TypeReference @base)
         {
-            // TODO: handle multiple implementations?
-            var type = CreateTypeWithBaseGenericArguments(self.Type, @base).FirstOrDefault();
-            return type == null ? Enumerable.Empty<TypeReference>() : type.Yield().Concat(GetDescendants(self, type));
+            return CreateTypeWithBaseGenericArguments(self.Type, @base).SelectMany(t => t.type.Yield().Concat(GetDescendants(self, t.type)));
         }
 
         IEnumerable<TypeReference> GetDescendants(TypeTreeNode self, TypeReference @base)
@@ -145,7 +143,7 @@ namespace AnySerialize.CodeGen
         {
             _typeTreeNodeMap.TryGetValue(baseType, out var node);
             if (node == null) throw new ArgumentException($"{baseType} is not part of this tree");
-            return node.ChildrenNodes.Select(child => child.Type).Where(type => type.IsImplementationOf(baseType));
+            return node.ChildrenNodes.Select(child => child.Type);
         }
         
         /// <summary>
@@ -153,32 +151,29 @@ namespace AnySerialize.CodeGen
         /// Will make new TypeReference if derived type is generic.
         /// </summary>
         /// <param name="rootType"></param>
-        /// <param name="publicOnly">including public only classes or also including private ones.</param>
-        /// <returns>Any typeDef of classes derived from <paramref name="rootType"/> directly or indirectly.</returns>
-        public IEnumerable<TypeReference> GetOrCreateAllDerivedReference(TypeReference rootType, bool publicOnly = true)
+        /// <returns>Any type of classes derived from <paramref name="rootType"/> directly or indirectly.</returns>
+        public IEnumerable<(TypeReference derivedType, TypeReference implementation)> GetOrCreateAllDerivedReferences(TypeReference rootType)
         {
-            return GetDirectDerivedDefinition(rootType).SelectMany(type => RecursiveProcess(type, rootType));
+            return GetOrCreateDirectDerivedReferences(rootType).SelectMany(t => t.Yield().Concat(GetOrCreateAllDerivedReferences(t.derivedType)));
+        }
         
-            IEnumerable<TypeReference> RecursiveProcess(TypeReference type, TypeReference baseType)
-            {
-                var typeDefinition = type.Resolve();
-                if (publicOnly && !typeDefinition.IsPublicOrNestedPublic()) return Enumerable.Empty<TypeReference>();
-                var baseCtor = typeDefinition.GetConstructors().FirstOrDefault(ctor => !ctor.HasParameters);
-                if (baseCtor == null) return Enumerable.Empty<TypeReference>();
-
-                // TODO: handle multiple implementations?
-                var newType = CreateTypeWithBaseGenericArguments(type, baseType).FirstOrDefault();
-                if (newType == null || !newType.IsMatchTypeConstraints()) return Enumerable.Empty<TypeReference>();
-
-                return newType.Yield().Concat(
-                    GetDirectDerivedDefinition(newType).SelectMany(t => RecursiveProcess(t, newType))
-                );
-            }
+        /// <summary>
+        /// Get directly derived class type of <paramref name="rootType"/>.
+        /// Will make new TypeReference if derived type is generic.
+        /// </summary>
+        /// <param name="rootType"></param>
+        /// <returns>Any type of classes derived from <paramref name="rootType"/> directly.</returns>
+        public IEnumerable<(TypeReference derivedType, TypeReference implementation)> GetOrCreateDirectDerivedReferences(TypeReference rootType)
+        {
+            return GetDirectDerivedDefinition(rootType)
+                .SelectMany(type => CreateTypeWithBaseGenericArguments(type, rootType))
+                .Where(t => t.type != null && t.type.IsMatchTypeConstraints())
+            ;
         }
 
-        private IEnumerable<TypeReference> CreateTypeWithBaseGenericArguments(TypeReference self, TypeReference baseType)
+        private IEnumerable<(TypeReference type, TypeReference implementation)> CreateTypeWithBaseGenericArguments(TypeReference self, TypeReference baseType)
         {
-            return self.GetImplementationsOf(baseType).Select(CreateTypeFromImplementation);
+            return self.GetImplementationsOf(baseType).Select(implementation => (CreateTypeFromImplementation(implementation), implementation));
 
             TypeReference CreateTypeFromImplementation(TypeReference implementation)
             {

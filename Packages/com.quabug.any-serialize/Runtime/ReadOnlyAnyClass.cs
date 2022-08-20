@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Reflection;
 using UnityEngine;
 
 namespace AnySerialize
@@ -10,10 +9,6 @@ namespace AnySerialize
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -26,7 +21,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 return (T)_cache;
             }
@@ -39,10 +34,6 @@ namespace AnySerialize
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -56,7 +47,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 return (T)_cache;
@@ -71,10 +62,6 @@ namespace AnySerialize
         where TAny1 : IReadOnlyAny<T1>
         where TAny2 : IReadOnlyAny<T2>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -89,7 +76,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -106,10 +93,6 @@ namespace AnySerialize
         where TAny2 : IReadOnlyAny<T2>
         where TAny3 : IReadOnlyAny<T3>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -125,7 +108,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -144,10 +127,6 @@ namespace AnySerialize
         where TAny3 : IReadOnlyAny<T3>
         where TAny4 : IReadOnlyAny<T4>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -164,7 +143,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -185,10 +164,6 @@ namespace AnySerialize
         where TAny4 : IReadOnlyAny<T4>
         where TAny5 : IReadOnlyAny<T5>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -206,7 +181,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -229,10 +204,6 @@ namespace AnySerialize
         where TAny5 : IReadOnlyAny<T5>
         where TAny6 : IReadOnlyAny<T6>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -251,7 +222,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -276,10 +247,6 @@ namespace AnySerialize
         where TAny6 : IReadOnlyAny<T6>
         where TAny7 : IReadOnlyAny<T7>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -299,7 +266,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -326,10 +293,6 @@ namespace AnySerialize
         where TAny7 : IReadOnlyAny<T7>
         where TAny8 : IReadOnlyAny<T8>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -350,7 +313,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -379,10 +342,6 @@ namespace AnySerialize
         where TAny8 : IReadOnlyAny<T8>
         where TAny9 : IReadOnlyAny<T9>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -404,7 +363,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -435,10 +394,6 @@ namespace AnySerialize
         where TAny9 : IReadOnlyAny<T9>
         where TAny10 : IReadOnlyAny<T10>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -461,7 +416,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -494,10 +449,6 @@ namespace AnySerialize
         where TAny10 : IReadOnlyAny<T10>
         where TAny11 : IReadOnlyAny<T11>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -521,7 +472,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -556,10 +507,6 @@ namespace AnySerialize
         where TAny11 : IReadOnlyAny<T11>
         where TAny12 : IReadOnlyAny<T12>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -584,7 +531,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -621,10 +568,6 @@ namespace AnySerialize
         where TAny12 : IReadOnlyAny<T12>
         where TAny13 : IReadOnlyAny<T13>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -650,7 +593,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -689,10 +632,6 @@ namespace AnySerialize
         where TAny13 : IReadOnlyAny<T13>
         where TAny14 : IReadOnlyAny<T14>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -719,7 +658,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -760,10 +699,6 @@ namespace AnySerialize
         where TAny14 : IReadOnlyAny<T14>
         where TAny15 : IReadOnlyAny<T15>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -791,7 +726,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -834,10 +769,6 @@ namespace AnySerialize
         where TAny15 : IReadOnlyAny<T15>
         where TAny16 : IReadOnlyAny<T16>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -866,7 +797,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -911,10 +842,6 @@ namespace AnySerialize
         where TAny16 : IReadOnlyAny<T16>
         where TAny17 : IReadOnlyAny<T17>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -944,7 +871,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -991,10 +918,6 @@ namespace AnySerialize
         where TAny17 : IReadOnlyAny<T17>
         where TAny18 : IReadOnlyAny<T18>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -1025,7 +948,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);
@@ -1074,10 +997,6 @@ namespace AnySerialize
         where TAny18 : IReadOnlyAny<T18>
         where TAny19 : IReadOnlyAny<T19>
     {
-        private readonly BindingFlags _fieldFlags;
-        public ReadOnlyAnyClass() : this(AnyClassUtility.DefaultBindingFlags) {}
-        public ReadOnlyAnyClass(BindingFlags fieldFlags) => _fieldFlags = fieldFlags;
-
         private object _cache;
         
         [SerializeField] private TAny0 _field0;
@@ -1109,7 +1028,7 @@ namespace AnySerialize
                 if (_cache != null) return (T)_cache;
 #endif
                 _cache ??= new T();
-                var fields = this.GetOrderedFields(_fieldFlags);
+                var fields = AnyClassUtility.GetOrderedFields<T>();
                 fields[0].SetValue(_cache, _field0.Value);
                 fields[1].SetValue(_cache, _field1.Value);
                 fields[2].SetValue(_cache, _field2.Value);

@@ -104,9 +104,13 @@ namespace AnySerialize.Tests
         {
             CheckDerived(
                 typeof(I),
+                    typeof(II),
+                        typeof(ABA),
+                            typeof(ABAA),
+                            typeof(ABAB),
                     // typeof(AA),
                         typeof(AAA),
-                            typeof(AAAA),
+                            typeof(AAAA), // AAA
                                 typeof(AAAAA),
                             typeof(AAAB),
                                 typeof(AAABA),
@@ -114,7 +118,7 @@ namespace AnySerialize.Tests
                             typeof(AAAC),
                     // typeof(AB),
                         typeof(ABA),
-                            typeof(ABAA),
+                            typeof(ABAA), // ABA
                             typeof(ABAB),
                         typeof(ABB)
                         // typeof(ABC)
@@ -124,20 +128,19 @@ namespace AnySerialize.Tests
         void CheckDerived(Type @base, params Type[] types)
         {
             var derivedTypes = _tree
-                .GetOrCreateAllDerivedReference(_module.ImportReference(@base), publicOnly: false)
-                .Distinct()
-                .Select(t => t.ToString())
+                .GetOrCreateAllDerivedReferences(_module.ImportReference(@base))
+                .Select(t => t.derivedType.Name)
             ;
-            Assert.That(derivedTypes, Is.EquivalentTo(types.Select(type => _module.ImportReference(type).ToString())));
+            Assert.That(derivedTypes, Is.EquivalentTo(types.Select(type => type.Name)));
         }
 
         void CheckDerivedIgnoreGenericParameters(Type @base, params Type[] types)
         {
             var tokens = _tree
                 .GetAllDerivedDefinition(_module.ImportReference(@base).Resolve())
-                .Select(type => type.ToString())
+                .Select(type => type.Name)
             ;
-            Assert.That(tokens, Is.EquivalentTo(types.Select(type => _module.ImportReference(type).Resolve().ToString())));
+            Assert.That(tokens, Is.EquivalentTo(types.Select(type => _module.ImportReference(type).Resolve().Name)));
         }
     }
 }

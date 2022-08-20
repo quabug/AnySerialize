@@ -6,18 +6,14 @@ using UnityEngine.Assertions;
 
 namespace AnySerialize
 {
-    public interface IReadOnlyAnyClass<out T> : IReadOnlyAny<T> {}
+    public interface IAnyClass : IAny {}
+    public interface IAnyClass<T> : IAny<T>, IAnyClass {}
+    public interface IReadOnlyAnyClass<out T> : IReadOnlyAny<T>, IAnyClass {}
 
     public static class AnyClassUtility
     {
         public const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         
-        [Pure]
-        public static FieldInfo[] GetOrderedFields<T>(this IReadOnlyAnyClass<T> _, BindingFlags fieldFlags)
-        {
-            return GetOrderedFields<T>(fieldFlags);
-        }
-
         [Pure]
         public static T[] Reorder<T>(this T[] array, IEnumerable<int> newIndices)
         {
@@ -34,9 +30,9 @@ namespace AnySerialize
         }
 
         [Pure]
-        public static FieldInfo[] GetOrderedFields<T>(BindingFlags fieldFlags)
+        public static FieldInfo[] GetOrderedFields<T>()
         {
-            var fields = typeof(T).GetFields(fieldFlags);
+            var fields = typeof(T).GetFields(DefaultBindingFlags);
             var newIndices = fields
                 .Select((f, i) => (index: i, order: f.GetCustomAttribute<AnySerializeFieldOrderAttribute>()?.Order ?? i))
                 .OrderBy(t => t.order)
