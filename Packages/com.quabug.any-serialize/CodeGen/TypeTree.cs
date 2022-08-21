@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 using Mono.Cecil;
-using Mono.Cecil.Rocks;
 
 namespace AnySerialize.CodeGen
 {
@@ -27,21 +26,6 @@ namespace AnySerialize.CodeGen
     /// </summary>
     public class TypeTree
     {
-        class TypeDefinitionTokenComparer : IEqualityComparer<TypeDefinition>
-        {
-            public bool Equals(TypeDefinition x, TypeDefinition y)
-            {
-                if (ReferenceEquals(x, y)) return true;
-                if (x == null || y == null) return false;
-                return new TypeKey(x).Equals(new TypeKey(y));
-            }
-
-            public int GetHashCode(TypeDefinition obj)
-            {
-                return new TypeKey(obj).GetHashCode();
-            }
-        }
-
         readonly struct TypeKey : IEquatable<TypeKey>
         {
             public readonly string ModuleName;
@@ -75,15 +59,15 @@ namespace AnySerialize.CodeGen
             public static implicit operator TypeKey(TypeReference typeReference) => new TypeKey(typeReference.Resolve());
         }
 
-        private class TypeTreeNode
+        private class Node
         {
             [NotNull] public TypeDefinition Type { get; }
-            public List<TypeTreeNode> ChildrenNodes { get; } = new List<TypeTreeNode>();
-            public TypeTreeNode(TypeDefinition type) => Type = type;
+            public List<Node> ChildrenNodes { get; } = new List<Node>();
+            public Node(TypeDefinition type) => Type = type;
             public override string ToString() => $"{Type.Name}({Type.Module.Name})";
         }
 
-        private readonly Dictionary<TypeKey, TypeTreeNode> _typeTreeNodeMap;
+        private readonly Dictionary<TypeKey, Node> _typeTreeNodeMap;
 
         public ILPostProcessorLogger Logger { get; set; } = new ILPostProcessorLogger();
 
@@ -94,7 +78,7 @@ namespace AnySerialize.CodeGen
         /// <param name="logger">logger</param>
         public TypeTree([NotNull, ItemNotNull] IEnumerable<TypeDefinition> sourceTypes)
         {
-            _typeTreeNodeMap = new Dictionary<TypeKey, TypeTreeNode>();
+            _typeTreeNodeMap = new Dictionary<TypeKey, Node>();
             foreach (var type in sourceTypes.Where(t => t.IsClass || t.IsInterface)) CreateTypeTree(type);
         }
 
@@ -121,12 +105,12 @@ namespace AnySerialize.CodeGen
             return GetDescendants(node, baseType);
         }
         
-        IEnumerable<TypeReference> GetDescendantsAndSelf(TypeTreeNode self, TypeReference @base)
+        IEnumerable<TypeReference> GetDescendantsAndSelf(Node self, TypeReference @base)
         {
             return CreateTypeWithBaseGenericArguments(self.Type, @base).SelectMany(t => t.type.Yield().Concat(GetDescendants(self, t.type)));
         }
 
-        IEnumerable<TypeReference> GetDescendants(TypeTreeNode self, TypeReference @base)
+        IEnumerable<TypeReference> GetDescendants(Node self, TypeReference @base)
         {
             return self.ChildrenNodes.SelectMany(child => GetDescendantsAndSelf(child, @base));
         }
@@ -214,7 +198,7 @@ namespace AnySerialize.CodeGen
             }
             return builder.ToString();
         
-            void WriteString(TypeTreeNode node, int indent = 0)
+            void WriteString(Node node, int indent = 0)
             {
                 for (var i = 0; i < indent; i++) builder.Append("    ");
                 builder.AppendLine(node.ToString());
@@ -222,12 +206,24 @@ namespace AnySerialize.CodeGen
             }
         }
 
-        TypeTreeNode CreateTypeTree(TypeDefinition type)
+        Node CreateTypeTree(TypeDefinition type)
         {
             if (type == null) return null;
             if (_typeTreeNodeMap.TryGetValue(type, out var node)) return node;
 
-            var self = new TypeTreeNode(type);
+            var self = new Node(type);
+            try
+            {
+                _typeTreeNodeMap.Add(type, self);
+            }
+            catch
+            {
+                var duplicate = _typeTreeNodeMap[type];
+                Logger.Error($"Duplicate type? {type} {duplicate.Type}");
+            }
+            // should skip creating type hierarchy for interfaces?
+            if (type.IsInterface) return self;
+            
             foreach (var @base in type.GetParentTypes())
             {
                 // HACK: some interface cannot be resolved? has been stripped by Unity?
@@ -244,16 +240,6 @@ namespace AnySerialize.CodeGen
                     if (parentNode.ChildrenNodes.All(n => !n.Type.IsTypeEqual(type)))
                         parentNode.ChildrenNodes.Add(self);
                 }
-            }
-
-            try
-            {
-                _typeTreeNodeMap.Add(type, self);
-            }
-            catch
-            {
-                var duplicate = _typeTreeNodeMap[type];
-                Logger.Error($"Duplicate type? {type} {duplicate.Type}");
             }
             return self;
         }

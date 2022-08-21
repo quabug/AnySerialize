@@ -178,5 +178,22 @@ namespace AnySerialize.Tests
             Assert.That(type.GenericParameters[1].Constraints.Count, Is.EqualTo(1));
             Assert.That(type.GenericParameters[2].Constraints.Count, Is.EqualTo(3));
         }
+        
+        interface I<T> {}
+        interface II<T, U> : I<int>, I<float> {}
+        class Foo<T> : II<float, long>, I<double> {}
+        
+        [Test]
+        public void should_()
+        {
+            var tree = new TypeTree(new[]
+            {
+                ImportDefinition(typeof(I<>)),
+                ImportDefinition(typeof(II<,>)),
+                ImportDefinition(typeof(Foo<>)),
+            });
+            
+            var i = tree.GetDirectDerivedDefinition(ImportReference(typeof(I<>)));
+        }
     }
 }

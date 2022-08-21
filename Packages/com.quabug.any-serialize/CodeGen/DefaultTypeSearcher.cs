@@ -28,20 +28,46 @@ namespace AnySerialize.CodeGen
             logger?.Warning($"{baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
             // TODO: only support base type with one and only one property type parameter?
             Assert.IsTrue(baseTypeReference.GenericParameters.Count == 1);
-            var targetType = baseTypeReference.MakeGenericInstanceType(property.PropertyType);
-            var propertyFields = GetNonStaticFields(property.PropertyType.Resolve());
+            var propertyType = property.PropertyType;
+            var targetType = baseTypeReference.MakeGenericInstanceType(propertyType);
+            var propertyFields = GetNonStaticFields(propertyType.Resolve());
             TypeReference closestType = null;
-            // foreach (var type in typeTree.GetOrCreateAllDerivedReferences(targetType))
-            // {
-            //     if (!IsInstantializable(type)) continue;
-            //     
-            //     if (!type.IsGenericType())
-            //     {
-            //         closestType = type;
-            //         break;
-            //     }
-            // }
-            return closestType;
+            TypeReference closestImplementation = null;
+            foreach (var (type, implementation) in FindTypes(targetType, targetType.ElementType.GenericParameters[0]))
+            {
+                if (!IsInstantializable(type)) continue;
+            }
+            return FindClosestTargetType();
+
+            bool IsCloserImplementation(TypeReference previous, TypeReference current, TypeReference target)
+            {
+                if (previous == null || previous.IsGenericParameter) return true;
+                if (current == null || current.IsGenericParameter) return false;
+                var previousDefinition = previous.Resolve();
+                var currentDefinition = current.Resolve();
+                
+                if (previousRank != currentRank) return previousRank < currentRank;
+                if (CalcTypeDistance(previous, propertyType) < CalcTypeDistance(current, propertyType)) return true;
+            }
+
+            int TypeHierarchyDistance(TypeDefinition from, TypeDefinition to)
+            {
+                const int MaxTypeHierarchy = 10000;
+                if (from.IsTypeEqual(to)) return 0;
+                
+                if (to.IsInterface && from.HasInterfaces && from.Interfaces.Any(i => ))
+                if (!to.IsInterface && from.BaseType == null) return MaxTypeHierarchy;
+                if (to.IsInterface && !from.HasInterfaces) return MaxTypeHierarchy;
+                
+                
+                
+                var distance = 0;
+                while (!from.IsTypeEqual(to))
+                {
+                    distance++;
+                    
+                }
+            }
 
             bool IsInstantializable(TypeReference type)
             {
@@ -67,6 +93,13 @@ namespace AnySerialize.CodeGen
             IReadOnlyList<FieldDefinition> GetNonStaticFields(TypeDefinition type)
             {
                 return type.HasFields ? type.Fields.Where(field => !field.IsStatic).ToArray() : Array.Empty<FieldDefinition>();
+            }
+
+            IEnumerable<(TypeReference type, TypeReference t)> FindTypes(TypeReference target, TypeReference t)
+            {
+                foreach (var (type, implementation) in typeTree.GetOrCreateDirectDerivedReferences(target))
+                {
+                }
             }
         }
     }

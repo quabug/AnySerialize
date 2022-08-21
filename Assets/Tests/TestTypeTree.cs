@@ -118,11 +118,6 @@ namespace AnySerialize.Tests
                             (nameof(AAAA), nameof(I)),
                                 (nameof(AAAAA), nameof(AAAA)),
                 
-                    (nameof(II), nameof(I)),
-                        (nameof(ABA), nameof(II)),
-                            (nameof(ABAA), nameof(ABA)),
-                            (nameof(ABAB), nameof(ABA)),
-                
                         (nameof(ABA), nameof(I)),
                             (nameof(ABAA), nameof(ABA)),
                             (nameof(ABAB), nameof(ABA)),
