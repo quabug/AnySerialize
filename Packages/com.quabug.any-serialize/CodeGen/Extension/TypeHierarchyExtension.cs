@@ -8,37 +8,44 @@ namespace AnySerialize.CodeGen
     internal static class TypeHierarchyExtension
     {
         [Pure, NotNull, ItemNotNull]
-        public static IEnumerable<TypeReference> GetParentTypes([NotNull] this TypeDefinition type)
+        public static IEnumerable<TypeReference> GetInterfaces([NotNull] this TypeDefinition type)
         {
-            if (type.BaseType != null) yield return type.BaseType;
             if (type.HasInterfaces) foreach (var @interface in type.Interfaces) yield return @interface.InterfaceType;
         }
         
         [Pure, NotNull, ItemNotNull]
-        public static IEnumerable<TypeReference> GetAllBases([NotNull] this TypeDefinition type)
+        public static IEnumerable<TypeReference> GetBaseAndInterfaces([NotNull] this TypeDefinition type)
         {
-            var baseType = type.BaseType;
-            while (baseType != null)
+            if (type.BaseType != null) yield return type.BaseType;
+            foreach (var @interface in type.GetInterfaces()) yield return @interface;
+        }
+        
+        [Pure, NotNull, ItemNotNull]
+        public static IEnumerable<TypeDefinition> GetAllBaseDefinitions([NotNull] this TypeDefinition type)
+        {
+            return type.GetAllBasesAndSelfDefinitions().Skip(1);
+        }
+        
+        [Pure, NotNull, ItemNotNull]
+        public static IEnumerable<TypeDefinition> GetAllBasesAndSelfDefinitions([NotNull] this TypeDefinition type)
+        {
+            while (type != null)
             {
-                yield return baseType;
-                baseType = baseType.Resolve().BaseType;
+                yield return type;
+                type = type.BaseType?.Resolve();
             }
         }
 
         [Pure, NotNull, ItemNotNull]
-        public static IEnumerable<TypeReference> GetAllInterfacesAndBases([NotNull] this TypeDefinition type)
+        public static IEnumerable<TypeReference> GetAllBasesAndInterfaces([NotNull] this TypeDefinition type)
         {
-            foreach (var parentType in type.GetParentTypes())
-            {
-                yield return parentType;
-                foreach (var t in GetAllInterfacesAndBases(parentType.Resolve())) yield return t;
-            }
+            return type.GetAllBasesAndSelfDefinitions().SelectMany(t => t.GetBaseAndInterfaces());
         }
 
         [Pure, NotNull, ItemNotNull]
         public static IEnumerable<TypeReference> GetAllInterfaces([NotNull] this TypeDefinition type)
         {
-            return type.GetAllInterfacesAndBases().Where(t => t.Resolve().IsInterface);
+            return type.GetAllBasesAndSelfDefinitions().SelectMany(t => t.GetInterfaces());
         }
 
         [Pure]

@@ -224,7 +224,7 @@ namespace AnySerialize.CodeGen
             // should skip creating type hierarchy for interfaces?
             if (type.IsInterface) return self;
             
-            foreach (var @base in type.GetParentTypes())
+            foreach (var @base in type.GetBaseAndInterfaces())
             {
                 // HACK: some interface cannot be resolved? has been stripped by Unity?
                 //       e.g. the interface `IEditModeTestYieldInstruction` of `ExitPlayMode`

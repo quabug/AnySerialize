@@ -53,9 +53,19 @@ namespace AnySerialize.CodeGen
         [Pure, NotNull, ItemNotNull]
         public static IEnumerable<TypeReference> GetGenericParametersOrArguments([NotNull] this TypeReference type)
         {
+            if (type.IsGenericParameter) return type.Yield();
             if (type.HasGenericParameters) return type.GenericParameters;
             if (type.IsGenericInstance) return ((GenericInstanceType)type).GenericArguments;
             return Enumerable.Empty<TypeReference>();
+        }
+        
+        [Pure, NotNull, ItemNotNull]
+        public static IEnumerable<GenericParameter> GetGenericParameters([NotNull] this TypeReference type)
+        {
+            if (type.IsGenericParameter) return ((GenericParameter)type).Yield();
+            if (type.HasGenericParameters) return type.GenericParameters;
+            if (type.IsGenericInstance) return ((GenericInstanceType)type).ElementType.GenericParameters;
+            return Enumerable.Empty<GenericParameter>();
         }
         
         public static void GetGenericParametersOrArguments([NotNull] this TypeReference type, [NotNull] IList<TypeReference> arguments)
@@ -111,7 +121,7 @@ namespace AnySerialize.CodeGen
         [Pure]
         public static bool IsDerivedFrom([NotNull] this TypeDefinition derived, [NotNull] TypeDefinition @base)
         {
-            return derived.GetAllInterfacesAndBases().Any(type => type.Resolve().IsTypeEqual(@base));
+            return derived.GetAllBasesAndInterfaces().Any(type => type.Resolve().IsTypeEqual(@base));
         }
 
         public static bool IsImplementationOf(this TypeReference self, TypeReference generic)
@@ -123,7 +133,7 @@ namespace AnySerialize.CodeGen
         {
             var selfDef = self.Resolve();
             var genericDef = @base.Resolve();
-            foreach (var parentType in selfDef.GetParentTypes())
+            foreach (var parentType in selfDef.GetBaseAndInterfaces())
             {
                 if (!parentType.Resolve().IsTypeEqual(genericDef)) continue;
                 if (!parentType.IsGenericType())
@@ -182,9 +192,21 @@ namespace AnySerialize.CodeGen
         [Pure, NotNull]
         public static TypeReference FillGenericTypesByReferenceGenericName([NotNull] this TypeReference self, [NotNull] GenericInstanceType referenceGeneric)
         {
+            return self.FillGenericTypesByReferenceGenericName(referenceGeneric.ElementType.GenericParameters, referenceGeneric.GenericArguments);
+        }
+        
+        [Pure, NotNull]
+        public static TypeReference FillGenericTypesByReferenceGenericName(
+            [NotNull] this TypeReference self,
+            [NotNull, ItemNotNull] IList<GenericParameter> referenceGenericParameters,
+            [NotNull, ItemNotNull] IList<TypeReference> referenceGenericArguments
+        )
+        {
+            Assert.AreEqual(referenceGenericArguments.Count, referenceGenericParameters.Count);
+            
             if (self is ArrayType arrayType)
             {
-                var elementType = FillGenericTypesByReferenceGenericName(arrayType.ElementType, referenceGeneric);
+                var elementType = FillGenericTypesByReferenceGenericName(arrayType.ElementType, referenceGenericParameters, referenceGenericArguments);
                 return new ArrayType(elementType, arrayType.Rank);
             }
             if (!self.IsGenericType()) return self;
@@ -198,17 +220,34 @@ namespace AnySerialize.CodeGen
                 var arg = genericArguments[i];
                 if (arg.IsGenericParameter)
                 {
-                    var typeIndex = referenceGeneric.ElementType.GenericParameters
-                        .FindIndex(t =>  t.IsGenericParameter && t.Name == arg.Name)
-                    ;
-                    genericArguments[i] = typeIndex < 0 ? arg : referenceGeneric.GenericArguments[typeIndex];
+                    var typeIndex = referenceGenericParameters.FindIndex(t =>  t.IsGenericParameter && t.Name == arg.Name);
+                    Assert.IsTrue(typeIndex >= 0);
+                    genericArguments[i] = referenceGenericArguments[typeIndex];
                 }
                 else
                 {
-                    genericArguments[i] = FillGenericTypesByReferenceGenericName(arg, referenceGeneric);
+                    genericArguments[i] = FillGenericTypesByReferenceGenericName(arg, referenceGenericParameters, referenceGenericArguments);
                 }
             }
-            return genericArguments.All(arg => arg.IsGenericParameter) ? self : self.MakeGenericInstanceType(genericArguments);
+            if (self.IsGenericParameter) return genericArguments.First();
+            return self.CreateGenericInstanceType(genericArguments);
+        }
+
+        public static TypeReference CreateGenericInstanceType([NotNull] this TypeReference self, [NotNull, ItemNotNull] IList<TypeReference> arguments)
+        {
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (arguments == null)
+                throw new ArgumentNullException(nameof(arguments));
+            if (self.GetGenericParametersOrArgumentsCount() != arguments.Count)
+                throw new ArgumentException();
+            
+            if (arguments.Count == 0) return self;
+            
+            var genericInstanceType = new GenericInstanceType(self.Resolve());
+            foreach (var (@new, old) in arguments.Zip(self.GetGenericParametersOrArguments(), (@new, old) => (@new, old)))
+                genericInstanceType.GenericArguments.Add(old.IsGenericParameter ? @new : old);
+            return genericInstanceType;
         }
     }
 }

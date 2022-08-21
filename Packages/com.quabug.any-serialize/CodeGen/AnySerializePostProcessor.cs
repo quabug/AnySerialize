@@ -7,6 +7,7 @@ using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
@@ -21,6 +22,7 @@ namespace AnySerialize.CodeGen
 
         public override bool WillProcess(ICompiledAssembly compiledAssembly)
         {
+            return false;
             var thisAssemblyName = GetType().Assembly.GetName().Name;
             var runtimeAssemblyName = typeof(AnySerializeAttribute).Assembly.GetName().Name;
             return compiledAssembly.Name != thisAssemblyName &&
@@ -90,13 +92,29 @@ namespace AnySerialize.CodeGen
         {
             if (property.GetMethod == null) throw new ArgumentException($"{property.Name}.get not exist");
             // TODO: search serialize
-            new DefaultTypeSearcher().Search(typeTree, property, _logger);
-            var anySerializeValueType = module.ImportReference(typeof(AnyValue<>));
-            var fieldType = module.ImportReference(anySerializeValueType.MakeGenericInstanceType(property.PropertyType));
+            var fieldType = new DefaultTypeSearcher(typeTree, module).Search(CreatePropertyType());
             var serializedField = CreateOrReplaceBackingField(property, fieldType);
             InjectGetter(property, serializedField);
             if (property.SetMethod != null) InjectSetter(property, serializedField);
+
+            TypeReference CreatePropertyType()
+            {
+                var isReadOnly = property.SetMethod == null;
+                var attribute = property.GetAttributesOf<AnySerializeAttribute>().Single();
+                var baseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearchingBaseTypeIndex].Value
+                    ?? (isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>))
+                ;
+                Assert.IsTrue(typeof(IAny<>).IsAssignableFrom(baseType) || typeof(IReadOnlyAny<>).IsAssignableFrom(baseType));
+                var baseTypeReference = module.ImportReference(baseType);
+                _logger?.Warning($"{baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
+                // TODO: only support base type with one and only one property type parameter?
+                Assert.IsTrue(baseTypeReference.GenericParameters.Count == 1);
+                var propertyType = property.PropertyType;
+                return baseTypeReference.MakeGenericInstanceType(propertyType);
+            }
         }
+        
+        
 
         private string GetBackingFieldName(PropertyDefinition property)
         {
