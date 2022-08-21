@@ -18,23 +18,23 @@ namespace AnySerialize
         [AnySerialize] public int IntValue { get; set; }
         [AnySerialize] public int IntValueRO { get; }
         [AnySerialize] public int IntValueROWithoutBacking => throw new NotImplementedException();
-        [AnySerialize] public Dictionary<string, IReadOnlyDictionary<string, int>> Dictionary { get; }
-        [AnySerialize] public string[][] AnyStringArray { get; }
+        // [AnySerialize] public Dictionary<string, IReadOnlyDictionary<string, int>> Dictionary { get; }
+        // [AnySerialize] public string[][] AnyStringArray { get; }
         public string[][] StringArray;
         
         public A A;
         public B<int> B;
         public B<int[]> BB;
         
-        [AnySerialize] public Vector2 Vector2 { get; }
+        // [AnySerialize] public Vector2 Vector2 { get; }
         
         private void Awake()
         {
-            Debug.Log(IntValue);
-            Debug.Log(IntValueRO);
+            Debug.Log($"{nameof(IntValue)} = {IntValue}");
+            Debug.Log($"{nameof(IntValueRO)} = {IntValueRO}");
             IntValue = IntValueRO;
-            Debug.Log(IntValue);
-            Debug.Log(IntValueROWithoutBacking);
+            Debug.Log($"{nameof(IntValue)} = {IntValue}");
+            Debug.Log($"{nameof(IntValueROWithoutBacking)} = {IntValueROWithoutBacking}");
 
             Debug.Log(string.Join(", ", array.Value.SelectMany(a => a)));
             Debug.Log(string.Join(", ", dict.Value.Select(t => $"[{t.Key},{string.Join(", ", t.Value.Select(n => $"[{n.Key},{n.Value}]"))}]")));
@@ -61,7 +61,7 @@ namespace AnySerialize
     public class A
     {
         public int Int;
-        [AnySerialize] public string[][] StringArray { get; }
+        // [AnySerialize] public string[][] StringArray { get; }
         public float Float;
     }
 

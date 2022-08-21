@@ -1,6 +1,6 @@
 <#@ template language="C#" #>
 <#@ output extension=".cs" #>
-<#@ assembly name="/Applications/Unity/Hub/Editor/2021.3.6f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
+<#@ assembly name="C:/Program Files/Unity/Hub/Editor/2021.3.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
 <#@ assembly name="$(SolutionDir)/Library/ScriptAssemblies/Unity.Mathematics.dll" #>
 <#@ import namespace="System" #>
 <#@ import namespace="Unity.Mathematics" #>
@@ -69,9 +69,9 @@ namespace AnySerialize
     {
 #>
 
-    public class AnyValue_<#= type.Name #> : AnyValue<<#= type.FullName #>> {}
-    public class AnyArray_<#= type.Name #> : AnyValue<<#= type.FullName #>[]> {}
-    public class AnyList_<#= type.Name #> : AnyValue<List<<#= type.FullName #>>> {}
+    [System.Serializable] public class AnyValue_<#= type.Name #> : AnyValue<<#= type.FullName #>> {}
+    [System.Serializable] public class AnyArray_<#= type.Name #> : AnyValue<<#= type.FullName #>[]> {}
+    [System.Serializable] public class AnyList_<#= type.Name #> : AnyValue<List<<#= type.FullName #>>> {}
 <#+
     }
 #>

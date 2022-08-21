@@ -102,7 +102,7 @@ namespace AnySerialize.CodeGen
             int? TypeHierarchyDistance(TypeDefinition from, TypeReference to)
             {
                 var distance = 0;
-                foreach (var type in from.GetAllBasesAndSelfDefinitions())
+                foreach (var type in from.GetSelfAndAllBaseDefinitions())
                 {
                     if (type.GetBaseAndInterfaces().Any(to.IsPartialGenericTypeOf))
                         return distance;
