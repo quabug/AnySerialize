@@ -195,5 +195,12 @@ namespace AnySerialize.Tests
             
             var i = tree.GetDirectDerivedDefinition(ImportReference(typeof(I<>)));
         }
+
+        [Test]
+        public void should_get_method_from_self_or_bases()
+        {
+            var type = ImportReference<AnyValue_Single>();
+            var method = type.GetMethodReference("get_Value");
+        }
     }
 }

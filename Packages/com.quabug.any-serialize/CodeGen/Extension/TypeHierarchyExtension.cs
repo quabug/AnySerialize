@@ -23,29 +23,41 @@ namespace AnySerialize.CodeGen
         [Pure, NotNull, ItemNotNull]
         public static IEnumerable<TypeDefinition> GetAllBaseDefinitions([NotNull] this TypeDefinition type)
         {
-            return type.GetAllBasesAndSelfDefinitions().Skip(1);
+            return type.GetSelfAndAllBaseDefinitions().Skip(1);
         }
         
         [Pure, NotNull, ItemNotNull]
-        public static IEnumerable<TypeDefinition> GetAllBasesAndSelfDefinitions([NotNull] this TypeDefinition type)
+        public static IEnumerable<TypeReference> GetAllBaseReferences([NotNull] this TypeReference type)
+        {
+            return type.GetSelfAndAllBaseReferences().Skip(1);
+        }
+        
+        [Pure, NotNull, ItemNotNull]
+        public static IEnumerable<TypeReference> GetSelfAndAllBaseReferences([NotNull] this TypeReference type)
         {
             while (type != null)
             {
                 yield return type;
-                type = type.BaseType?.Resolve();
+                type = type.Resolve().BaseType;
             }
+        }
+        
+        [Pure, NotNull, ItemNotNull]
+        public static IEnumerable<TypeDefinition> GetSelfAndAllBaseDefinitions([NotNull] this TypeDefinition type)
+        {
+            return type.GetSelfAndAllBaseReferences().Select(t => t.Resolve());
         }
 
         [Pure, NotNull, ItemNotNull]
         public static IEnumerable<TypeReference> GetAllBasesAndInterfaces([NotNull] this TypeDefinition type)
         {
-            return type.GetAllBasesAndSelfDefinitions().SelectMany(t => t.GetBaseAndInterfaces());
+            return type.GetSelfAndAllBaseDefinitions().SelectMany(t => t.GetBaseAndInterfaces());
         }
 
         [Pure, NotNull, ItemNotNull]
         public static IEnumerable<TypeReference> GetAllInterfaces([NotNull] this TypeDefinition type)
         {
-            return type.GetAllBasesAndSelfDefinitions().SelectMany(t => t.GetInterfaces());
+            return type.GetSelfAndAllBaseDefinitions().SelectMany(t => t.GetInterfaces());
         }
 
         [Pure]
@@ -66,6 +78,18 @@ namespace AnySerialize.CodeGen
             {
                 yield return type.DeclaringType;
                 type = type.DeclaringType;
+            }
+        }
+        
+        [Pure, NotNull, ItemNotNull]
+        public static IEnumerable<TypeReference> GetSelfAndAllBasesWithConcreteGenericType([NotNull] this TypeReference type)
+        {
+            var self = type;
+            yield return self;
+            foreach (var @base in type.GetAllBaseReferences())
+            {
+                self = self is GenericInstanceType genericInstanceType ? @base.FillGenericTypesByReferenceGenericName(genericInstanceType) : @base;
+                yield return self;
             }
         }
     }

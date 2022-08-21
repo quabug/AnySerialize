@@ -22,7 +22,6 @@ namespace AnySerialize.CodeGen
 
         public override bool WillProcess(ICompiledAssembly compiledAssembly)
         {
-            return false;
             var thisAssemblyName = GetType().Assembly.GetName().Name;
             var runtimeAssemblyName = typeof(AnySerializeAttribute).Assembly.GetName().Name;
             return compiledAssembly.Name != thisAssemblyName &&
@@ -92,8 +91,13 @@ namespace AnySerialize.CodeGen
         {
             if (property.GetMethod == null) throw new ArgumentException($"{property.Name}.get not exist");
             // TODO: search serialize
-            var fieldType = new DefaultTypeSearcher(typeTree, module).Search(CreatePropertyType());
+            var propertyType = CreatePropertyType();
+            _logger.Info($"property type: {propertyType.FullName}");
+            var fieldType = new DefaultTypeSearcher(typeTree, module).Search(propertyType);
+            fieldType = module.ImportReference(fieldType);
+            _logger.Info($"field type: {fieldType.FullName}");
             var serializedField = CreateOrReplaceBackingField(property, fieldType);
+            _logger.Info($"serialize field type: {serializedField.FullName}");
             InjectGetter(property, serializedField);
             if (property.SetMethod != null) InjectSetter(property, serializedField);
 
@@ -109,21 +113,13 @@ namespace AnySerialize.CodeGen
                 _logger?.Warning($"{baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
                 // TODO: only support base type with one and only one property type parameter?
                 Assert.IsTrue(baseTypeReference.GenericParameters.Count == 1);
-                var propertyType = property.PropertyType;
-                return baseTypeReference.MakeGenericInstanceType(propertyType);
+                return baseTypeReference.MakeGenericInstanceType(property.PropertyType);
             }
-        }
-        
-        
-
-        private string GetBackingFieldName(PropertyDefinition property)
-        {
-            return $"<{property.Name}>k__BackingField";
         }
 
         private FieldDefinition CreateOrReplaceBackingField(PropertyDefinition property, TypeReference fieldType)
         {
-            var backingFieldName = GetBackingFieldName(property);
+            var backingFieldName = property.GetBackingFieldName();
             var backingField = property.DeclaringType.Fields.FirstOrDefault(field => field.Name == backingFieldName)
                                ?? CreateSerializeReferenceField(property, fieldType);
             backingField.FieldType = fieldType;
@@ -141,7 +137,7 @@ namespace AnySerialize.CodeGen
             //  .custom instance void [UnityEngine.CoreModule]UnityEngine.SerializeReference::.ctor()
             //    = (01 00 00 00 )
             var serializedField = new FieldDefinition(
-                GetBackingFieldName(property)
+                property.GetBackingFieldName()
                 , FieldAttributes.Private
                 , fieldType
             );
@@ -163,6 +159,9 @@ namespace AnySerialize.CodeGen
             //     IL_000b: ret
             var instructions = property.GetMethod.Body.Instructions;
             var getValueMethod = serializedField.FieldType.GetMethodReference("get_Value", _logger);
+            getValueMethod = property.Module.ImportReference(getValueMethod);
+            _logger.Info($"getValueMethod: {getValueMethod?.FullName}");
+            _logger.Info($"serialize field: {serializedField.FullName}");
             instructions.Clear();
             instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
             instructions.Add(Instruction.Create(OpCodes.Ldfld, serializedField));
@@ -186,6 +185,7 @@ namespace AnySerialize.CodeGen
             //     IL_000d: ret
             var instructions = property.SetMethod.Body.Instructions;
             var setValueMethod = serializedField.FieldType.GetMethodReference("set_Value", _logger);
+            setValueMethod = property.Module.ImportReference(setValueMethod);
             instructions.Clear();
             instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
             instructions.Add(Instruction.Create(OpCodes.Ldfld, serializedField));

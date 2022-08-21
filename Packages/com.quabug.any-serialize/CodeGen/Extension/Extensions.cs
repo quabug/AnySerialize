@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
+using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
@@ -47,12 +48,18 @@ namespace AnySerialize.CodeGen
         
         public static MethodReference GetMethodReference(this TypeReference type, string methodName, ILPostProcessorLogger logger = null)
         {
-            var method = type.Resolve().Methods.FirstOrDefault(method => method.Name == methodName);
+            if (!type.IsConcreteType()) throw new ArgumentException($"{type} must be concrete type.", nameof(type));
+            var (declaringType, method) = type.GetSelfAndAllBasesWithConcreteGenericType()
+                .SelectMany(type => type.Resolve().Methods.Select(method => (type, method)))
+                .FirstOrDefault(t => t.method.Name == methodName)
+            ;
+            logger?.Info($"{declaringType.FullName}({declaringType.HasGenericParameters})");
             if (method == null) return null;
-            var methodReference = type.Module.ImportReference(method);
-            if (!type.IsGenericInstance) return methodReference;
-            var parameters = ((GenericInstanceType)type).GenericArguments;
-            logger?.Info($"{type.FullName}({type.HasGenericParameters}): {string.Join(",", parameters.Select(p => p.Name))}");
+            
+            var methodReference = declaringType.Module.ImportReference(method);
+            if (!declaringType.IsGenericInstance) return methodReference;
+            var parameters = ((GenericInstanceType)declaringType).GenericArguments;
+            logger?.Info($"{declaringType.FullName}({declaringType.HasGenericParameters}): {string.Join(",", parameters.Select(p => p.Name))}");
             return methodReference.CreateGenericMethodReference(parameters.ToArray(), logger);
         }
         
@@ -149,6 +156,16 @@ namespace AnySerialize.CodeGen
                 : Enumerable.Empty<CustomAttribute>()
             ;
             static bool IsAttributeOf(CustomAttribute attribute) => attribute.AttributeType.FullName == typeof(T).FullName;
+        }
+        
+        public static string GetBackingFieldName([NotNull] this PropertyDefinition property)
+        {
+            return property.Name.GetBackingFieldName();
+        }
+        
+        public static string GetBackingFieldName([NotNull] this string propertyName)
+        {
+            return $"<{propertyName}>k__BackingField";
         }
     }
 }
