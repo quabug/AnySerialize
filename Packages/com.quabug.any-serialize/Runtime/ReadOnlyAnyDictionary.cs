@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace AnySerialize
@@ -12,6 +11,12 @@ namespace AnySerialize
     {
         public TAnyKey Key;
         public TAnyValue Value;
+
+        public void Deconstruct(out TKey key, out TValue value)
+        {
+            key = Key.Value;
+            value = Value.Value;
+        }
     }
     
     [Serializable]
@@ -21,6 +26,22 @@ namespace AnySerialize
         where TAnyValue : IReadOnlyAny<TValue>
     {
         [SerializeField] private List<TAnyPair> _pairs;
-        public Dictionary<TKey, TValue> Value => _pairs.ToDictionary(pair => pair.Value.Key.Value, pair => pair.Value.Value.Value);
+        private Dictionary<TKey, TValue> _cache;
+        public Dictionary<TKey, TValue> Value
+        {
+            get
+            {
+#if !UNITY_EDITOR
+                if (_cache != null) return _cache;
+#endif
+                _cache ??= new Dictionary<TKey, TValue>();
+                foreach (var pair in _pairs)
+                {
+                    var (key, value) = pair.Value;
+                    _cache.Add(key, value);
+                }
+                return _cache;
+            }
+        }
     }
 }

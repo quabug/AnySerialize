@@ -1,0 +1,77 @@
+<#@ template language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="/Applications/Unity/Hub/Editor/2021.3.6f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
+<#@ assembly name="$(SolutionDir)/Library/ScriptAssemblies/Unity.Mathematics.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="Unity.Mathematics" #>
+<#@ import namespace="UnityEngine" #>
+using System.Collections.Generic;
+
+namespace AnySerialize
+{
+
+#region Primitive Types
+<#
+    foreach (var type in typeof(int).Assembly.GetTypes())
+    {
+        if (type.IsPrimitive)
+        {
+            GenerateAnySerialize(type);
+        }
+    }
+#>
+#endregion
+
+#region UnityEngine Types
+    public class AnySerialize_Object<T> : AnyValue<T> where T : UnityEngine.Object {}
+    public class AnySerialize_ObjectArray<T> : AnyValue<T[]> where T : UnityEngine.Object {}
+    public class AnySerialize_ObjectList<T> : AnyValue<List<T>> where T : UnityEngine.Object {}
+<#
+    foreach (var type in new []
+    {
+        typeof(Vector2), typeof(Vector3), typeof(Vector4),
+        typeof(Vector2Int), typeof(Vector3Int),
+        typeof(Quaternion), typeof(Matrix4x4),
+        typeof(Color), typeof(Rect), typeof(LayerMask)
+    })
+    {
+        GenerateAnySerialize(type);
+    }
+#>
+#endregion
+
+#region Unity.Mathematics Types
+#if ENABLE_UNITY_MATHEMATICS
+<#
+    foreach (var type in typeof(math).Assembly.GetTypes())
+    {
+        if (type.IsPublic && IsUnmanaged(type))
+        {
+            GenerateAnySerialize(type);
+        }
+    }
+#>
+#endif
+#endregion
+}
+
+<#+
+    class U<T> where T : unmanaged { }
+    public static bool IsUnmanaged(Type t)
+    {
+        try { typeof(U<>).MakeGenericType(t); return true; }
+        catch (Exception){ return false; }
+    }
+#>
+
+<#+
+    void GenerateAnySerialize(Type type)
+    {
+#>
+
+    public class AnyValue_<#= type.Name #> : AnyValue<<#= type.FullName #>> {}
+    public class AnyArray_<#= type.Name #> : AnyValue<<#= type.FullName #>[]> {}
+    public class AnyList_<#= type.Name #> : AnyValue<List<<#= type.FullName #>>> {}
+<#+
+    }
+#>

@@ -3,7 +3,11 @@ using System;
 namespace AnySerialize
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class AnySerializeAttribute : Attribute {}
+    public class AnySerializeAttribute : Attribute
+    {
+        public const int SearchingBaseTypeIndex = 0;
+        public AnySerializeAttribute(Type searchingBaseType = null) {}
+    }
     
     [AttributeUsage(AttributeTargets.GenericParameter)]
     public class AnyGenericAttribute : Attribute

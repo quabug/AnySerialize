@@ -7,6 +7,7 @@ using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
@@ -21,6 +22,7 @@ namespace AnySerialize.CodeGen
 
         public override bool WillProcess(ICompiledAssembly compiledAssembly)
         {
+            return false;
             var thisAssemblyName = GetType().Assembly.GetName().Name;
             var runtimeAssemblyName = typeof(AnySerializeAttribute).Assembly.GetName().Name;
             return compiledAssembly.Name != thisAssemblyName &&
@@ -63,13 +65,15 @@ namespace AnySerialize.CodeGen
 
             bool ProcessProperties()
             {
+                var typeTree = compiledAssembly.CreateTypeTree(resolver, assembly, _logger);
                 var modified = false;
-                foreach (var (property, attribute) in
+                foreach (var property in
                     from type in module.GetAllTypes()
                     where type.IsClass && !type.IsAbstract
                     from property in type.Properties.ToArray() // able to change `Properties` during looping
                     from attribute in property.GetAttributesOf<AnySerializeAttribute>()
-                    select (property, attribute)
+                    where attribute != null
+                    select property
                 )
                 {
                     if (property.GetMethod == null)
@@ -77,23 +81,40 @@ namespace AnySerialize.CodeGen
                         _logger.Error($"Cannot process on property {property.DeclaringType.FullName}.{property.Name} without getter");
                         continue;
                     }
-                    GenerateField(module, property);
+                    GenerateField(module, property, typeTree);
                     modified = true;
                 }
                 return modified;
             }
         }
 
-        private void GenerateField(ModuleDefinition module, PropertyDefinition property)
+        private void GenerateField(ModuleDefinition module, PropertyDefinition property, TypeTree typeTree)
         {
             if (property.GetMethod == null) throw new ArgumentException($"{property.Name}.get not exist");
             // TODO: search serialize
-            var anySerializeValueType = module.ImportReference(typeof(AnyValue<>));
-            var fieldType = module.ImportReference(anySerializeValueType.MakeGenericInstanceType(property.PropertyType));
+            var fieldType = new DefaultTypeSearcher(typeTree, module).Search(CreatePropertyType());
             var serializedField = CreateOrReplaceBackingField(property, fieldType);
             InjectGetter(property, serializedField);
             if (property.SetMethod != null) InjectSetter(property, serializedField);
+
+            TypeReference CreatePropertyType()
+            {
+                var isReadOnly = property.SetMethod == null;
+                var attribute = property.GetAttributesOf<AnySerializeAttribute>().Single();
+                var baseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearchingBaseTypeIndex].Value
+                    ?? (isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>))
+                ;
+                Assert.IsTrue(typeof(IAny<>).IsAssignableFrom(baseType) || typeof(IReadOnlyAny<>).IsAssignableFrom(baseType));
+                var baseTypeReference = module.ImportReference(baseType);
+                _logger?.Warning($"{baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
+                // TODO: only support base type with one and only one property type parameter?
+                Assert.IsTrue(baseTypeReference.GenericParameters.Count == 1);
+                var propertyType = property.PropertyType;
+                return baseTypeReference.MakeGenericInstanceType(propertyType);
+            }
         }
+        
+        
 
         private string GetBackingFieldName(PropertyDefinition property)
         {
