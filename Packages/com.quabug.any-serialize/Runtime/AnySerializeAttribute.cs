@@ -1,9 +1,10 @@
 using System;
+using AnyProcessor;
 
 namespace AnySerialize
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class AnySerializeAttribute : Attribute
+    public class AnySerializeAttribute : Attribute, IAnyProcessorAttribute
     {
         public Type Searcher { get; set; }
         public Type BaseType { get; set; }

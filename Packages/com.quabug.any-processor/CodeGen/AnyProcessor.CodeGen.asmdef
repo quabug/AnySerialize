@@ -1,9 +1,8 @@
 {
-    "name": "Unity.AnyProcessor.CodeGen",
+    "name": "AnyProcessor.CodeGen",
     "rootNamespace": "AnyProcessor.CodeGen",
     "references": [
-        "GUID:c8a1986dcbf446bd9c54d4528d20455d",
-        "GUID:c6c41306eeb7e5146aa2ac2ac87bb70c"
+        "GUID:c8a1986dcbf446bd9c54d4528d20455d"
     ],
     "includePlatforms": [
         "Editor"

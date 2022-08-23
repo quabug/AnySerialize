@@ -9,7 +9,7 @@ using Mono.Cecil;
 
 namespace AnyProcessor.CodeGen
 {
-    internal class PostProcessorAssemblyResolver : IAssemblyResolver
+    public class PostProcessorAssemblyResolver : IAssemblyResolver
     {
         private readonly IDictionary<string, AssemblyDefinition> _cache = new Dictionary<string, AssemblyDefinition>();
         private readonly IReadOnlyList<string> _references;

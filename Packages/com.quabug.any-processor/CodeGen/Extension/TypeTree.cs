@@ -69,7 +69,7 @@ namespace AnyProcessor.CodeGen
 
         private readonly Dictionary<TypeKey, Node> _typeTreeNodeMap;
 
-        public ICodeGenLogger Logger { get; set; }
+        public ILPostProcessorLogger Logger { get; set; } = new ILPostProcessorLogger();
 
         /// <summary>
         /// Create a type-tree from a collection of <paramref name="sourceTypes"/>

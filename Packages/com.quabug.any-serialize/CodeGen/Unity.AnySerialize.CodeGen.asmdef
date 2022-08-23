@@ -1,7 +1,11 @@
 {
-    "name": "AnyProcessor.Extension",
-    "rootNamespace": "",
-    "references": [],
+    "name": "Unity.AnySerialize.CodeGen",
+    "rootNamespace": "AnySerialize.CodeGen",
+    "references": [
+        "GUID:3ea4545e70041684b9bbf08dd5c6e257",
+        "GUID:dd47b202cac746eda2dd7627a0830d51",
+        "GUID:c8a1986dcbf446bd9c54d4528d20455d"
+    ],
     "includePlatforms": [
         "Editor"
     ],

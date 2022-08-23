@@ -12,10 +12,10 @@ namespace AnySerialize.CodeGen
     {
         private readonly TypeTree _typeTree;
         private readonly ModuleDefinition _module;
-        private readonly ICodeGenLogger _logger;
+        private readonly ILPostProcessorLogger _logger;
         private readonly TypeDefinition _anyDef;
 
-        public DefaultTypeSearcher(TypeTree typeTree, ModuleDefinition module, ICodeGenLogger logger = null)
+        public DefaultTypeSearcher(TypeTree typeTree, ModuleDefinition module, ILPostProcessorLogger logger = null)
         {
             _typeTree = typeTree;
             _module = module;
@@ -32,7 +32,7 @@ namespace AnySerialize.CodeGen
             // ;
             // Assert.IsTrue(typeof(IAny<>).IsAssignableFrom(baseType) || typeof(IReadOnlyAny<>).IsAssignableFrom(baseType));
             // var baseTypeReference = _module.ImportReference(baseType);
-            // _logger?.Warning($"{baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
+            // Logger?.Warning($"{baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
             // // TODO: only support base type with one and only one property type parameter?
             // Assert.IsTrue(baseTypeReference.GenericParameters.Count == 1);
             // var propertyType = property.PropertyType;

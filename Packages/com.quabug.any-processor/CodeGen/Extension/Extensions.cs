@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
+// using Unity.CompilationPipeline.Common.ILPostProcessing;
 
 namespace AnyProcessor.CodeGen
 {
@@ -45,7 +46,7 @@ namespace AnyProcessor.CodeGen
             ;
         }
         
-        public static MethodReference GetMethodReference(this TypeReference type, string methodName, ICodeGenLogger logger = null)
+        public static MethodReference GetMethodReference(this TypeReference type, string methodName, ILPostProcessorLogger logger = null)
         {
             if (!type.IsConcreteType()) throw new ArgumentException($"{type} must be concrete type.", nameof(type));
             var (declaringType, method) = type.GetSelfAndAllBasesWithConcreteGenericType()
@@ -62,7 +63,7 @@ namespace AnyProcessor.CodeGen
             return methodReference.CreateGenericMethodReference(parameters.ToArray(), logger);
         }
         
-        public static MethodReference CreateGenericMethodReference(this MethodReference method, TypeReference[] genericArguments, ICodeGenLogger logger = null)
+        public static MethodReference CreateGenericMethodReference(this MethodReference method, TypeReference[] genericArguments, ILPostProcessorLogger logger = null)
         {
             var reference = new MethodReference(method.Name, method.ReturnType) {
                 DeclaringType = method.DeclaringType.MakeGenericInstanceType(genericArguments),
