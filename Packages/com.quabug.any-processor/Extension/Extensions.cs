@@ -5,11 +5,10 @@ using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
-using UnityEngine.Assertions;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
-    internal static class CecilExtension
+    public static class CecilExtension
     {
         public static string ToReadableName(this TypeReference type)
         {
@@ -46,7 +45,7 @@ namespace AnySerialize.CodeGen
             ;
         }
         
-        public static MethodReference GetMethodReference(this TypeReference type, string methodName, ILPostProcessorLogger logger = null)
+        public static MethodReference GetMethodReference(this TypeReference type, string methodName, ICodeGenLogger logger = null)
         {
             if (!type.IsConcreteType()) throw new ArgumentException($"{type} must be concrete type.", nameof(type));
             var (declaringType, method) = type.GetSelfAndAllBasesWithConcreteGenericType()
@@ -63,7 +62,7 @@ namespace AnySerialize.CodeGen
             return methodReference.CreateGenericMethodReference(parameters.ToArray(), logger);
         }
         
-        public static MethodReference CreateGenericMethodReference(this MethodReference method, TypeReference[] genericArguments, ILPostProcessorLogger logger = null)
+        public static MethodReference CreateGenericMethodReference(this MethodReference method, TypeReference[] genericArguments, ICodeGenLogger logger = null)
         {
             var reference = new MethodReference(method.Name, method.ReturnType) {
                 DeclaringType = method.DeclaringType.MakeGenericInstanceType(genericArguments),

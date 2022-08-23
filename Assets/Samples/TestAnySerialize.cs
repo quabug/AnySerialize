@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Vector2 = System.Numerics.Vector2;
 
 
 namespace AnySerialize
@@ -15,7 +14,7 @@ namespace AnySerialize
 
     public class TestAnySerialize : MonoBehaviour
     {
-        [AnySerialize] public int IntValue { get; set; }
+        [AnySerialize(BaseType = typeof(int))] public int IntValue { get; set; }
         [AnySerialize] public int IntValueRO { get; }
         [AnySerialize] public int IntValueROWithoutBacking => throw new NotImplementedException();
         // [AnySerialize] public Dictionary<string, IReadOnlyDictionary<string, int>> Dictionary { get; }

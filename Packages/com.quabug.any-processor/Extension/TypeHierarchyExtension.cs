@@ -3,9 +3,9 @@ using System.Linq;
 using JetBrains.Annotations;
 using Mono.Cecil;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
-    internal static class TypeHierarchyExtension
+    public static class TypeHierarchyExtension
     {
         [Pure, NotNull, ItemNotNull]
         public static IEnumerable<TypeReference> GetInterfaces([NotNull] this TypeDefinition type)

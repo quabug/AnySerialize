@@ -2,9 +2,9 @@ using System;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
-    internal static class ReflectionExtension
+    public static class ReflectionExtension
     {
         [Pure, NotNull]
         public static string ToReadableName([NotNull] this Type type)

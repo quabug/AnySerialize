@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.Scripting;
 
-namespace AnySerialize.Tests
+namespace AnyProccesor.Tests
 {
     public static class NonGeneric
     {

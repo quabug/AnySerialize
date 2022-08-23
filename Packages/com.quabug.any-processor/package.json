@@ -1,0 +1,11 @@
+{
+  "name": "com.quabug.any-processor",
+  "version": "0.0.1",
+  "unity": "2020.3",
+  "displayName": "AnyProcessor",
+  "type": "library",
+  "dependencies": {
+    "com.unity.nuget.mono-cecil": "1.11.4",
+    "com.quabug.one-shot-injection": "2.1.2"
+  }
+}

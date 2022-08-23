@@ -5,7 +5,7 @@ using System.Text;
 using JetBrains.Annotations;
 using Mono.Cecil;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
     /// <summary>
     ///
@@ -69,7 +69,7 @@ namespace AnySerialize.CodeGen
 
         private readonly Dictionary<TypeKey, Node> _typeTreeNodeMap;
 
-        public ILPostProcessorLogger Logger { get; set; } = new ILPostProcessorLogger();
+        public ICodeGenLogger Logger { get; set; }
 
         /// <summary>
         /// Create a type-tree from a collection of <paramref name="sourceTypes"/>
@@ -171,7 +171,7 @@ namespace AnySerialize.CodeGen
                     var arg = genericArguments[i];
                     if (arg.IsGenericParameter)
                     {
-                        var index = implementation.GetGenericParametersOrArguments().FindIndex(t =>  t.IsGenericParameter && t.Name == arg.Name);
+                        var index = implementation.GetGenericParametersOrArguments().FindIndexOf(t =>  t.IsGenericParameter && t.Name == arg.Name);
                         var isGenericType = index < 0 || !baseType.IsGenericInstance;
                         genericArguments[i] = isGenericType ? arg : ((GenericInstanceType)baseType).GenericArguments[index];
                     }

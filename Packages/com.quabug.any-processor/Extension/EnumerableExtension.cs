@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
-    internal static class EnumerableExtension
+    public static class EnumerableExtension
     {
         public static IEnumerable<T> Yield<T>(this T value)
         {
@@ -20,12 +20,14 @@ namespace AnySerialize.CodeGen
             return -1;
         }
         
-        public static int FindIndexOf<T>(this IList<T> list, Predicate<T> predicate)
+        public static int FindIndexOf<T>(this IEnumerable<T> items, Predicate<T> predicate)
         {
-            for (var i = 0; i < list.Count; i++)
+            var index = 0;
+            foreach (var item in items)
             {
-                if (predicate(list[i]))
-                    return i;
+                if (predicate(item))
+                    return index;
+                index++;
             }
             return -1;
         }

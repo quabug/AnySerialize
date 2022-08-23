@@ -7,7 +7,7 @@ using Mono.Cecil.Rocks;
 using Unity.CompilationPipeline.Common.Diagnostics;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
     internal static class PostProcessorExtension
     {
@@ -34,7 +34,7 @@ namespace AnySerialize.CodeGen
         public static ILPostProcessorLogger CreateLogger(this AssemblyDefinition assembly)
         {
             var logger = new ILPostProcessorLogger(new List<DiagnosticMessage>());
-            var loggerAttributes = assembly.GetAttributesOf<AnySerializeLoggerAttribute>();
+            var loggerAttributes = assembly.GetAttributesOf<CodeGenLoggerAttribute>();
             if (loggerAttributes.Any()) logger.LogLevel = (LogLevel)loggerAttributes.First().ConstructorArguments[0].Value;
             return logger;
         }

@@ -5,14 +5,14 @@ namespace AnySerialize
     [AttributeUsage(AttributeTargets.Property)]
     public class AnySerializeAttribute : Attribute
     {
-        public const int SearchingBaseTypeIndex = 0;
-        public AnySerializeAttribute(Type searchingBaseType = null) {}
+        public Type Searcher { get; set; }
+        public Type BaseType { get; set; }
     }
     
     [AttributeUsage(AttributeTargets.GenericParameter)]
     public class AnyGenericAttribute : Attribute
     {
-        public AnyGenericAttribute(Type anySerializeBaseType) {}
+        public Type Searcher { get; set; }
     }
     
     [AttributeUsage(AttributeTargets.Field)]

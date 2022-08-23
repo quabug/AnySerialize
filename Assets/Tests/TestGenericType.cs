@@ -1,8 +1,9 @@
 ﻿using System.Linq;
+using AnyProcessor.CodeGen;
 using AnySerialize.CodeGen;
 using NUnit.Framework;
 
-namespace AnySerialize.Tests
+namespace AnyProcessor.Tests
 {
     public class TestGenericType : CecilTestBase
     {

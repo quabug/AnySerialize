@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.quabug.any-processor": {
+      "version": "file:com.quabug.any-processor",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.nuget.mono-cecil": "1.11.4",
+        "com.quabug.one-shot-injection": "2.1.2"
+      }
+    },
     "com.quabug.any-serialize": {
       "version": "file:com.quabug.any-serialize",
       "depth": 0,
@@ -7,6 +16,13 @@
       "dependencies": {
         "com.unity.nuget.mono-cecil": "1.11.4"
       }
+    },
+    "com.quabug.one-shot-injection": {
+      "version": "2.1.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",

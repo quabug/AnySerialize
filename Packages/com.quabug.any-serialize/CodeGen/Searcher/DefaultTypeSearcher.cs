@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AnyProcessor.CodeGen;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
 using UnityEngine.Assertions;
@@ -11,10 +12,10 @@ namespace AnySerialize.CodeGen
     {
         private readonly TypeTree _typeTree;
         private readonly ModuleDefinition _module;
-        private readonly ILPostProcessorLogger _logger;
+        private readonly ICodeGenLogger _logger;
         private readonly TypeDefinition _anyDef;
 
-        public DefaultTypeSearcher(TypeTree typeTree, ModuleDefinition module, ILPostProcessorLogger logger = null)
+        public DefaultTypeSearcher(TypeTree typeTree, ModuleDefinition module, ICodeGenLogger logger = null)
         {
             _typeTree = typeTree;
             _module = module;
@@ -26,7 +27,7 @@ namespace AnySerialize.CodeGen
         {
             // var isReadOnly = property.SetMethod == null;
             // var attribute = property.GetAttributesOf<AnySerializeAttribute>().Single();
-            // var baseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearchingBaseTypeIndex].Value
+            // var baseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearcherIndex].Value
             //     ?? (isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>))
             // ;
             // Assert.IsTrue(typeof(IAny<>).IsAssignableFrom(baseType) || typeof(IReadOnlyAny<>).IsAssignableFrom(baseType));

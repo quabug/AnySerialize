@@ -1,3 +1,3 @@
-using AnySerialize;
+using AnyProcessor;
 
-[assembly: AnySerializeLogger(LogLevel.Debug)]
+[assembly: CodeGenLogger(LogLevel.Debug)]

@@ -7,7 +7,7 @@ using System.Threading;
 using JetBrains.Annotations;
 using Mono.Cecil;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
     internal class PostProcessorAssemblyResolver : IAssemblyResolver
     {

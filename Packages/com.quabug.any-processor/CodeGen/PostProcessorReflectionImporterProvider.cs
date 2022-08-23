@@ -2,7 +2,7 @@ using System.Linq;
 using System.Reflection;
 using Mono.Cecil;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
     internal class PostProcessorReflectionImporterProvider : IReflectionImporterProvider
     {

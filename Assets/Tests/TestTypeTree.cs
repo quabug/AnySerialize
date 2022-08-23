@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
+using AnyProcessor.CodeGen;
 using AnySerialize.CodeGen;
 using NUnit.Framework;
 
-namespace AnySerialize.Tests
+namespace AnyProcessor.Tests
 {
     public class TestTypeTree : CecilTestBase
     {

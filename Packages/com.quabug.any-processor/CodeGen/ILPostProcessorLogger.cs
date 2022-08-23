@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Unity.CompilationPipeline.Common.Diagnostics;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
-    public class ILPostProcessorLogger
+    public class ILPostProcessorLogger : ICodeGenLogger
     {
         public LogLevel LogLevel = LogLevel.Info;
         public readonly List<DiagnosticMessage> Messages;
