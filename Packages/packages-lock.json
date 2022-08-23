@@ -1,11 +1,20 @@
 {
   "dependencies": {
+    "com.quabug.any-processor": {
+      "version": "file:com.quabug.any-processor",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.nuget.mono-cecil": "1.11.4"
+      }
+    },
     "com.quabug.any-serialize": {
       "version": "file:com.quabug.any-serialize",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.nuget.mono-cecil": "1.11.4"
+        "com.unity.nuget.mono-cecil": "1.11.4",
+        "com.quabug.any-processor": "0.1.0"
       }
     },
     "com.unity.ext.nunit": {

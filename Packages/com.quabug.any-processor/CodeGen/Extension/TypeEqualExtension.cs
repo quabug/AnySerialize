@@ -3,9 +3,9 @@ using System.Linq;
 using JetBrains.Annotations;
 using Mono.Cecil;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
-    internal static class TypeEqualExtension
+    public static class TypeEqualExtension
     {
         [Pure]
         public static bool IsTypeEqual([NotNull] this TypeReference lhs, [NotNull] TypeReference rhs)

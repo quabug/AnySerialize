@@ -1,4 +1,4 @@
-namespace AnySerialize.Tests
+namespace AnyProccesor.Tests
 {
     public class AnotherAssembly
     {

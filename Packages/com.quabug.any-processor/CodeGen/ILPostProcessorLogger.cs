@@ -1,30 +1,25 @@
 using System;
 using System.Collections.Generic;
-using Unity.CompilationPipeline.Common.Diagnostics;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
     public class ILPostProcessorLogger
     {
         public LogLevel LogLevel = LogLevel.Info;
-        public readonly List<DiagnosticMessage> Messages;
-
-        public ILPostProcessorLogger(List<DiagnosticMessage> messages = null)
-        {
-            Messages = messages;
-        }
+        private readonly List<string> _warnings = new List<string>();
+        private readonly List<string> _errors = new List<string>();
+        public IReadOnlyList<string> Warnings => _warnings;
+        public IReadOnlyList<string> Errors => _errors;
 
         public void Error(string message)
         {
-            if (Messages == null) throw new ApplicationException(message);
-            Messages.Add(new DiagnosticMessage {DiagnosticType = DiagnosticType.Error, MessageData = message});
+            _errors.Add(message);
         }
 
         public void Warning(string message)
         {
             if (LogLevel > LogLevel.Warning) return;
-            if (Messages == null) Console.WriteLine("warning: " + message);
-            else Messages.Add(new DiagnosticMessage {DiagnosticType = DiagnosticType.Warning, MessageData = message});
+            _warnings.Add(message);
         }
 
         public void Info(string message)

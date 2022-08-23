@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AnyProcessor.CodeGen;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
 using UnityEngine.Assertions;
@@ -26,12 +27,12 @@ namespace AnySerialize.CodeGen
         {
             // var isReadOnly = property.SetMethod == null;
             // var attribute = property.GetAttributesOf<AnySerializeAttribute>().Single();
-            // var baseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearchingBaseTypeIndex].Value
+            // var baseType = (Type)attribute.ConstructorArguments[AnySerializeAttribute.SearcherIndex].Value
             //     ?? (isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>))
             // ;
             // Assert.IsTrue(typeof(IAny<>).IsAssignableFrom(baseType) || typeof(IReadOnlyAny<>).IsAssignableFrom(baseType));
             // var baseTypeReference = _module.ImportReference(baseType);
-            // _logger?.Warning($"{baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
+            // Logger?.Warning($"{baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
             // // TODO: only support base type with one and only one property type parameter?
             // Assert.IsTrue(baseTypeReference.GenericParameters.Count == 1);
             // var propertyType = property.PropertyType;

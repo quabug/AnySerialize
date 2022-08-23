@@ -5,11 +5,11 @@ using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
-using UnityEngine.Assertions;
+// using Unity.CompilationPipeline.Common.ILPostProcessing;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
-    internal static class CecilExtension
+    public static class CecilExtension
     {
         public static string ToReadableName(this TypeReference type)
         {

@@ -5,7 +5,7 @@ using System.Text;
 using JetBrains.Annotations;
 using Mono.Cecil;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
     /// <summary>
     ///
@@ -171,7 +171,7 @@ namespace AnySerialize.CodeGen
                     var arg = genericArguments[i];
                     if (arg.IsGenericParameter)
                     {
-                        var index = implementation.GetGenericParametersOrArguments().FindIndex(t =>  t.IsGenericParameter && t.Name == arg.Name);
+                        var index = implementation.GetGenericParametersOrArguments().FindIndexOf(t =>  t.IsGenericParameter && t.Name == arg.Name);
                         var isGenericType = index < 0 || !baseType.IsGenericInstance;
                         genericArguments[i] = isGenericType ? arg : ((GenericInstanceType)baseType).GenericArguments[index];
                     }

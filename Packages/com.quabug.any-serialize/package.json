@@ -6,6 +6,7 @@
   "displayName": "AnySerialize",
   "type": "library",
   "dependencies": {
-    "com.unity.nuget.mono-cecil": "1.11.4"
+    "com.unity.nuget.mono-cecil": "1.11.4",
+    "com.quabug.any-processor": "0.1.0"
   }
 }

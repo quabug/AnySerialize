@@ -6,9 +6,9 @@ using Mono.Cecil;
 using Mono.Cecil.Rocks;
 using UnityEngine.Assertions;
 
-namespace AnySerialize.CodeGen
+namespace AnyProcessor.CodeGen
 {
-    internal static class TypeGenericExtension
+    public static class TypeGenericExtension
     {
         [Pure]
         public static bool IsConcreteType([NotNull] this TypeReference type)
@@ -220,7 +220,7 @@ namespace AnySerialize.CodeGen
                 var arg = genericArguments[i];
                 if (arg.IsGenericParameter)
                 {
-                    var typeIndex = referenceGenericParameters.FindIndex(t =>  t.IsGenericParameter && t.Name == arg.Name);
+                    var typeIndex = referenceGenericParameters.FindIndexOf(t =>  t.IsGenericParameter && t.Name == arg.Name);
                     Assert.IsTrue(typeIndex >= 0);
                     genericArguments[i] = referenceGenericArguments[typeIndex];
                 }

@@ -10,7 +10,7 @@ namespace AnySerialize
     {
 #>
     [Serializable]
-    public class ReadOnlyAnyClass<T<# for (var n = 0; n < i; n++) { #>, T<#= n #>, TAny<#= n #><# } #>> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T<# for (var n = 0; n < i; n++) { #>, [AnyGeneric] T<#= n #>, TAny<#= n #><# } #>> : IReadOnlyAnyClass<T>
         where T : new()
 <#
         for (var n = 0; n < i; n++)

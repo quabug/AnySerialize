@@ -2,6 +2,7 @@
     "name": "AnySerialize",
     "rootNamespace": "AnySerialize",
     "references": [
+        "GUID:c8a1986dcbf446bd9c54d4528d20455d",
         "GUID:d8b63aba1907145bea998dd612889d6b"
     ],
     "includePlatforms": [],
