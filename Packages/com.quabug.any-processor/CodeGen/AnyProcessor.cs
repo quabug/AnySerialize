@@ -53,7 +53,7 @@ namespace AnyProcessor.CodeGen
                     SymbolWriterProvider = new PortablePdbWriterProvider(), SymbolStream = pdbStream, WriteSymbols = true
                 };
                 Assembly.Write(peStream, writerParameters);
-                return (pdbStream.ToArray(), pdbStream.ToArray());
+                return (peStream.ToArray(), pdbStream.ToArray());
             }
             finally
             {

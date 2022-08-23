@@ -38,7 +38,6 @@ namespace AnySerialize.CodeGen
 
         private bool OnProcessProperty(PropertyDefinition propertyDefinition, CustomAttribute attribute)
         {
-            return false;
             if (propertyDefinition.GetMethod == null)
             {
                 _processor.Logger.Error($"Cannot process on property {propertyDefinition.DeclaringType.FullName}.{propertyDefinition.Name} without getter");
@@ -66,7 +65,7 @@ namespace AnySerialize.CodeGen
                 var baseType = isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>);
                 Assert.IsTrue(typeof(IAny<>).IsAssignableFrom(baseType) || typeof(IReadOnlyAny<>).IsAssignableFrom(baseType));
                 var baseTypeReference = module.ImportReference(baseType);
-                _processor.Logger?.Warning($"{baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
+                _processor.Logger.Info($"create property {baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
                 // TODO: only support base type with one and only one property type parameter?
                 Assert.IsTrue(baseTypeReference.GenericParameters.Count == 1);
                 return baseTypeReference.MakeGenericInstanceType(property.PropertyType);
