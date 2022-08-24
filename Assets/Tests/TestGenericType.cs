@@ -55,22 +55,6 @@ namespace AnyProcessor.Tests
         }
 
         [Test]
-        public void should_equal_with_same_generic_type()
-        {
-            var refDef = _module.ImportReference(typeof(IGeneric<,>));
-            var defDef = _module.ImportReference(typeof(IGeneric<,>)).Resolve();
-            Assert.IsTrue(refDef.IsTypeEqual(defDef));
-        }
-        
-        [Test]
-        public void should_not_equal_with_different_generic_type()
-        {
-            var def = _module.ImportReference(typeof(IGeneric<,>));
-            var partialDef = _module.ImportReference(typeof(TInt<>)).Resolve().Interfaces[0];
-            Assert.AreNotEqual(def, partialDef);
-        }
-        
-        [Test]
         public void should_get_implementations()
         {
             var generic = _module.ImportReference(typeof(IGeneric<,>));

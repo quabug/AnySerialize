@@ -79,7 +79,7 @@ namespace AnyProcessor.Tests
 
         protected void AssertTypeEqual(TypeReference lhs, TypeReference rhs)
         {
-            Assert.IsTrue(lhs.IsTypeEqual(rhs));
+            Assert.IsTrue(lhs.TypeEquals(rhs));
         }
     }
 }
