@@ -42,11 +42,11 @@ namespace AnyProcessor.CodeGen
             if (partial == null || generic == null) throw new ArgumentNullException();
             if (partial.IsArray || generic.IsArray) throw new ArgumentException();
             if (partial.IsGenericParameter || generic.IsGenericParameter) return generic.IsGenericParameter;
-            if (!partial.IsGenericType() && !generic.IsGenericType()) return partial.Resolve().IsTypeEqual(generic.Resolve());
+            if (!partial.IsGenericType() && !generic.IsGenericType()) return partial.Resolve().TypeEquals(generic.Resolve());
             if (!partial.IsGenericType() || !generic.IsGenericType()) return false;
             var partialArguments = partial.GetGenericParametersOrArguments();
             var genericArguments = generic.GetGenericParametersOrArguments();
-            return partial.Resolve().IsTypeEqual(generic.Resolve()) && 
+            return partial.Resolve().TypeEquals(generic.Resolve()) && 
                    partialArguments.Zip(genericArguments, (p, g) => (p, g)).All(t => t.p.IsPartialGenericTypeOf(t.g));
         }
 
@@ -114,14 +114,14 @@ namespace AnyProcessor.CodeGen
             if (derived.GetGenericParametersOrArgumentsCount() != @base.GetGenericParametersOrArgumentsCount()) return false;
             return derived.GetGenericParametersOrArguments()
                 .Zip(@base.GetGenericParametersOrArguments(), (d, b) => (d, b))
-                .All(t => t.d.IsTypeEqual(t.b))
+                .All(t => t.d.TypeEquals(t.b))
             ;
         }
         
         [Pure]
         public static bool IsDerivedFrom([NotNull] this TypeDefinition derived, [NotNull] TypeDefinition @base)
         {
-            return derived.GetAllBasesAndInterfaces().Any(type => type.Resolve().IsTypeEqual(@base));
+            return derived.GetAllBasesAndInterfaces().Any(type => type.Resolve().TypeEquals(@base));
         }
 
         public static bool IsImplementationOf(this TypeReference self, TypeReference generic)
@@ -135,7 +135,7 @@ namespace AnyProcessor.CodeGen
             var genericDef = @base.Resolve();
             foreach (var parentType in selfDef.GetBaseAndInterfaces())
             {
-                if (!parentType.Resolve().IsTypeEqual(genericDef)) continue;
+                if (!parentType.Resolve().TypeEquals(genericDef)) continue;
                 if (!parentType.IsGenericType())
                     yield return parentType;
                 else if (parentType.GetGenericParametersOrArguments().Zip(@base.GetGenericParametersOrArguments(), (s, g) => (s, g)).All(t => IsMatch(t.s, t.g)))
@@ -147,9 +147,9 @@ namespace AnyProcessor.CodeGen
                 if (selfArgument.IsGenericParameter || genericArgument.IsGenericParameter) return true;
                 if (selfArgument.IsArray && genericArgument.IsArray) return IsMatch(selfArgument.GetElementType(), genericArgument.GetElementType());
                 if (selfArgument.IsArray || genericArgument.IsArray) return false;
-                if (!selfArgument.IsGenericType() && !genericArgument.IsGenericType()) return selfArgument.IsTypeEqual(genericArgument);
+                if (!selfArgument.IsGenericType() && !genericArgument.IsGenericType()) return selfArgument.TypeEquals(genericArgument);
                 if (!(selfArgument.IsGenericType() && genericArgument.IsGenericType())) return false;
-                if (!selfArgument.Resolve().IsTypeEqual(genericArgument.Resolve())) return false;
+                if (!selfArgument.Resolve().TypeEquals(genericArgument.Resolve())) return false;
                 if (selfArgument.GetGenericParametersOrArgumentsCount() != genericArgument.GetGenericParametersOrArgumentsCount()) return false;
                 return selfArgument.GetGenericParametersOrArguments()
                     .Zip(genericArgument.GetGenericParametersOrArguments(), (s, g) => (s, g))
