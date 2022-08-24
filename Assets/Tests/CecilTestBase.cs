@@ -60,6 +60,7 @@ namespace AnyProcessor.Tests
 
         protected virtual void OnSetUp() {}
 
+        protected TypeReference ImportReference<T>(T _) => ImportReference(typeof(T));
         protected TypeReference ImportReference<T>() => ImportReference(typeof(T));
         protected TypeReference ImportReference(Type type)
         {

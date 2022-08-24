@@ -16,7 +16,7 @@ namespace AnyProcessor.CodeGen
             {
                 (GenericParameter l, GenericParameter r) => TypeEquals(l, r),
                 (ArrayType l, ArrayType r) => TypeEquals(l, r),
-                (ByReferenceType l, ArrayType r) => TypeEquals(l, r),
+                (ByReferenceType l, ByReferenceType r) => TypeEquals(l, r),
                 (FunctionPointerType l, FunctionPointerType r) => TypeEquals(l, r),
                 (GenericInstanceType l, GenericInstanceType r) => TypeEquals(l, r),
                 (OptionalModifierType l, OptionalModifierType r) => TypeEquals(l, r),

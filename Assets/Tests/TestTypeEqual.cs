@@ -1,4 +1,5 @@
 ﻿using AnyProcessor.CodeGen;
+using Mono.Cecil;
 using NUnit.Framework;
 
 namespace AnyProcessor.Tests
@@ -58,6 +59,13 @@ namespace AnyProcessor.Tests
             Assert.IsFalse(t3.TypeEquals(t4));
             Assert.IsFalse(t4.TypeEquals(t5));
             Assert.IsTrue(t2.TypeEquals(t5));
+            
+            Assert.IsTrue(((TypeReference)t0).TypeEquals(t1));
+            Assert.IsFalse(((TypeReference)t1).TypeEquals(t2));
+            Assert.IsFalse(((TypeReference)t2).TypeEquals(t3));
+            Assert.IsFalse(((TypeReference)t3).TypeEquals(t4));
+            Assert.IsFalse(((TypeReference)t4).TypeEquals(t5));
+            Assert.IsTrue(((TypeReference)t2).TypeEquals(t5));
         }
         
         interface IGeneric<T0, T1, T2> {}
@@ -65,6 +73,7 @@ namespace AnyProcessor.Tests
         class G1<T0, T1> : IGeneric<int, T0, T1> {}
         class G2<T> : IGeneric<int, T, T> where T : struct {}
         class G3<T> : IGeneric<T, T, T> {}
+        class G4 : IGeneric<int, int, int> {}
 
         [Test]
         public void should_check_equatable_of_generic_types()
@@ -74,11 +83,19 @@ namespace AnyProcessor.Tests
             var g1 = ImportReference(typeof(G1<,>)).Resolve().Interfaces[0].InterfaceType;
             var g2 = ImportReference(typeof(G2<>)).Resolve().Interfaces[0].InterfaceType;
             var g3 = ImportReference(typeof(G3<>)).Resolve().Interfaces[0].InterfaceType;
+            var g4 = ImportReference(typeof(G4)).Resolve().Interfaces[0].InterfaceType;
             Assert.IsFalse(g.TypeEquals(ImportReference<int>()));
             Assert.IsFalse(g.TypeEquals(g0));
             Assert.IsTrue(g.TypeEquals(g3));
             Assert.IsTrue(g0.TypeEquals(g1));
             Assert.IsFalse(g0.TypeEquals(g2));
+            Assert.IsFalse(g0.TypeEquals(g3));
+            Assert.IsFalse(g0.TypeEquals(g4));
+            
+            Assert.IsTrue(((GenericInstanceType)g0).TypeEquals((GenericInstanceType)g1));
+            Assert.IsFalse(((GenericInstanceType)g0).TypeEquals((GenericInstanceType)g2));
+            Assert.IsFalse(((GenericInstanceType)g0).TypeEquals((GenericInstanceType)g3));
+            Assert.IsFalse(((GenericInstanceType)g0).TypeEquals((GenericInstanceType)g4));
         }
         
         [Test]
@@ -95,6 +112,28 @@ namespace AnyProcessor.Tests
             var def = _module.ImportReference(typeof(IGeneric<,,>));
             var partialDef = _module.ImportReference(typeof(G0<>)).Resolve().Interfaces[0].InterfaceType;
             Assert.IsFalse(def.TypeEquals(partialDef));
+        }
+
+        private IGeneric<int, int, float>[] _array0;
+        private IGeneric<int, int, float>[] _array1;
+        private IGeneric<int, float, float>[] _array2;
+        private G4[] _array3;
+        private G4[] _array4;
+
+        [Test]
+        public void should_check_equatable_of_array_types()
+        {
+            var array0 = ImportReference(_array0);
+            var array1 = ImportReference(_array1);
+            var array2 = ImportReference(_array2);
+            var array3 = ImportReference(_array3);
+            var array4 = ImportReference(_array4);
+            
+            Assert.IsTrue(array0.TypeEquals(array1));
+            Assert.IsFalse(array1.TypeEquals(array2));
+            Assert.IsFalse(array2.TypeEquals(array3));
+            Assert.IsTrue(array3.TypeEquals(array4));
+            Assert.IsFalse(array4.TypeEquals(array0));
         }
     }
 }
