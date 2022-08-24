@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
-// using Unity.CompilationPipeline.Common.ILPostProcessing;
 
 namespace AnyProcessor.CodeGen
 {
@@ -151,11 +150,15 @@ namespace AnyProcessor.CodeGen
 
         public static IEnumerable<CustomAttribute> GetAttributesOf<T>([NotNull] this ICustomAttributeProvider provider) where T : Attribute
         {
+            return provider.GetAttributesOf(typeof(T));
+        }
+        
+        public static IEnumerable<CustomAttribute> GetAttributesOf([NotNull] this ICustomAttributeProvider provider, Type type)
+        {
             return provider.HasCustomAttributes
-                ? provider.CustomAttributes.Where(IsAttributeOf)
+                ? provider.CustomAttributes.Where(attribute => attribute.AttributeType.FullName == type.FullName)
                 : Enumerable.Empty<CustomAttribute>()
             ;
-            static bool IsAttributeOf(CustomAttribute attribute) => attribute.AttributeType.FullName == typeof(T).FullName;
         }
         
         public static string GetBackingFieldName([NotNull] this PropertyDefinition property)

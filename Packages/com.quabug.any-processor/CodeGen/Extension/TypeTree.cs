@@ -237,7 +237,7 @@ namespace AnyProcessor.CodeGen
                 else
                 {
                     var parentNode = CreateTypeTree(baseDef);
-                    if (parentNode.ChildrenNodes.All(n => !n.Type.IsTypeEqual(type)))
+                    if (parentNode.ChildrenNodes.All(n => !n.Type.TypeEquals(type)))
                         parentNode.ChildrenNodes.Add(self);
                 }
             }
