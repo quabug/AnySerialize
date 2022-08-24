@@ -43,7 +43,7 @@ namespace AnyProcessor.Tests
         public void should_find_replace_type_for_class_type()
         {
             var type = _searcher.Search(ImportReference<IReadOnlyAny<A>>());
-            AssertTypeEqual(type, ImportReference(typeof(ReadOnlyAnyClass<A, int, AnyValue_Int32, int, AnyValue_Int32, float, AnyValue_Single, float, AnyValue_Single>)));
+            AssertTypeEqual(type, ImportReference(typeof(ReadOnlyAnyClass<A, int, int, float, float, AnyValue_Int32, AnyValue_Int32, AnyValue_Single, AnyValue_Single>)));
         }
     }
 }

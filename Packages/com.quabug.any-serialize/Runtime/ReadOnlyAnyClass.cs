@@ -5,7 +5,7 @@ using UnityEngine;
 namespace AnySerialize
 {
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyConstraintType] TAny0> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
     {
@@ -29,7 +29,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -56,7 +56,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -86,7 +86,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -119,7 +119,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -155,7 +155,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -194,7 +194,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -236,7 +236,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -281,7 +281,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -329,7 +329,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -380,7 +380,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -434,7 +434,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10, T11, TAny11> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyFieldType] T11, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10, [AnyConstraintType] TAny11> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -491,7 +491,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10, T11, TAny11, T12, TAny12> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyFieldType] T11, [AnyFieldType] T12, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10, [AnyConstraintType] TAny11, [AnyConstraintType] TAny12> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -551,7 +551,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10, T11, TAny11, T12, TAny12, T13, TAny13> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyFieldType] T11, [AnyFieldType] T12, [AnyFieldType] T13, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10, [AnyConstraintType] TAny11, [AnyConstraintType] TAny12, [AnyConstraintType] TAny13> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -614,7 +614,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10, T11, TAny11, T12, TAny12, T13, TAny13, T14, TAny14> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyFieldType] T11, [AnyFieldType] T12, [AnyFieldType] T13, [AnyFieldType] T14, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10, [AnyConstraintType] TAny11, [AnyConstraintType] TAny12, [AnyConstraintType] TAny13, [AnyConstraintType] TAny14> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -680,7 +680,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10, T11, TAny11, T12, TAny12, T13, TAny13, T14, TAny14, T15, TAny15> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyFieldType] T11, [AnyFieldType] T12, [AnyFieldType] T13, [AnyFieldType] T14, [AnyFieldType] T15, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10, [AnyConstraintType] TAny11, [AnyConstraintType] TAny12, [AnyConstraintType] TAny13, [AnyConstraintType] TAny14, [AnyConstraintType] TAny15> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -749,7 +749,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10, T11, TAny11, T12, TAny12, T13, TAny13, T14, TAny14, T15, TAny15, T16, TAny16> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyFieldType] T11, [AnyFieldType] T12, [AnyFieldType] T13, [AnyFieldType] T14, [AnyFieldType] T15, [AnyFieldType] T16, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10, [AnyConstraintType] TAny11, [AnyConstraintType] TAny12, [AnyConstraintType] TAny13, [AnyConstraintType] TAny14, [AnyConstraintType] TAny15, [AnyConstraintType] TAny16> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -821,7 +821,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10, T11, TAny11, T12, TAny12, T13, TAny13, T14, TAny14, T15, TAny15, T16, TAny16, T17, TAny17> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyFieldType] T11, [AnyFieldType] T12, [AnyFieldType] T13, [AnyFieldType] T14, [AnyFieldType] T15, [AnyFieldType] T16, [AnyFieldType] T17, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10, [AnyConstraintType] TAny11, [AnyConstraintType] TAny12, [AnyConstraintType] TAny13, [AnyConstraintType] TAny14, [AnyConstraintType] TAny15, [AnyConstraintType] TAny16, [AnyConstraintType] TAny17> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -896,7 +896,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10, T11, TAny11, T12, TAny12, T13, TAny13, T14, TAny14, T15, TAny15, T16, TAny16, T17, TAny17, T18, TAny18> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyFieldType] T11, [AnyFieldType] T12, [AnyFieldType] T13, [AnyFieldType] T14, [AnyFieldType] T15, [AnyFieldType] T16, [AnyFieldType] T17, [AnyFieldType] T18, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10, [AnyConstraintType] TAny11, [AnyConstraintType] TAny12, [AnyConstraintType] TAny13, [AnyConstraintType] TAny14, [AnyConstraintType] TAny15, [AnyConstraintType] TAny16, [AnyConstraintType] TAny17, [AnyConstraintType] TAny18> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
@@ -974,7 +974,7 @@ namespace AnySerialize
     }
 
     [Serializable]
-    public class ReadOnlyAnyClass<T, T0, TAny0, T1, TAny1, T2, TAny2, T3, TAny3, T4, TAny4, T5, TAny5, T6, TAny6, T7, TAny7, T8, TAny8, T9, TAny9, T10, TAny10, T11, TAny11, T12, TAny12, T13, TAny13, T14, TAny14, T15, TAny15, T16, TAny16, T17, TAny17, T18, TAny18, T19, TAny19> : IReadOnlyAnyClass<T>
+    public class ReadOnlyAnyClass<T, [AnyFieldType] T0, [AnyFieldType] T1, [AnyFieldType] T2, [AnyFieldType] T3, [AnyFieldType] T4, [AnyFieldType] T5, [AnyFieldType] T6, [AnyFieldType] T7, [AnyFieldType] T8, [AnyFieldType] T9, [AnyFieldType] T10, [AnyFieldType] T11, [AnyFieldType] T12, [AnyFieldType] T13, [AnyFieldType] T14, [AnyFieldType] T15, [AnyFieldType] T16, [AnyFieldType] T17, [AnyFieldType] T18, [AnyFieldType] T19, [AnyConstraintType] TAny0, [AnyConstraintType] TAny1, [AnyConstraintType] TAny2, [AnyConstraintType] TAny3, [AnyConstraintType] TAny4, [AnyConstraintType] TAny5, [AnyConstraintType] TAny6, [AnyConstraintType] TAny7, [AnyConstraintType] TAny8, [AnyConstraintType] TAny9, [AnyConstraintType] TAny10, [AnyConstraintType] TAny11, [AnyConstraintType] TAny12, [AnyConstraintType] TAny13, [AnyConstraintType] TAny14, [AnyConstraintType] TAny15, [AnyConstraintType] TAny16, [AnyConstraintType] TAny17, [AnyConstraintType] TAny18, [AnyConstraintType] TAny19> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>

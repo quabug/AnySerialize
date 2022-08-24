@@ -4,17 +4,13 @@ using AnyProcessor;
 namespace AnySerialize
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class AnySerializeAttribute : Attribute, IAnyProcessorAttribute
-    {
-        public Type Searcher { get; set; }
-        public Type BaseType { get; set; }
-    }
+    public class AnySerializeAttribute : Attribute, IAnyProcessorAttribute {}
     
     [AttributeUsage(AttributeTargets.GenericParameter)]
-    public class AnyGenericAttribute : Attribute
-    {
-        public Type Searcher { get; set; }
-    }
+    public class AnyConstraintTypeAttribute : Attribute {}
+    
+    [AttributeUsage(AttributeTargets.GenericParameter)]
+    public class AnyFieldTypeAttribute : Attribute {}
     
     [AttributeUsage(AttributeTargets.Field)]
     public class AnySerializeFieldOrderAttribute : Attribute

@@ -23,9 +23,9 @@ namespace AnySerialize
 #endregion
 
 #region UnityEngine Types
-    public class AnySerialize_Object<T> : AnyValue<T> where T : UnityEngine.Object {}
-    public class AnySerialize_ObjectArray<T> : AnyValue<T[]> where T : UnityEngine.Object {}
-    public class AnySerialize_ObjectList<T> : AnyValue<List<T>> where T : UnityEngine.Object {}
+    [System.Serializable] public class AnySerialize_Object<T> : AnyValue<T> where T : UnityEngine.Object {}
+    [System.Serializable] public class AnySerialize_ObjectArray<T> : AnyValue<T[]> where T : UnityEngine.Object {}
+    [System.Serializable] public class AnySerialize_ObjectList<T> : AnyValue<List<T>> where T : UnityEngine.Object {}
 <#
     foreach (var type in new []
     {
