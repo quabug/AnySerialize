@@ -33,6 +33,9 @@ namespace AnyProcessor.Tests
             OnSetUp();
         }
 
+        [TearDown]
+        public void TearDown() => OnTearDown();
+
         protected TypeTree LoadTree(params Type[] roots)
         {
             var types = AppDomain.CurrentDomain.GetAssemblies()
@@ -59,6 +62,7 @@ namespace AnyProcessor.Tests
         }
 
         protected virtual void OnSetUp() {}
+        protected virtual void OnTearDown() {}
 
         protected TypeReference ImportReference<T>(T _) => ImportReference(typeof(T));
         protected TypeReference ImportReference<T>() => ImportReference(typeof(T));

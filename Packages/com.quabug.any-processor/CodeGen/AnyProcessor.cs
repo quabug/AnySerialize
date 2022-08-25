@@ -8,7 +8,7 @@ using Mono.Cecil.Rocks;
 
 namespace AnyProcessor.CodeGen
 {
-    public class AnyProcessor<T> where T : Attribute, IAnyProcessorAttribute
+    public class AnyProcessor<T> : IDisposable where T : Attribute, IAnyProcessorAttribute
     {
         public ILPostProcessorLogger Logger { get; private set; }
         public PostProcessorAssemblyResolver Resolver { get; private set; }
@@ -26,24 +26,34 @@ namespace AnyProcessor.CodeGen
         public event Func<ParameterDefinition, CustomAttribute, bool> ProcessParameter;
         public event Func<GenericParameter, CustomAttribute, bool> ProcessGenericParameter;
         
-        public bool WillProcess(Type thisType, string name, IEnumerable<string> references)
+        public static bool WillProcess(Type thisType, string name, IEnumerable<string> references)
         {
             var thisAssemblyName = thisType.Assembly.GetName().Name;
             var runtimeAssemblyName = typeof(T).Assembly.GetName().Name;
             return name != thisAssemblyName && references.Any(f => Path.GetFileNameWithoutExtension(f) == runtimeAssemblyName);
         }
 
-        public (byte[] pe, byte[] pdb) Process(byte[] pe, byte[] pdb, string[] references)
+        public AnyProcessor(byte[] pe, byte[] pdb, string[] references)
+        {
+            Resolver = new PostProcessorAssemblyResolver(references);
+            Assembly = Resolver.LoadAssembly(pe, pdb);
+            Logger = Assembly.CreateLogger();
+            AttributeType = Module.ImportReference(typeof(T)).Resolve();
+            TypeTree = new Lazy<TypeTree>(() => Resolver.CreateTypeTree(Assembly, references, Logger));
+            Logger.Info($"[AnyProcessor] created: ({AttributeType}): {Assembly.Name.Name}({string.Join(",", references.Where(r => r.StartsWith("Library")))})");
+        }
+
+        public void Dispose()
+        {
+            Resolver?.Dispose();
+            Assembly?.Dispose();
+        }
+
+        public (byte[] pe, byte[] pdb) Process()
         {
             try
             {
-                Resolver = new PostProcessorAssemblyResolver(references);
-                Assembly = Resolver.LoadAssembly(pe, pdb);
-                Logger = Assembly.CreateLogger();
-                AttributeType = Module.ImportReference(typeof(T)).Resolve();
-                TypeTree = new Lazy<TypeTree>(() => Resolver.CreateTypeTree(Assembly, references, Logger));
-                Logger.Info($"[AnyProcessor] processing ({AttributeType}): {Assembly.Name.Name}({string.Join(",", references.Where(r => r.StartsWith("Library")))})");
-                var modified = Process();
+                var modified = ProcessImpl();
                 if (!modified) return (null, null);
 
                 var peStream = new MemoryStream();
@@ -62,7 +72,7 @@ namespace AnyProcessor.CodeGen
             }
         }
 
-        private bool Process()
+        private bool ProcessImpl()
         {
             IReadOnlyList<AssemblyDefinition> referenceAssemblies = Array.Empty<AssemblyDefinition>();
             try
@@ -92,13 +102,14 @@ namespace AnyProcessor.CodeGen
         private bool ProcessEachAttribute<TAttributeProvider>(TAttributeProvider value, Func<TAttributeProvider, CustomAttribute, bool> processor)
             where TAttributeProvider : ICustomAttributeProvider
         {
-            if (processor == null) return false;
+            if (processor == null || !value.HasCustomAttributes) return false;
+            Logger.Info($"[AnyProcessor] process: {value}");
 
-            var attributes = value.GetAttributesOf<T>();
+            var attributes = value.CustomAttributes.Where(attribute => attribute.AttributeType.IsDerivedFrom(AttributeType));
             var modified = attributes.Aggregate(false, (current, attribute) => processor(value, attribute) || current);
-            if (value is IGenericParameterProvider genericParameterProvider && genericParameterProvider.HasGenericParameters)
+            if (value is IGenericParameterProvider { HasGenericParameters: true } genericParameterProvider)
                 modified = ProcessEachAttribute(genericParameterProvider.GenericParameters, ProcessGenericParameter) || modified;
-            if (value is IMethodSignature methodSignature && methodSignature.HasParameters)
+            if (value is IMethodSignature { HasParameters: true } methodSignature)
                 modified = ProcessEachAttribute(methodSignature.Parameters, ProcessParameter) || modified;
             return modified;
         }
