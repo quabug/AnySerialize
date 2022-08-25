@@ -40,7 +40,7 @@ namespace AnySerialize.CodeGen
             Assert.IsTrue(_targetType.IsConcreteType());
             Assert.IsTrue(_targetType.GetGenericParametersOrArgumentsCount() == 1);
 
-            var anySearcherAttributeType = _module.ImportReference(typeof(AnySearcherAttribute));
+            var anyGenericParameterSearcherAttributeType = _module.ImportReference(typeof(IAnyGenericParameterSearcherAttribute));
             
             var propertyType = _targetType.GetGenericParametersOrArguments().First();
             TypeReference closestType = null;
@@ -102,7 +102,9 @@ namespace AnySerialize.CodeGen
                     if (arg is GenericParameter parameter)
                     {
                         if (!parameter.HasCustomAttributes) return null;
-                        var attribute = parameter.CustomAttributes.FirstOrDefault(attribute => attribute.AttributeType.IsDerivedFrom(anySearcherAttributeType));
+                        var attribute = parameter.CustomAttributes
+                            .FirstOrDefault(attribute => attribute.AttributeType.IsDerivedFrom(anyGenericParameterSearcherAttributeType))
+                        ;
                         if (attribute == null) return null;
                         var genericArgument = _container.Search(
                             attribute,

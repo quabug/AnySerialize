@@ -19,13 +19,13 @@ namespace AnySerialize.CodeGen
         
         public override bool WillProcess(ICompiledAssembly compiledAssembly)
         {
-            return AnyProcessor<AnySerializeAttribute>.WillProcess(GetType(), compiledAssembly.Name, compiledAssembly.References);
+            return AnyProcessor<IAnyCodeGenAttribute>.WillProcess(GetType(), compiledAssembly.Name, compiledAssembly.References);
         }
     
         public override ILPostProcessResult Process(ICompiledAssembly compiledAssembly)
         {
             var assemblyMemory = compiledAssembly.InMemoryAssembly;
-            using var processor = new AnyProcessor<AnySerializeAttribute>(assemblyMemory.PeData, assemblyMemory.PdbData, compiledAssembly.References);
+            using var processor = new AnyProcessor<IAnyCodeGenAttribute>(assemblyMemory.PeData, assemblyMemory.PdbData, compiledAssembly.References);
             using var container = new Container();
             container.RegisterInstance(processor.Assembly).AsSelf();
             container.RegisterInstance(processor.Logger).AsSelf();

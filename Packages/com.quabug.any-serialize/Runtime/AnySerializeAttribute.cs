@@ -3,16 +3,19 @@ using AnyProcessor;
 
 namespace AnySerialize
 {
-    public abstract class AnySearcherAttribute : Attribute {}
+    public interface IAnyTypeSearcherAttribute {}
+    public interface IAnyGenericParameterSearcherAttribute : IAnyTypeSearcherAttribute {}
+    public interface IAnyPropertySearcherAttribute : IAnyTypeSearcherAttribute {}
+    public interface IAnyCodeGenAttribute : IAnyProcessorAttribute {}
     
     [AttributeUsage(AttributeTargets.Property)]
-    public class AnySerializeAttribute : AnySearcherAttribute, IAnyProcessorAttribute {}
+    public class AnySerializeAttribute : Attribute, IAnyPropertySearcherAttribute, IAnyCodeGenAttribute {}
     
     [AttributeUsage(AttributeTargets.GenericParameter)]
-    public class AnyConstraintTypeAttribute : AnySearcherAttribute {}
+    public class AnyConstraintTypeAttribute : Attribute, IAnyGenericParameterSearcherAttribute {}
     
     [AttributeUsage(AttributeTargets.GenericParameter)]
-    public class AnyFieldTypeAttribute : AnySearcherAttribute {}
+    public class AnyFieldTypeAttribute : Attribute, IAnyGenericParameterSearcherAttribute {}
     
     [AttributeUsage(AttributeTargets.Field)]
     public class AnySerializeFieldOrderAttribute : Attribute

@@ -8,14 +8,14 @@ using Mono.Cecil.Rocks;
 
 namespace AnyProcessor.CodeGen
 {
-    public class AnyProcessor<T> : IDisposable where T : Attribute, IAnyProcessorAttribute
+    public class AnyProcessor<T> : IDisposable where T : IAnyProcessorAttribute
     {
-        public ILPostProcessorLogger Logger { get; private set; }
-        public PostProcessorAssemblyResolver Resolver { get; private set; }
-        public AssemblyDefinition Assembly { get; private set; }
+        public ILPostProcessorLogger Logger { get; }
+        public PostProcessorAssemblyResolver Resolver { get; }
+        public AssemblyDefinition Assembly { get; }
         public ModuleDefinition Module => Assembly.MainModule;
-        public TypeDefinition AttributeType { get; private set; }
-        public Lazy<TypeTree> TypeTree { get; private set; }
+        public TypeDefinition AttributeType { get; }
+        public Lazy<TypeTree> TypeTree { get; }
 
         public event Func<AssemblyDefinition, CustomAttribute, bool> ProcessAssembly;
         public event Func<ModuleDefinition, CustomAttribute, bool> ProcessModule;
@@ -40,7 +40,7 @@ namespace AnyProcessor.CodeGen
             Logger = Assembly.CreateLogger();
             AttributeType = Module.ImportReference(typeof(T)).Resolve();
             TypeTree = new Lazy<TypeTree>(() => Resolver.CreateTypeTree(Assembly, references, Logger));
-            Logger.Info($"[AnyProcessor] created: ({AttributeType}): {Assembly.Name.Name}({string.Join(",", references.Where(r => r.StartsWith("Library")))})");
+            Logger.Info($"[AnyProcessor] created {AttributeType}: {Assembly.Name.Name}({string.Join(",", references.Where(r => r.StartsWith("Library")))})");
         }
 
         public void Dispose()
@@ -104,7 +104,7 @@ namespace AnyProcessor.CodeGen
         {
             if (processor == null || !value.HasCustomAttributes) return false;
             var attributes = value.CustomAttributes.Where(attribute => attribute.AttributeType.IsDerivedFrom(AttributeType));
-            Logger.Info($"[AnyProcessor] process ({attributes.Count()}): {value}");
+            Logger.Info($"[AnyProcessor] process {AttributeType}({attributes.Count()}/{value.CustomAttributes.Count}): {value}");
             var modified = attributes.Aggregate(false, (current, attribute) => processor(value, attribute) || current);
             if (value is IGenericParameterProvider { HasGenericParameters: true } genericParameterProvider)
                 modified = ProcessEachAttribute(genericParameterProvider.GenericParameters, ProcessGenericParameter) || modified;

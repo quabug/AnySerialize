@@ -21,11 +21,11 @@ namespace AnySerialize
         // [AnySerialize] public string[][] AnyStringArray { get; }
         public string[][] StringArray;
         
-        public A A;
+        [AnySerialize] public A A { get; }
         public B<int> B;
         public B<int[]> BB;
         
-        // [AnySerialize] public Vector2 Vector2 { get; }
+        [AnySerialize] public Vector2 Vector2 { get; }
         
         private void Awake()
         {

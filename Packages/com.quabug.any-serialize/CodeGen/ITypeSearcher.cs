@@ -13,7 +13,7 @@ namespace AnySerialize.CodeGen
         [CanBeNull] TypeReference Search();
     }
     
-    public interface ITypeSearcher<T> : ITypeSearcher where T : AnySearcherAttribute {}
+    public interface ITypeSearcher<T> : ITypeSearcher where T : Attribute, IAnyTypeSearcherAttribute {}
 
     public static class AnySearchers
     {
