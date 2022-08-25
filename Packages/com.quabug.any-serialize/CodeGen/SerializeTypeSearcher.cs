@@ -11,7 +11,7 @@ using UnityEngine.Assertions;
 namespace AnySerialize.CodeGen
 {
     [UsedImplicitly]
-    internal class SerializeTypeSearcher : ITypeSearcher<AnySearcherSerializeAttribute>
+    internal class SerializeTypeSearcher : ITypeSearcher<AnySerializeAttribute>
     {
         private readonly Container _container;
         private readonly TypeTree _typeTree;

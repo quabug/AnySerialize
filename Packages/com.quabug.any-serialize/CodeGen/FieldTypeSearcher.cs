@@ -5,7 +5,7 @@ using OneShot;
 
 namespace AnySerialize.CodeGen
 {
-    public class FieldTypeSearcher : ITypeSearcher<AnySearcherFieldTypeAttribute>
+    public class FieldTypeSearcher : ITypeSearcher<AnyFieldTypeAttribute>
     {
         private readonly TypeReference _fieldType;
 
@@ -22,7 +22,7 @@ namespace AnySerialize.CodeGen
                 if (genericParameter.Name == parameter.Name)
                     fieldIndex = searcherFieldCount;
                 
-                if (genericParameter.GetAttributesOf<AnySearcherFieldTypeAttribute>().Any())
+                if (genericParameter.GetAttributesOf<AnyFieldTypeAttribute>().Any())
                     searcherFieldCount++;
             }
             

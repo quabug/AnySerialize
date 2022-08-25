@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
-    public class ConstraintTypeSearcher : ITypeSearcher<AnySearcherConstraintTypeAttribute>
+    public class ConstraintTypeSearcher : ITypeSearcher<AnyConstraintTypeAttribute>
     {
         private readonly TypeReference _result;
         

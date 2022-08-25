@@ -14,9 +14,9 @@ namespace AnySerialize
 
     public class TestAnySerialize : MonoBehaviour
     {
-        [AnySearcherSerialize] public int IntValue { get; set; }
-        [AnySearcherSerialize] public int IntValueRO { get; }
-        [AnySearcherSerialize] public int IntValueROWithoutBacking => throw new NotImplementedException();
+        [AnySerialize] public int IntValue { get; set; }
+        [AnySerialize] public int IntValueRO { get; }
+        [AnySerialize] public int IntValueROWithoutBacking => throw new NotImplementedException();
         // [AnySerialize] public Dictionary<string, IReadOnlyDictionary<string, int>> Dictionary { get; }
         // [AnySerialize] public string[][] AnyStringArray { get; }
         public string[][] StringArray;

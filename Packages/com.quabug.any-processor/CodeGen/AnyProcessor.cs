@@ -103,9 +103,8 @@ namespace AnyProcessor.CodeGen
             where TAttributeProvider : ICustomAttributeProvider
         {
             if (processor == null || !value.HasCustomAttributes) return false;
-            Logger.Info($"[AnyProcessor] process: {value}");
-
             var attributes = value.CustomAttributes.Where(attribute => attribute.AttributeType.IsDerivedFrom(AttributeType));
+            Logger.Info($"[AnyProcessor] process ({attributes.Count()}): {value}");
             var modified = attributes.Aggregate(false, (current, attribute) => processor(value, attribute) || current);
             if (value is IGenericParameterProvider { HasGenericParameters: true } genericParameterProvider)
                 modified = ProcessEachAttribute(genericParameterProvider.GenericParameters, ProcessGenericParameter) || modified;

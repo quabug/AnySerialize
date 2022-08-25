@@ -6,13 +6,13 @@ namespace AnySerialize
     public abstract class AnySearcherAttribute : Attribute {}
     
     [AttributeUsage(AttributeTargets.Property)]
-    public class AnySearcherSerializeAttribute : AnySearcherAttribute, IAnyProcessorAttribute {}
+    public class AnySerializeAttribute : AnySearcherAttribute, IAnyProcessorAttribute {}
     
     [AttributeUsage(AttributeTargets.GenericParameter)]
-    public class AnySearcherConstraintTypeAttribute : AnySearcherAttribute {}
+    public class AnyConstraintTypeAttribute : AnySearcherAttribute {}
     
     [AttributeUsage(AttributeTargets.GenericParameter)]
-    public class AnySearcherFieldTypeAttribute : AnySearcherAttribute {}
+    public class AnyFieldTypeAttribute : AnySearcherAttribute {}
     
     [AttributeUsage(AttributeTargets.Field)]
     public class AnySerializeFieldOrderAttribute : Attribute

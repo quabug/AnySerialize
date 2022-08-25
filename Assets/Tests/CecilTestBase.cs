@@ -86,5 +86,10 @@ namespace AnyProcessor.Tests
         {
             Assert.IsTrue(lhs.TypeEquals(rhs));
         }
+        
+        protected void AssertTypeEqual<T>(TypeReference lhs)
+        {
+            Assert.IsTrue(lhs.TypeEquals(ImportReference(typeof(T))));
+        }
     }
 }

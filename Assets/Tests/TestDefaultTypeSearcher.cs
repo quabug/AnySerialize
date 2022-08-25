@@ -49,9 +49,9 @@ namespace AnyProcessor.Tests
         [Test]
         public void should_find_replace_type_for_primitive_type()
         {
-            AssertTypeEqual(CreateSearcher(ImportReference<IReadOnlyAny<int>>()).Search(), ImportReference(typeof(AnyValue_Int32)));
-            AssertTypeEqual(CreateSearcher(ImportReference<IReadOnlyAny<float>>()).Search(), ImportReference(typeof(AnyValue_Single)));
-            AssertTypeEqual(CreateSearcher(ImportReference<IReadOnlyAny<long>>()).Search(), ImportReference(typeof(AnyValue_Int64)));
+            AssertTypeEqual<AnyValue_Int32>(CreateSearcher(ImportReference<IReadOnlyAny<int>>()).Search());
+            AssertTypeEqual<AnyValue_Single>(CreateSearcher(ImportReference<IReadOnlyAny<float>>()).Search());
+            AssertTypeEqual<AnyValue_Int64>(CreateSearcher(ImportReference<IReadOnlyAny<long>>()).Search());
         }
 
         class A
@@ -66,7 +66,7 @@ namespace AnyProcessor.Tests
         public void should_find_replace_type_for_class_type()
         {
             var type = CreateSearcher(ImportReference<IReadOnlyAny<A>>()).Search();
-            AssertTypeEqual(type, ImportReference(typeof(ReadOnlyAnyClass<A, int, int, float, float, AnyValue_Int32, AnyValue_Int32, AnyValue_Single, AnyValue_Single>)));
+            AssertTypeEqual<ReadOnlyAnyClass<A, int, int, float, float, AnyValue_Int32, AnyValue_Int32, AnyValue_Single, AnyValue_Single>>(type);
         }
     }
 }
