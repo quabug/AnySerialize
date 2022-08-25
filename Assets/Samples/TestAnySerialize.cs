@@ -14,18 +14,18 @@ namespace AnySerialize
 
     public class TestAnySerialize : MonoBehaviour
     {
-        [AnySerialize(BaseType = typeof(int))] public int IntValue { get; set; }
+        [AnySerialize] public int IntValue { get; set; }
         [AnySerialize] public int IntValueRO { get; }
         [AnySerialize] public int IntValueROWithoutBacking => throw new NotImplementedException();
         // [AnySerialize] public Dictionary<string, IReadOnlyDictionary<string, int>> Dictionary { get; }
         // [AnySerialize] public string[][] AnyStringArray { get; }
         public string[][] StringArray;
         
-        public A A;
+        [AnySerialize] public A A { get; }
         public B<int> B;
         public B<int[]> BB;
         
-        // [AnySerialize] public Vector2 Vector2 { get; }
+        [AnySerialize] public Vector2 Vector2 { get; }
         
         private void Awake()
         {
@@ -47,9 +47,9 @@ namespace AnySerialize
 
         [SerializeField] private ReadOnlyAnyArray<string[], ReadOnlyAnyArray<string, AnyValue<string>>> array;
         [SerializeField] private ReadOnlyAnyDictionary<string, Dict, AnyValue<string>, AnySerializeDict, AnyValue<SerializeKeyValuePair<string, Dict, AnyValue<string>, AnySerializeDict>>> dict;
-        [SerializeField] private ReadOnlyAnyClass<B<int>, int, AnyValue<int>, int[], AnySerializeArray, int[][], AnySerializeArrayArray, float, AnyValue<float>> IntB;
+        [SerializeField] private ReadOnlyAnyClass<B<int>, int, int[], int[][], float, AnyValue<int>, AnySerializeArray, AnySerializeArrayArray, AnyValue<float>> IntB;
         
-        [SerializeField] private ReadOnlyAnyClass<Vector4, float, AnyValue<float>, float, AnyValue<float>, float, AnyValue<float>, float, AnyValue<float>> Vector4Any;
+        [SerializeField] private ReadOnlyAnyClass<Vector4, float, float, float, float, AnyValue<float>, AnyValue<float>, AnyValue<float>, AnyValue<float>> Vector4Any;
         [SerializeField] private ReadOnlyAnyLazy<int[][], AnySerializeArrayArray> LazyIntArrayArray;
     }
     

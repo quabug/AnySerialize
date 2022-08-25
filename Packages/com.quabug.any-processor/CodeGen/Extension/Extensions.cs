@@ -170,5 +170,78 @@ namespace AnyProcessor.CodeGen
         {
             return $"<{propertyName}>k__BackingField";
         }
+        
+        [NotNull]
+        public static FieldDefinition CreateOrReplaceBackingField([NotNull] this PropertyDefinition property, [NotNull] TypeReference fieldType)
+        {
+            var backingFieldName = property.GetBackingFieldName();
+            var backingField = property.DeclaringType.Fields.FirstOrDefault(field => field.Name == backingFieldName)
+                               ?? property.CreateSerializeReferenceField(fieldType);
+            backingField.FieldType = fieldType;
+            backingField.IsInitOnly = false;
+            return backingField;
+        }
+        
+        [NotNull]
+        public static FieldDefinition CreateSerializeReferenceField([NotNull] this PropertyDefinition property, [NotNull] TypeReference fieldType)
+        {
+            //.field private class AnySerialize.Tests.TestMonoBehavior/__generic_serialize_reference_GenericInterface__/IBase _GenericInterface
+            //  .custom instance void [UnityEngine.CoreModule]UnityEngine.SerializeReference::.ctor()
+            //    = (01 00 00 00 )
+            var serializedField = new FieldDefinition(
+                property.GetBackingFieldName()
+                , FieldAttributes.Private
+                , fieldType
+            );
+            property.DeclaringType.Fields.Add(serializedField);
+            return serializedField;
+        }
+        
+        public static void ReplacePropertyGetterByFieldMethod([NotNull] this PropertyDefinition property, [NotNull] FieldDefinition serializedField, [NotNull] string fieldMethodName)
+        {
+            // before
+            //     IL_0000: ldarg.0      // this
+            //     IL_0001: ldfld        int32 TestAnySerialize::'<Value>k__BackingField'
+            //     IL_0006: ret
+            
+            // after
+            //     IL_0000: ldarg.0      // this
+            //     IL_0001: ldfld        class [AnySerialize]AnySerialize.AnyValue`1<object> TestAnySerialize::_value
+            //     IL_0006: callvirt     instance !0/*object*/ class [AnySerialize]AnySerialize.AnyValue`1<object>::get_Value()
+            //     IL_000b: ret
+            var instructions = property.GetMethod.Body.Instructions;
+            var getValueMethod = serializedField.FieldType.GetMethodReference(fieldMethodName);
+            getValueMethod = property.Module.ImportReference(getValueMethod);
+            instructions.Clear();
+            instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+            instructions.Add(Instruction.Create(OpCodes.Ldfld, serializedField));
+            instructions.Add(Instruction.Create(OpCodes.Callvirt, getValueMethod));
+            instructions.Add(Instruction.Create(OpCodes.Ret));
+        }
+        
+        public static void ReplacePropertySetterByFieldMethod([NotNull] this PropertyDefinition property, [NotNull] FieldDefinition serializedField, [NotNull] string fieldMethodName)
+        {
+            // before
+            //     IL_0000: ldarg.0      // this
+            //     IL_0001: ldarg.1      // 'value'
+            //     IL_0002: stfld        int32 TestAnySerialize::'<ntValue>k__BackingField'
+            //     IL_0007: ret
+            
+            // after
+            //     IL_0000: ldarg.0      // this
+            //     IL_0001: ldfld        class [AnySerialize]AnySerialize.AnyValue`1<object> TestAnySerialize::_value
+            //     IL_0006: ldarg.1      // 'value'
+            //     IL_0007: callvirt     instance void class [AnySerialize]AnySerialize.AnyValue`1<object>::set_Value(!0/*object*/)
+            //     IL_000d: ret
+            var instructions = property.SetMethod.Body.Instructions;
+            var setValueMethod = serializedField.FieldType.GetMethodReference(fieldMethodName);
+            setValueMethod = property.Module.ImportReference(setValueMethod);
+            instructions.Clear();
+            instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+            instructions.Add(Instruction.Create(OpCodes.Ldfld, serializedField));
+            instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
+            instructions.Add(Instruction.Create(OpCodes.Callvirt, setValueMethod));
+            instructions.Add(Instruction.Create(OpCodes.Ret));
+        }
     }
 }
