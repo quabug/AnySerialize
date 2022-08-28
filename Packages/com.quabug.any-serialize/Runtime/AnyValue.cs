@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AnySerialize
 {
     [Serializable]
-    public class AnyValue<T> : IAny<T>, IReadOnlyAny<T>
+    public abstract class AnyValue<T> : IAny<T>, IReadOnlyAny<T>
     {
         [SerializeField] private T _value;
         public T Value

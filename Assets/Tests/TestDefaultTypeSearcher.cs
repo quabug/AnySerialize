@@ -36,22 +36,23 @@ namespace AnyProcessor.Tests
             _container.Dispose();
         }
 
-        private SerializeTypeSearcher CreateSearcher(TypeReference target)
+        private TypeReference SearchReadOnly<T>()
         {
+            var target = ImportReference(typeof(IReadOnlyAny<T>));
             Assert.IsTrue(target is GenericInstanceType genericTarget && genericTarget.GenericArguments.Count == 1);
             var container = _container.CreateChildContainer();
             container.RegisterInstance(container).AsSelf();
             container.RegisterInstance(((GenericInstanceType)target).GenericArguments[0]).AsSelf(typeof(OuterLabel<>)).AsBases(typeof(OuterLabel<>));
             container.RegisterInstance(target).AsSelf(typeof(TargetLabel<>)).AsBases(typeof(TargetLabel<>));
-            return container.Instantiate<SerializeTypeSearcher>();
+            return container.Instantiate<SerializeTypeSearcher>().Search();
         }
 
         [Test]
         public void should_find_replace_type_for_primitive_type()
         {
-            AssertTypeEqual<AnyValue_Int32>(CreateSearcher(ImportReference<IReadOnlyAny<int>>()).Search());
-            AssertTypeEqual<AnyValue_Single>(CreateSearcher(ImportReference<IReadOnlyAny<float>>()).Search());
-            AssertTypeEqual<AnyValue_Int64>(CreateSearcher(ImportReference<IReadOnlyAny<long>>()).Search());
+            AssertTypeEqual<AnyValue_Int32>(SearchReadOnly<int>());
+            AssertTypeEqual<AnyValue_Single>(SearchReadOnly<float>());
+            AssertTypeEqual<AnyValue_Int64>(SearchReadOnly<long>());
         }
 
         class A
@@ -63,10 +64,17 @@ namespace AnyProcessor.Tests
         }
         
         [Test]
-        public void should_find_replace_type_for_class_type()
+        public void should_find_replace_type_for_simple_class_type()
         {
-            var type = CreateSearcher(ImportReference<IReadOnlyAny<A>>()).Search();
-            AssertTypeEqual<ReadOnlyAnyClass<A, int, int, float, float, AnyValue_Int32, AnyValue_Int32, AnyValue_Single, AnyValue_Single>>(type);
+            AssertTypeEqual<ReadOnlyAnyClass<A, int, int, float, float, AnyValue_Int32, AnyValue_Int32, AnyValue_Single, AnyValue_Single>>(SearchReadOnly<A>());
+        }
+        
+        [Test]
+        public void should_find_replace_type_for_array_types()
+        {
+            AssertTypeEqual<AnyArray_Int32>(SearchReadOnly<int[]>());
+            AssertTypeEqual<ReadOnlyAnyArray<int[], AnyArray_Int32>>(SearchReadOnly<int[][]>());
+            AssertTypeEqual<ReadOnlyAnyArray<int[][], ReadOnlyAnyArray<int[], AnyArray_Int32>>>(SearchReadOnly<int[][]>());
         }
     }
 }
