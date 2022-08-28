@@ -61,6 +61,11 @@ namespace AnySerialize.CodeGen
             {
                 if (previous == null || previous.IsGenericParameter) return true;
                 if (current == null || current.IsGenericParameter) return false;
+                if (previous.TypeEquals(current)) return true;
+                if (previous is ArrayType previousArray && current is ArrayType currentArray && target is ArrayType targetArray)
+                    return IsCloserImplementation(previousArray.ElementType, currentArray.ElementType, targetArray.ElementType);
+                if (current.IsArray && target.IsArray) return true;
+                
                 var previousDefinition = previous.Resolve();
                 var currentDefinition = current.Resolve();
                 var targetDefinition = target.Resolve();
