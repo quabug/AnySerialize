@@ -169,18 +169,14 @@ namespace AnyProcessor.CodeGen
                 for (var i = 0; i < self.GenericParameters.Count; i++)
                 {
                     var arg = genericArguments[i];
-                    if (arg.IsGenericParameter)
-                    {
-                        var index = implementation.GetGenericParametersOrArguments().FindIndexOf(t =>  t.IsGenericParameter && t.Name == arg.Name);
-                        var isGenericType = index < 0 || !baseType.IsGenericInstance;
-                        genericArguments[i] = isGenericType ? arg : ((GenericInstanceType)baseType).GenericArguments[index];
-                    }
+                    if (arg is GenericParameter genericParameter)
+                        genericArguments[i] = genericParameter.FindGenericParameterType(baseType, implementation);
                 }
 
-                if (genericArguments.Take(self.GenericParameters.Count).All(arg => arg.IsGenericParameter)) return self;
+                if (genericArguments.All(arg => arg.IsGenericParameter)) return self;
                 
                 var instance = new GenericInstanceType(self);
-                foreach (var arg in genericArguments.Take(self.GenericParameters.Count)) instance.GenericArguments.Add(arg);
+                foreach (var arg in genericArguments) instance.GenericArguments.Add(arg);
                 return instance;
             }
         }

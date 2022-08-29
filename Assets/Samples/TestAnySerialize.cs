@@ -18,7 +18,9 @@ namespace AnySerialize
         [AnySerialize] public int IntValueRO { get; }
         [AnySerialize] public int IntValueROWithoutBacking => throw new NotImplementedException();
         // [AnySerialize] public Dictionary<string, IReadOnlyDictionary<string, int>> Dictionary { get; }
-        // [AnySerialize] public string[][] AnyStringArray { get; }
+        [AnySerialize] public string[][] AnyStringArray2 { get; }
+        [AnySerialize] public int[][][] AnyIntArray3 { get; }
+        [AnySerialize] public A[] AnyClassArray { get; }
         public string[][] StringArray;
         
         [AnySerialize] public A A { get; }

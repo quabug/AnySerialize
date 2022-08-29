@@ -2,6 +2,13 @@
 
 namespace AnySerialize
 {
+    
+#region String
+
+    [System.Serializable] public class AnyValue_String : AnyValue<System.String> {}
+    [System.Serializable] public class AnyArray_String : AnyValue<System.String[]> {}
+    [System.Serializable] public class AnyList_String : AnyValue<List<System.String>> {}
+#endregion
 
 #region Primitive Types
 

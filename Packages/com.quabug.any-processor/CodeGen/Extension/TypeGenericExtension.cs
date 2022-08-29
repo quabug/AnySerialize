@@ -145,7 +145,8 @@ namespace AnyProcessor.CodeGen
             static bool IsMatch(TypeReference selfArgument, TypeReference genericArgument)
             {
                 if (selfArgument.IsGenericParameter || genericArgument.IsGenericParameter) return true;
-                if (selfArgument.IsArray && genericArgument.IsArray) return IsMatch(selfArgument.GetElementType(), genericArgument.GetElementType());
+                if (selfArgument is ArrayType selfArray && genericArgument is ArrayType genericArray)
+                    return IsMatch(selfArray.ElementType, genericArray.ElementType);
                 if (selfArgument.IsArray || genericArgument.IsArray) return false;
                 if (!selfArgument.IsGenericType() && !genericArgument.IsGenericType()) return selfArgument.TypeEquals(genericArgument);
                 if (!(selfArgument.IsGenericType() && genericArgument.IsGenericType())) return false;
@@ -248,6 +249,20 @@ namespace AnyProcessor.CodeGen
             foreach (var (@new, old) in arguments.Zip(self.GetGenericParametersOrArguments(), (@new, old) => (@new, old)))
                 genericInstanceType.GenericArguments.Add(old.IsGenericParameter ? @new : old);
             return genericInstanceType;
+        }
+    
+        public static TypeReference FindGenericParameterType(this GenericParameter parameter, TypeReference baseType, TypeReference implementation)
+        {
+            if (!(baseType is GenericInstanceType genericBaseType)) return parameter;
+
+            foreach (var (generic, index) in implementation.GetGenericParametersOrArguments().Select((generic, index) => (g: generic, index)))
+            {
+                if (generic.IsGenericParameter && generic.Name == parameter.Name)
+                    return genericBaseType.GenericArguments[index];
+                if (generic is ArrayType arrayGeneric && arrayGeneric.Name == $"{parameter.Name}[]")
+                    return ((ArrayType)genericBaseType.GenericArguments[index]).ElementType;
+            }
+            return parameter;
         }
     }
 }
