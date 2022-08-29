@@ -45,8 +45,12 @@ namespace AnySerialize.CodeGen
             var propertyType = _targetType.GetGenericParametersOrArguments().First();
             TypeReference closestType = null;
             TypeReference closestImplementation = null;
+            var closestPriority = int.MaxValue;
             foreach (var (type, implementation) in FindTypes(_targetType, ((GenericInstanceType)_targetType).ElementType.GenericParameters[0]))
             {
+                var priorityAttribute = type.Resolve().GetAttributesOf<AnySerializePriorityAttribute>().SingleOrDefault();
+                var priority = priorityAttribute == null ? 0 : (int)priorityAttribute.ConstructorArguments[0].Value;
+                if (priority > closestPriority) continue;
                 if (!IsCloserImplementation(closestImplementation, implementation, propertyType)) continue;
                 
                 var concreteType = CreateConcreteTypeFrom(type);
@@ -54,6 +58,7 @@ namespace AnySerialize.CodeGen
                 
                 closestImplementation = implementation;
                 closestType = type;
+                closestPriority = priority;
             }
             return closestType;
 

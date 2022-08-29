@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AnySerialize
 {
-    [Serializable]
+    [Serializable, AnySerializePriority(5000)]
     public class ReadOnlyAnyArray<T, [AnyConstraintType] TAny> : IReadOnlyAny<T[]> where TAny : IReadOnlyAny<T>
     {
         [SerializeField] private TAny[] _value;

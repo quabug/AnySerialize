@@ -23,4 +23,11 @@ namespace AnySerialize
         public int Order { get; }
         public AnySerializeFieldOrderAttribute(int order) => Order = order;
     }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    public class AnySerializePriorityAttribute : Attribute
+    {
+        public int Value { get; }
+        public AnySerializePriorityAttribute(int value) => Value = value;
+    }
 }
