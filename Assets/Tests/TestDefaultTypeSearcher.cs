@@ -84,7 +84,7 @@ namespace AnyProcessor.Tests
         [Test]
         public void should_find_replace_type_for_3D_array_type()
         {
-            AssertTypeEqual<ReadOnlyAnyArray<int[][], ReadOnlyAnyArray<int[], AnyArray_Int32>>>(SearchReadOnly<int[][]>());
+            AssertTypeEqual<ReadOnlyAnyArray<int[][], ReadOnlyAnyArray<int[], AnyArray_Int32>>>(SearchReadOnly<int[][][]>());
         }
     }
 }
