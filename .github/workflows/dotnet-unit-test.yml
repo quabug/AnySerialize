@@ -24,8 +24,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore Standard
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore Standard
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal Standard
