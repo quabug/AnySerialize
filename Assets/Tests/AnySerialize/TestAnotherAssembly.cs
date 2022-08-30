@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using AnyProccesor.Tests;
+using AnyProcessor.CodeGen;
 using AnyProcessor.Tests;
 using NUnit.Framework;
 using UnityEngine;
@@ -8,6 +10,9 @@ namespace AnySerialize.Tests
     public class TestAnotherAssembly : CecilTestBase
     {
         class AnotherGeneric : AnotherAssembly.Generic {}
+
+        protected override IEnumerable<string> _AdditionalLocations =>
+            typeof(AnotherAssembly).Assembly.Location.Yield();
 
         [Test]
         public void should_resolve_types_inherited_from_another_assembly()

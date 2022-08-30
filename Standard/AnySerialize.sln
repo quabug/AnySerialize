@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnySerialize", "AnySerialize\AnySerialize.csproj", "{02F9C4AC-BE1A-4A43-8D43-C0633AEAE2D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnySerialize.Test", "AnySerialize.Test\AnySerialize.Test.csproj", "{294E1D38-894F-40EE-806C-28170B0C70A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnySerialize.Tests", "AnySerialize.Tests\AnySerialize.Tests.csproj", "{294E1D38-894F-40EE-806C-28170B0C70A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnyProcessor", "AnyProcessor\AnyProcessor.csproj", "{5FC02D61-46C9-48C5-BA78-6CA065D5E6EA}"
 EndProject

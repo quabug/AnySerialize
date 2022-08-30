@@ -2,12 +2,18 @@
 
     <PropertyGroup>
         <Nullable>disable</Nullable>
+
         <IsPackable>false</IsPackable>
+
+        <RootNamespace>AnySerialize.Test</RootNamespace>
+
         <TargetFramework>net6.0</TargetFramework>
+
+        <OutputType>Library</OutputType>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <Compile Include="..\..\Assets\Tests\AnyProcessor\*.cs">
+        <Compile Include="..\..\Assets\Tests\AnySerialize\*.cs" Exclude="..\..\Assets\Tests\AnySerialize\TestAnotherAssembly.cs">
             <Link>%(FileName)%(Extension)</Link>
         </Compile>
     </ItemGroup>
@@ -18,10 +24,12 @@
         <PackageReference Include="NUnit" Version="3.13.2" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
         <PackageReference Include="coverlet.collector" Version="3.1.0" />
+        <PackageReference Include="OneShot" Version="2.2.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AnyProcessor\AnyProcessor.csproj" />
+      <ProjectReference Include="..\AnyProcessor.Test\AnyProcessor.Test.csproj" />
+      <ProjectReference Include="..\AnySerialize\AnySerialize.csproj" />
     </ItemGroup>
 
 </Project>

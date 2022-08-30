@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using AnyProccesor.Tests;
 using AnyProcessor.CodeGen;
 using AnySerialize;
 using AnySerialize.CodeGen;
@@ -17,14 +15,9 @@ namespace AnyProcessor.Tests
         private TypeTree _typeTree;
         private Container _container;
 
-        protected override IEnumerable<string> _AdditionalLocations =>
-            typeof(AnotherAssembly).Assembly.Location.Yield();
-
         protected override void OnSetUp()
         {
-            var serializerTypes = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .SelectMany(asm => asm.GetTypes())
+            var serializerTypes = typeof(IAny).Assembly.GetTypes()
                 .Where(type => typeof(IAny).IsAssignableFrom(type))
             ;
             _typeTree = new TypeTree(serializerTypes.Select(type => ImportReference(type).Resolve()));

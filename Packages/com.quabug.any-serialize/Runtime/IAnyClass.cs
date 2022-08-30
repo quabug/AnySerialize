@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
-using UnityEngine.Assertions;
 
 namespace AnySerialize
 {
@@ -21,11 +21,13 @@ namespace AnySerialize
             var index = 0;
             foreach (var newIndex in newIndices)
             {
+                if (array[index] == null)
+                    throw new ArgumentException($"element of {nameof(array)} cannot be null", nameof(array));
                 newArray[newIndex] = array[index];
                 index++;
             }
-            Assert.AreEqual(index, array.Length);
-            Assert.IsTrue(newArray.All(element => element != null));
+            if (index != array.Length)
+                throw new ArgumentException($"{nameof(array)}({array.Length}) and {nameof(newIndices)}({index}) must have same count of elements", nameof(newIndices));
             return array;
         }
 

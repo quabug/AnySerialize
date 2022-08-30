@@ -70,6 +70,7 @@ namespace AnySerialize
 #endregion
 
 #region UnityEngine Types
+#if UNITY_2020_1_OR_NEWER
     [System.Serializable] public class AnySerialize_Object<T> : AnyValue<T> where T : UnityEngine.Object {}
     [System.Serializable] public class AnySerialize_ObjectArray<T> : AnyValue<T[]> where T : UnityEngine.Object {}
     [System.Serializable] public class AnySerialize_ObjectList<T> : AnyValue<List<T>> where T : UnityEngine.Object {}
@@ -113,6 +114,7 @@ namespace AnySerialize
     [System.Serializable] public class AnyValue_LayerMask : AnyValue<UnityEngine.LayerMask> {}
     [System.Serializable] public class AnyArray_LayerMask : AnyValue<UnityEngine.LayerMask[]> {}
     [System.Serializable] public class AnyList_LayerMask : AnyValue<List<UnityEngine.LayerMask>> {}
+#endif
 #endregion
 
 #region Unity.Mathematics Types
