@@ -4,7 +4,6 @@ using System.Linq;
 using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
-using UnityEngine.Assertions;
 
 namespace AnyProcessor.CodeGen
 {
@@ -162,7 +161,8 @@ namespace AnyProcessor.CodeGen
         [Pure, NotNull]
         public static TypeReference FillGenericTypesByReferenceGenericIndex([NotNull] this TypeReference self, [NotNull] TypeReference referenceGeneric)
         {
-            Assert.AreEqual(self.Resolve(), referenceGeneric.Resolve());
+            if (!self.Resolve().TypeEquals(referenceGeneric.Resolve()))
+                throw new ArgumentException($"{nameof(self)}({self.Resolve()}) and {nameof(referenceGeneric)}({referenceGeneric.Resolve()}) must have same type", nameof(self));
             
             if (self is ArrayType arrayType && referenceGeneric is ArrayType referenceArray)
             {
@@ -170,10 +170,9 @@ namespace AnyProcessor.CodeGen
                 return new ArrayType(elementType, arrayType.Rank);
             }
             if (!self.IsGenericType()) return self;
-            
-            Assert.IsTrue(referenceGeneric.IsGenericInstance);
 
-            var referenceGenericInstance = (GenericInstanceType)referenceGeneric;
+            if (!(referenceGeneric is GenericInstanceType referenceGenericInstance))
+                throw new ArgumentException( $"{nameof(referenceGeneric)}({referenceGeneric}) must be a {nameof(GenericInstanceType)}", nameof(referenceGeneric));
             
             // TODO: array pool on MacOS not working?
             //       (0,0): error System.TypeLoadException: Could not load type 'System.Buffers.ArrayPool`1' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
@@ -203,7 +202,8 @@ namespace AnyProcessor.CodeGen
             [NotNull, ItemNotNull] IList<TypeReference> referenceGenericArguments
         )
         {
-            Assert.AreEqual(referenceGenericArguments.Count, referenceGenericParameters.Count);
+            if (referenceGenericArguments.Count != referenceGenericParameters.Count)
+                throw new ArgumentException($"{nameof(referenceGenericParameters)}({referenceGenericParameters.Count}) and {nameof(referenceGenericArguments)}({referenceGenericArguments.Count}) must have same count", nameof(referenceGenericParameters));
             
             if (self is ArrayType arrayType)
             {
@@ -222,7 +222,7 @@ namespace AnyProcessor.CodeGen
                 if (arg.IsGenericParameter)
                 {
                     var typeIndex = referenceGenericParameters.FindIndexOf(t =>  t.IsGenericParameter && t.Name == arg.Name);
-                    Assert.IsTrue(typeIndex >= 0);
+                    if (typeIndex < 0) throw new IndexOutOfRangeException();
                     genericArguments[i] = referenceGenericArguments[typeIndex];
                 }
                 else

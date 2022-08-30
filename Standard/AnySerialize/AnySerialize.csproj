@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="..\..\Packages\com.quabug.any-serialize\CodeGen\*.cs" Exclude="..\..\Packages\com.quabug.any-serialize\CodeGen\AnySerializePostProcessor.cs">
+            <Link>%(FileName)%(Extension)</Link>
+        </Compile>
+        <Compile Include="..\..\Packages\com.quabug.any-serialize\Runtime\AnySerializeAttribute.cs">
+          <Link>AnySerializeAttribute.cs</Link>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AnyProcessor\AnyProcessor.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="OneShot" Version="2.2.0" />
+    </ItemGroup>
+
+</Project>

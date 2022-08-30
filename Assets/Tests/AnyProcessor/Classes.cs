@@ -1,7 +1,6 @@
 using System;
-using UnityEngine.Scripting;
 
-namespace AnyProccesor.Tests
+namespace AnyProcessor.Tests
 {
     public static class NonGeneric
     {
@@ -45,7 +44,6 @@ namespace AnyProccesor.Tests
 
     public static class MultipleGeneric
     {
-        [Preserve]
         public interface IInterface<T, U> {}
 
         [Serializable]
