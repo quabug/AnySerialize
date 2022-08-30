@@ -1,29 +1,26 @@
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
-using AnyProccesor.Tests;
 using AnyProcessor.CodeGen;
-using AnySerialize;
-using AnySerialize.CodeGen;
 using Mono.Cecil;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace AnyProcessor.Tests
 {
     public class TestCecil : CecilTestBase
     {
+#if UNITY_2020_1_OR_NEWER
         [Test]
         public void should_resolve_unity_type()
         {
-            var type = ImportReference<ExitPlayMode>().Resolve();
+            var type = ImportReference<UnityEngine.TestTools.ExitPlayMode>().Resolve();
             Assert.AreEqual(1, type.Interfaces.Count);
             var interfaceReference = type.Interfaces.First();
             Assert.NotNull(interfaceReference);
             Assert.NotNull(interfaceReference.InterfaceType);
             Assert.NotNull(interfaceReference.InterfaceType.Resolve());
         }
+#endif
 
         [Test]
         public void should_get_generic_type_definition_from_generic_type()
@@ -33,44 +30,10 @@ namespace AnyProcessor.Tests
         }
 
         [Test]
-        public void should_resolve_generic_types_in_another_assembly()
-        {
-            var typeRef = ImportReference<AnotherAssembly.IGeneric<int,int>>();
-            Debug.Log($"{typeRef} {typeRef.Module}");
-            Assert.NotNull(typeRef);
-            Assert.NotNull(typeRef.Resolve());
-        }
-
-        [Test]
-        public void should_resolve_types_in_another_assembly()
-        {
-            var typeRef = ImportReference<AnotherAssembly>();
-            Debug.Log($"{typeRef} {typeRef.Module}");
-            Assert.NotNull(typeRef);
-            Assert.NotNull(typeRef.Resolve());
-        }
-
-        class AnotherGeneric : AnotherAssembly.Generic {}
-
-        [Test]
-        public void should_resolve_types_inherited_from_another_assembly()
-        {
-            var typeRef = ImportReference<AnotherGeneric>();
-            Debug.Log($"{typeRef} {typeRef.Module}");
-            Assert.NotNull(typeRef);
-            Assert.NotNull(typeRef.Resolve());
-
-            var baseType = typeRef.Resolve().BaseType;
-            Debug.Log($"{baseType} {baseType.Module}");
-            Assert.NotNull(baseType);
-            Assert.NotNull(baseType.Resolve());
-        }
-
-        [Test]
         public void should_resolve_types_in_system_assembly()
         {
             var typeRef = ImportReference<Attribute>();
-            Debug.Log($"{typeRef} {typeRef.Module}");
+            Log($"{typeRef} {typeRef.Module}");
             Assert.NotNull(typeRef);
             Assert.NotNull(typeRef.Resolve());
         }
@@ -169,7 +132,7 @@ namespace AnyProcessor.Tests
         class Constraint<T0, T1, T2>
             where T0 : class, new()
             where T1 : struct
-            where T2 : Int2<int, int>, IAny, IAny<int>, new()
+            where T2 : Int2<int, int>, I<int>, I<float>, new()
         {}
 
         [Test]
@@ -186,24 +149,24 @@ namespace AnyProcessor.Tests
         interface II<T, U> : I<int>, I<float> {}
         class Foo<T> : II<float, long>, I<double> {}
         
-        [Test]
-        public void should_()
-        {
-            var tree = new TypeTree(new[]
-            {
-                ImportDefinition(typeof(I<>)),
-                ImportDefinition(typeof(II<,>)),
-                ImportDefinition(typeof(Foo<>)),
-            });
-            
-            var i = tree.GetDirectDerivedDefinition(ImportReference(typeof(I<>)));
-        }
-
-        [Test]
-        public void should_get_method_from_self_or_bases()
-        {
-            var type = ImportReference<AnyValue_Single>();
-            var method = type.GetMethodReference("get_Value");
-        }
+        // [Test]
+        // public void should_()
+        // {
+        //     var tree = new TypeTree(new[]
+        //     {
+        //         ImportDefinition(typeof(I<>)),
+        //         ImportDefinition(typeof(II<,>)),
+        //         ImportDefinition(typeof(Foo<>)),
+        //     });
+        //     
+        //     var i = tree.GetDirectDerivedDefinition(ImportReference(typeof(I<>)));
+        // }
+        //
+        // [Test]
+        // public void should_get_method_from_self_or_bases()
+        // {
+        //     var type = ImportReference<AnyValue_Single>();
+        //     var method = type.GetMethodReference("get_Value");
+        // }
     }
 }

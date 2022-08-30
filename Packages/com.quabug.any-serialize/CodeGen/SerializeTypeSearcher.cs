@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
 using OneShot;
-using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
@@ -36,9 +35,8 @@ namespace AnySerialize.CodeGen
 
         public TypeReference Search()
         {
-            Assert.IsTrue(_targetType.IsGenericInstance);
-            Assert.IsTrue(_targetType.IsConcreteType());
-            Assert.IsTrue(_targetType.GetGenericParametersOrArgumentsCount() == 1);
+            if (!_targetType.IsGenericInstance || !_targetType.IsConcreteType() || _targetType.GetGenericParametersOrArgumentsCount() != 1)
+                throw new ArgumentException($"{nameof(_targetType)} must be a concrete generic instance with one and only one arguments.", nameof(_targetType));
 
             var anyGenericParameterSearcherAttributeType = _module.ImportReference(typeof(IAnyGenericParameterSearcherAttribute));
             
@@ -104,8 +102,10 @@ namespace AnySerialize.CodeGen
                 if (def.IsAbstract) return null;
                 if (def.GetConstructors().FirstOrDefault(ctor => !ctor.HasParameters) == null) return null;
                 if (type.IsConcreteType()) return type;
-                Assert.IsTrue(type.IsGenericInstance);
-                var genericType = (GenericInstanceType)type;
+                
+                if (!(type is GenericInstanceType genericType))
+                    throw new ArgumentException($"{nameof(type)}({type}) must be a {nameof(GenericInstanceType)}", nameof(type));
+                        
                 for (var i = 0; i < genericType.GenericArguments.Count; i++)
                 {
                     var arg = genericType.GenericArguments[i];
@@ -113,7 +113,7 @@ namespace AnySerialize.CodeGen
                     {
                         if (!parameter.HasCustomAttributes) return null;
                         var attribute = parameter.CustomAttributes
-                            .FirstOrDefault(attribute => attribute.AttributeType.IsDerivedFrom(anyGenericParameterSearcherAttributeType))
+                            .FirstOrDefault(attr => attr.AttributeType.IsDerivedFrom(anyGenericParameterSearcherAttributeType))
                         ;
                         if (attribute == null) return null;
                         var genericArgument = _container.Search(

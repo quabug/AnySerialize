@@ -1,11 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using AnyProccesor.Tests;
 using AnyProcessor.CodeGen;
 using Mono.Cecil;
 using NUnit.Framework;
-using UnityEngine;
-using Assert = UnityEngine.Assertions.Assert;
 using Object = System.Object;
 
 namespace AnyProcessor.Tests
@@ -14,6 +12,7 @@ namespace AnyProcessor.Tests
     {
         protected AssemblyDefinition _assemblyDefinition;
         protected ModuleDefinition _module;
+        protected virtual IEnumerable<string> _AdditionalLocations => Enumerable.Empty<string>();
 
         [SetUp]
         public void SetUp()
@@ -21,12 +20,15 @@ namespace AnyProcessor.Tests
             var assemblyLocation = GetType().Assembly.Location;
             _assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyLocation, new ReaderParameters
             {
-                AssemblyResolver = new CodeGen.PostProcessorAssemblyResolver(
+                AssemblyResolver = new CodeGen.PostProcessorAssemblyResolver(new []
+                {
                     GetType().Assembly.Location
                     , typeof(object).Assembly.Location
                     , typeof(Object).Assembly.Location
+#if UNITY_2020_1_OR_NEWER
                     , typeof(UnityEngine.Object).Assembly.Location
-                    , typeof(AnotherAssembly).Assembly.Location
+#endif
+                }.Concat(_AdditionalLocations).ToArray()
                 )
             });
             _module = _assemblyDefinition.MainModule;
@@ -74,9 +76,27 @@ namespace AnyProcessor.Tests
             }
             catch (Exception ex)
             {
-                Debug.LogError($"cannot import reference of {type.AssemblyQualifiedName}: {ex}");
+                LogError($"cannot import reference of {type.AssemblyQualifiedName}: {ex}");
                 throw;
             }
+        }
+
+        protected void Log(string msg)
+        {
+#if UNITY_2020_1_OR_NEWER
+            UnityEngine.Debug.Log(msg);
+#else
+            Console.Out.WriteLine(msg);
+#endif
+        }
+        
+        protected void LogError(string error)
+        {
+#if UNITY_2020_1_OR_NEWER
+            UnityEngine.Debug.LogError(error);
+#else
+            Console.Error.WriteLine(error);
+#endif
         }
         
         protected TypeDefinition ImportDefinition<T>() => ImportDefinition(typeof(T));

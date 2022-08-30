@@ -14,12 +14,10 @@ namespace AnyProcessor.Tests
         private SerializeTypeSearcher _searcher;
         private TypeTree _typeTree;
         private Container _container;
-        
+
         protected override void OnSetUp()
         {
-            var serializerTypes = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .SelectMany(asm => asm.GetTypes())
+            var serializerTypes = typeof(IAny).Assembly.GetTypes()
                 .Where(type => typeof(IAny).IsAssignableFrom(type))
             ;
             _typeTree = new TypeTree(serializerTypes.Select(type => ImportReference(type).Resolve()));

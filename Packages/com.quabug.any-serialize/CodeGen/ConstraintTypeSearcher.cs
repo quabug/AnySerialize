@@ -1,7 +1,7 @@
-﻿using AnyProcessor.CodeGen;
+﻿using System;
+using AnyProcessor.CodeGen;
 using Mono.Cecil;
 using OneShot;
-using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
@@ -15,7 +15,8 @@ namespace AnySerialize.CodeGen
             [Inject(typeof(GenericLabel<>))] GenericParameter parameter
         )
         {
-            Assert.AreEqual(1, parameter.Constraints.Count);
+            if (parameter.Constraints.Count != 1)
+                throw new ArgumentException($"Must have and only have one constraint of {nameof(parameter)}", nameof(parameter));
             var constraint = parameter.Constraints[0].ConstraintType;
             var constraintType = constraint.FillGenericTypesByReferenceGenericName(genericType);
             if (constraintType.IsConcreteType())

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using AnyProcessor.CodeGen;
-using AnySerialize.CodeGen;
 using NUnit.Framework;
 
 namespace AnyProcessor.Tests
