@@ -58,8 +58,8 @@ namespace AnySerialize.CodeGen
                     attribute,
                     (propertyType, typeof(TargetLabel<>))
                 );
+                processor.Logger.Debug($"field type: {fieldType?.FullName}");
                 fieldType = processor.Module.ImportReference(fieldType);
-                processor.Logger.Info($"field type: {fieldType.FullName}");
                 var serializedField = property.CreateOrReplaceBackingField(fieldType);
                 serializedField.AddCustomAttribute<SerializeField>(property.Module);
                 processor.Logger.Info($"serialize field type: {serializedField.FullName}");

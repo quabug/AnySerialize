@@ -14,31 +14,29 @@ namespace AnySerialize.CodeGen
     {
         private readonly Container _container;
         private readonly TypeTree _typeTree;
-        private readonly ModuleDefinition _module;
         private readonly TypeReference _targetType;
         private readonly ILPostProcessorLogger _logger;
 
         public SerializeTypeSearcher(
             Container container,
             TypeTree typeTree,
-            ModuleDefinition module,
             [Inject(typeof(TargetLabel<>))] TypeReference targetType,
             ILPostProcessorLogger logger
         )
         {
             _container = container;
             _typeTree = typeTree;
-            _module = module;
             _targetType = targetType;
             _logger = logger;
+            logger.Debug($"[{GetType()}] create search of {_targetType}");
         }
 
         public TypeReference Search()
         {
             if (!_targetType.IsGenericInstance || !_targetType.IsConcreteType() || _targetType.GetGenericParametersOrArgumentsCount() != 1)
                 throw new ArgumentException($"{nameof(_targetType)} must be a concrete generic instance with one and only one arguments.", nameof(_targetType));
-
-            var anyGenericParameterSearcherAttributeType = _module.ImportReference(typeof(IAnyGenericParameterSearcherAttribute));
+            
+            _logger.Debug($"[{GetType()}] search {_targetType}");
             
             var propertyType = _targetType.GetGenericParametersOrArguments().First();
             TypeReference closestType = null;
@@ -51,8 +49,10 @@ namespace AnySerialize.CodeGen
                 if (priority > closestPriority) continue;
                 if (!IsCloserImplementation(closestImplementation, implementation, propertyType)) continue;
                 
-                var concreteType = CreateConcreteTypeFrom(type);
+                var concreteType = _container.CreateConcreteTypeFrom(type);
                 if (concreteType == null) continue;
+                
+                _logger.Debug($"[{GetType()}] create concreteType {concreteType} from {type}");
                 
                 closestImplementation = implementation;
                 closestType = type;
@@ -94,42 +94,6 @@ namespace AnySerialize.CodeGen
                     distance++;
                 }
                 return null;
-            }
-
-            TypeReference CreateConcreteTypeFrom(TypeReference type)
-            {
-                var def = type.Resolve();
-                if (def.IsAbstract) return null;
-                if (def.GetConstructors().FirstOrDefault(ctor => !ctor.HasParameters) == null) return null;
-                if (type.IsConcreteType()) return type;
-                
-                if (!(type is GenericInstanceType genericType))
-                    throw new ArgumentException($"{nameof(type)}({type}) must be a {nameof(GenericInstanceType)}", nameof(type));
-                        
-                for (var i = 0; i < genericType.GenericArguments.Count; i++)
-                {
-                    var arg = genericType.GenericArguments[i];
-                    if (arg is GenericParameter parameter)
-                    {
-                        if (!parameter.HasCustomAttributes) return null;
-                        var attribute = parameter.CustomAttributes
-                            .FirstOrDefault(attr => attr.AttributeType.IsDerivedFrom(anyGenericParameterSearcherAttributeType))
-                        ;
-                        if (attribute == null) return null;
-                        var genericArgument = _container.Search(
-                            attribute,
-                            (parameter, typeof(GenericLabel<>)),
-                            (genericType, typeof(GenericLabel<>))
-                        );
-                        if (genericArgument == null) return null;
-                        genericType.GenericArguments[i] = genericArgument;
-                    }
-                    else if (!arg.IsConcreteType())
-                    {
-                        throw new NotSupportedException();
-                    }
-                }
-                return genericType;
             }
 
             IEnumerable<(TypeReference type, TypeReference typeGeneric)> FindTypes(TypeReference target, TypeReference targetGeneric)

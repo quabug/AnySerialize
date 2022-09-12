@@ -10,6 +10,7 @@ namespace AnySerialize.CodeGen
         private readonly TypeReference _fieldType;
 
         public FieldTypeSearcher(
+            ILPostProcessorLogger logger,
             [Inject(typeof(AttributeLabel<>))] string fieldDeclaringTypeParameterName,
             [Inject(typeof(GenericLabel<>))] GenericInstanceType genericType,
             [Inject(typeof(GenericLabel<>))] GenericParameter parameter
@@ -37,8 +38,12 @@ namespace AnySerialize.CodeGen
                     if (!fields[i].IsConcreteType()) fields[i] = fields[i].FillGenericTypesByReferenceGenericName(genericDeclaringType);
                 }
             }
-            
-            if (searcherFieldCount == fields.Length && fieldIndex >= 0) _fieldType = fields[fieldIndex];
+
+            if (searcherFieldCount == fields.Length && fieldIndex >= 0)
+            {
+                _fieldType = fields[fieldIndex];
+                logger.Debug($"[{GetType()}] {parameter.Name} = {_fieldType}");
+            }
         }
         
         public TypeReference Search()
