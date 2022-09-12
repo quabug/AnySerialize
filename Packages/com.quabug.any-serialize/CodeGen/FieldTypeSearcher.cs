@@ -10,14 +10,15 @@ namespace AnySerialize.CodeGen
         private readonly TypeReference _fieldType;
 
         public FieldTypeSearcher(
-            [Inject(typeof(OuterLabel<>))] TypeReference propertyType,
-            [Inject(typeof(GenericLabel<>))] TypeReference genericType,
+            [Inject(typeof(AttributeLabel<>))] string fieldDeclaringTypeParameterName,
+            [Inject(typeof(GenericLabel<>))] GenericInstanceType genericType,
             [Inject(typeof(GenericLabel<>))] GenericParameter parameter
         )
         {
             var fieldIndex = -1;
             var searcherFieldCount = 0;
-            foreach (var genericParameter in genericType.Resolve().GenericParameters)
+            var genericTypeDefinition = genericType.Resolve();
+            foreach (var genericParameter in genericTypeDefinition.GenericParameters)
             {
                 if (genericParameter.Name == parameter.Name)
                     fieldIndex = searcherFieldCount;
@@ -25,8 +26,18 @@ namespace AnySerialize.CodeGen
                 if (genericParameter.GetAttributesOf<AnyFieldTypeAttribute>().Any())
                     searcherFieldCount++;
             }
+
+            var declaringGenericIndex = genericTypeDefinition.GenericParameters.FindIndexOf(parameter => parameter.Name == fieldDeclaringTypeParameterName);
+            var declaringType = genericType.GenericArguments[declaringGenericIndex];
+            var fields = declaringType.Resolve().Fields.Where(field => !field.IsStatic).Select(field => field.FieldType).ToArray();
+            if (declaringType is GenericInstanceType genericDeclaringType)
+            {
+                for (var i = 0; i < fields.Length; i++)
+                {
+                    if (!fields[i].IsConcreteType()) fields[i] = fields[i].FillGenericTypesByReferenceGenericName(genericDeclaringType);
+                }
+            }
             
-            var fields = propertyType.Resolve().Fields.Where(field => !field.IsStatic).Select(field => field.FieldType).ToArray();
             if (searcherFieldCount == fields.Length && fieldIndex >= 0) _fieldType = fields[fieldIndex];
         }
         

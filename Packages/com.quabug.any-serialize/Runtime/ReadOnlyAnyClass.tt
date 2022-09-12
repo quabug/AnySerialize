@@ -9,8 +9,8 @@ namespace AnySerialize
     for (var i = 1; i < 21; i++)
     {
 #>
-    [Serializable, AnySerializeOrder(10000)]
-    public class ReadOnlyAnyClass<T<# for (var n = 0; n < i; n++) { #>, [AnyFieldType] T<#= n #><# } #><# for (var n = 0; n < i; n++) { #>, [AnyConstraintType] TAny<#= n #><# } #>> : IReadOnlyAnyClass<T>
+    [Serializable, AnySerializePriority(10000)]
+    public class ReadOnlyAnyClass<T<# for (var n = 0; n < i; n++) { #>, [AnyFieldType(nameof(T))] T<#= n #><# } #><# for (var n = 0; n < i; n++) { #>, [AnyConstraintType] TAny<#= n #><# } #>> : IReadOnlyAnyClass<T>
         where T : new()
 <#
         for (var n = 0; n < i; n++)

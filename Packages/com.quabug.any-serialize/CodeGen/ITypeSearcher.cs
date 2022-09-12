@@ -63,7 +63,13 @@ namespace AnySerialize.CodeGen
             var searcher = _value[attribute.AttributeType.FullName];
             container = container.CreateChildContainer();
             container.RegisterInstance(container).AsSelf();
-            foreach (var attributeArgument in attribute.ConstructorArguments) container.RegisterInstance(attributeArgument).AsSelf().AsBases().AsInterfaces();
+            
+            foreach (var attributeArgument in attribute.ConstructorArguments) container.RegisterInstance(attributeArgument.Value)
+                .AsSelf(typeof(AttributeLabel<>))
+                .AsBases(typeof(AttributeLabel<>))
+                .AsInterfaces(typeof(AttributeLabel<>))
+            ;
+            
             foreach (var (instance, label) in instances) container.RegisterInstance(instance).AsSelf(label).AsBases(label).AsInterfaces(label);
             return (ITypeSearcher)container.Instantiate(searcher);
         }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AnyProcessor.CodeGen;
 using AnySerialize;
@@ -40,7 +40,6 @@ namespace AnyProcessor.Tests
             Assert.IsTrue(target is GenericInstanceType genericTarget && genericTarget.GenericArguments.Count == 1);
             var container = _container.CreateChildContainer();
             container.RegisterInstance(container).AsSelf();
-            container.RegisterInstance(((GenericInstanceType)target).GenericArguments[0]).AsSelf(typeof(OuterLabel<>)).AsBases(typeof(OuterLabel<>));
             container.RegisterInstance(target).AsSelf(typeof(TargetLabel<>)).AsBases(typeof(TargetLabel<>));
             return container.Instantiate<SerializeTypeSearcher>().Search();
         }
@@ -83,6 +82,12 @@ namespace AnyProcessor.Tests
         public void should_find_replace_type_for_3D_array_type()
         {
             AssertTypeEqual<ReadOnlyAnyArray<int[][], ReadOnlyAnyArray<int[], AnyArray_Int32>>>(SearchReadOnly<int[][][]>());
+        }
+        
+        [Test]
+        public void should_find_replace_type_for_dictionary_type()
+        {
+            AssertTypeEqual<ReadOnlyAnyDictionary<int, long, ReadOnlyAnyClass<KeyValuePair<int, long>, int, long, AnyValue_Int32, AnyValue_Int64>>>(SearchReadOnly<Dictionary<int, long>>());
         }
     }
 }

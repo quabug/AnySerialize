@@ -13,9 +13,13 @@ namespace AnySerialize
     
     [AttributeUsage(AttributeTargets.GenericParameter)]
     public class AnyConstraintTypeAttribute : Attribute, IAnyGenericParameterSearcherAttribute {}
-    
+
     [AttributeUsage(AttributeTargets.GenericParameter)]
-    public class AnyFieldTypeAttribute : Attribute, IAnyGenericParameterSearcherAttribute {}
+    public class AnyFieldTypeAttribute : Attribute, IAnyGenericParameterSearcherAttribute
+    {
+        public string GenericParameterName { get; }
+        public AnyFieldTypeAttribute(string genericParameterName) => GenericParameterName = genericParameterName;
+    }
     
     [AttributeUsage(AttributeTargets.Field)]
     public class AnySerializeFieldOrderAttribute : Attribute
