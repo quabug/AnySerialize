@@ -31,7 +31,6 @@ namespace AnySerialize.CodeGen
             container.RegisterInstance(processor.Logger).AsSelf();
             container.RegisterInstance(processor.Module).AsSelf();
             container.RegisterInstance(processor.Resolver).AsSelf();
-            container.RegisterInstance(processor.AttributeType).AsSelf(typeof(OuterLabel<>));
             container.RegisterInstance(processor.TypeTree.Value).AsSelf();
             processor.ProcessProperty += OnProcessProperty;
             var (pe, pdb) = processor.Process();
@@ -57,11 +56,10 @@ namespace AnySerialize.CodeGen
                 processor.Logger.Info($"property type: {propertyType.FullName}");
                 var fieldType = container.Search(
                     attribute,
-                    (propertyType, typeof(TargetLabel<>)),
-                    (property.PropertyType, typeof(OuterLabel<>))
+                    (propertyType, typeof(TargetLabel<>))
                 );
+                processor.Logger.Debug($"field type: {fieldType?.FullName}");
                 fieldType = processor.Module.ImportReference(fieldType);
-                processor.Logger.Info($"field type: {fieldType.FullName}");
                 var serializedField = property.CreateOrReplaceBackingField(fieldType);
                 serializedField.AddCustomAttribute<SerializeField>(property.Module);
                 processor.Logger.Info($"serialize field type: {serializedField.FullName}");

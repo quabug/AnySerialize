@@ -1,33 +1,33 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 
 namespace AnySerialize
 {
-
-    using AnySerializeDict = ReadOnlyAnyDictionary<string, int, AnyValue<string>, AnyValue<int>, AnyValue<SerializeKeyValuePair<string, int, AnyValue<string>, AnyValue<int>>>>;
-    using Dict = Dictionary<string, int>;
-    using AnySerializeArray = ReadOnlyAnyArray<int, AnyValue<int>>;
-    using AnySerializeArrayArray = ReadOnlyAnyArray<int[], ReadOnlyAnyArray<int, AnyValue<int>>>;
-
     public class TestAnySerialize : MonoBehaviour
     {
         [AnySerialize] public int IntValue { get; set; }
         [AnySerialize] public int IntValueRO { get; }
         [AnySerialize] public int IntValueROWithoutBacking => throw new NotImplementedException();
-        // [AnySerialize] public Dictionary<string, IReadOnlyDictionary<string, int>> Dictionary { get; }
+        [AnySerialize] public Dictionary<string, long> DictionaryStringInt { get; }
+        [AnySerialize] public Dictionary<int, Dictionary<string, string>> DictionaryStringDict { get; }
         [AnySerialize] public string[][] AnyStringArray2 { get; }
         [AnySerialize] public int[][][] AnyIntArray3 { get; }
         [AnySerialize] public A[] AnyClassArray { get; }
-        public string[][] StringArray;
         
         [AnySerialize] public A A { get; }
-        public B<int> B;
-        public B<int[]> BB;
+        [AnySerialize] public B<int> B { get; }
+        [AnySerialize] public B<int[]> BB { get; }
         
         [AnySerialize] public Vector2 Vector2 { get; }
+        
+        [AnySerialize] public R Record { get; }
+        
+        // [AnySerialize] public Lazy<int> LazyInt { get; }
+        //
+        // [AnySerialize] public Lazy<int[]> LazyIntArray { get; }
+        // [AnySerialize] public Lazy<Dictionary<int, long[]>> LazyDictIntLongArray { get; }
         
         private void Awake()
         {
@@ -36,23 +36,7 @@ namespace AnySerialize
             IntValue = IntValueRO;
             Debug.Log($"{nameof(IntValue)} = {IntValue}");
             Debug.Log($"{nameof(IntValueROWithoutBacking)} = {IntValueROWithoutBacking}");
-
-            Debug.Log(string.Join(", ", array.Value.SelectMany(a => a)));
-            Debug.Log(string.Join(", ", dict.Value.Select(t => $"[{t.Key},{string.Join(", ", t.Value.Select(n => $"[{n.Key},{n.Value}]"))}]")));
-            var intB = IntB.Value;
-            Debug.Log($"intB: {nameof(B<int>.ReadOnlyTValue)}={intB.ReadOnlyTValue} {nameof(B<int>.TArray)}={string.Join(",", intB.TArray)} {nameof(B<int>.TArrayArray)}={string.Join(",", intB.TArrayArray.SelectMany(a => a))} {nameof(intB.ReadOnlyProperty)}={intB.ReadOnlyProperty}");
-            
-            Debug.Log(Vector4Any.Value.ToString());
-            
-            Debug.Log(string.Join(", ", LazyIntArrayArray.Value.Value.SelectMany(a => a)));
         }
-
-        [SerializeField] private ReadOnlyAnyArray<string[], ReadOnlyAnyArray<string, AnyValue<string>>> array;
-        [SerializeField] private ReadOnlyAnyDictionary<string, Dict, AnyValue<string>, AnySerializeDict, AnyValue<SerializeKeyValuePair<string, Dict, AnyValue<string>, AnySerializeDict>>> dict;
-        [SerializeField] private ReadOnlyAnyClass<B<int>, int, int[], int[][], float, AnyValue<int>, AnySerializeArray, AnySerializeArrayArray, AnyValue<float>> IntB;
-        
-        [SerializeField] private ReadOnlyAnyClass<Vector4, float, float, float, float, AnyValue<float>, AnyValue<float>, AnyValue<float>, AnyValue<float>> Vector4Any;
-        [SerializeField] private ReadOnlyAnyLazy<int[][], AnySerializeArrayArray> LazyIntArrayArray;
     }
     
     public interface IB {}
@@ -73,5 +57,11 @@ namespace AnySerialize
         public T[] TArray;
         public T[][] TArrayArray;
         public float ReadOnlyProperty { get; }
+    }
+    
+    [Serializable]
+    public record R
+    {
+        public int Int { get; } = 123;
     }
 }

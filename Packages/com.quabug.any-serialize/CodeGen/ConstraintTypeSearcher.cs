@@ -11,6 +11,7 @@ namespace AnySerialize.CodeGen
         
         public ConstraintTypeSearcher(
             Container container,
+            ILPostProcessorLogger logger,
             [Inject(typeof(GenericLabel<>))] GenericInstanceType genericType,
             [Inject(typeof(GenericLabel<>))] GenericParameter parameter
         )
@@ -26,6 +27,7 @@ namespace AnySerialize.CodeGen
                 container.RegisterInstance(constraintType).AsSelf(label).AsBases(label);
                 _result = container.Search<SerializeTypeSearcher>();
             }
+            logger.Debug($"[{GetType()}] {parameter.Name}:{constraintType}={_result}");
         }
         
         public TypeReference Search()

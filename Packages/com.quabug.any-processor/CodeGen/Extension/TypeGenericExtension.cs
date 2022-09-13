@@ -246,8 +246,7 @@ namespace AnyProcessor.CodeGen
             if (arguments.Count == 0) return self;
             
             var genericInstanceType = new GenericInstanceType(self.Resolve());
-            foreach (var (@new, old) in arguments.Zip(self.GetGenericParametersOrArguments(), (@new, old) => (@new, old)))
-                genericInstanceType.GenericArguments.Add(old.IsGenericParameter ? @new : old);
+            foreach (var arg in arguments) genericInstanceType.GenericArguments.Add(arg);
             return genericInstanceType;
         }
     
@@ -261,6 +260,13 @@ namespace AnyProcessor.CodeGen
                     return genericBaseType.GenericArguments[index];
                 if (generic is ArrayType arrayGeneric && arrayGeneric.Name == $"{parameter.Name}[]")
                     return ((ArrayType)genericBaseType.GenericArguments[index]).ElementType;
+                
+                if (generic is GenericInstanceType genericImplementation)
+                {
+                    var innerParameter = parameter.FindGenericParameterType(genericBaseType.GenericArguments[index], genericImplementation);
+                    if (innerParameter != parameter) return innerParameter;
+                    // continue searching
+                }
             }
             return parameter;
         }

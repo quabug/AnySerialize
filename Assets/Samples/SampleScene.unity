@@ -202,6 +202,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -358,6 +359,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <BB>k__BackingField._field0._value.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: dict._pairs.Array.data[0]._value.Value._value
       value: 321
       objectReference: {fileID: 0}
@@ -368,6 +373,14 @@ PrefabInstance:
     - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: <AnyIntArray3>k__BackingField._value.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <BB>k__BackingField._field0._value.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <BB>k__BackingField._field0._value.Array.data[1]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: <IntValueROWithoutBacking>k__BackingField._value
@@ -394,6 +407,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringInt>k__BackingField._pairs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: array._Value.Array.data[0]._Value.Array.data[0]._value
       value: 123
       objectReference: {fileID: 0}
@@ -412,6 +429,10 @@ PrefabInstance:
     - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: array._value.Array.data[0]._value.Array.data[0]._value
       value: 1111
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringDict>k__BackingField._pairs.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: dict._pairs.Array.data[0]._value.Value._pairs.Array.size
@@ -486,6 +507,26 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringInt>k__BackingField._pairs.Array.data[0]._field0._value
+      value: fdafda
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringInt>k__BackingField._pairs.Array.data[0]._field1._value
+      value: 213
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringInt>k__BackingField._pairs.Array.data[1]._field0._value
+      value: fg1213
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringInt>k__BackingField._pairs.Array.data[1]._field1._value
+      value: 34312
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringDict>k__BackingField._pairs.Array.data[0]._field0._value
+      value: 3213
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: LazyIntArrayArray._value._Value.Array.data[0]._Value.Array.data[0]._value
       value: 1
       objectReference: {fileID: 0}
@@ -546,6 +587,10 @@ PrefabInstance:
       value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringDict>k__BackingField._pairs.Array.data[0]._field1._pairs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: <AnyIntArray3>k__BackingField._value.Array.data[0]._value.Array.data[0]._value.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -596,6 +641,14 @@ PrefabInstance:
     - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: <AnyStringArray3>k__BackingField._value.Array.data[1]._value.Array.data[2]._value.Array.data[1]
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringDict>k__BackingField._pairs.Array.data[0]._field1._pairs.Array.data[0]._field0._value
+      value: gfda
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557180844171351634, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
+      propertyPath: <DictionaryStringDict>k__BackingField._pairs.Array.data[0]._field1._pairs.Array.data[0]._field1._value
+      value: fdafda
       objectReference: {fileID: 0}
     - target: {fileID: 7557180844171351635, guid: 681b0ad2a6efaca44a075ad58220d7d3, type: 3}
       propertyPath: m_RootOrder
