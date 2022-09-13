@@ -15,7 +15,6 @@ jobs:
           - Mono2x
           - IL2CPP
         unityVersion:
-          - 2020.3.38f1
           - 2021.3.8f1
           - 2022.1.13f1
     steps:
