@@ -10,7 +10,7 @@ namespace AnyProcessor.CodeGen
         [Pure]
         public static IEnumerable<TypeReference> GetInterfaces(this TypeDefinition type)
         {
-            if (type.HasInterfaces) foreach (var @interface in type.Interfaces) yield return @interface.InterfaceType;
+            if (type.HasInterfaces) foreach (var @interface in type.Interfaces!) yield return @interface.InterfaceType!;
         }
         
         [Pure]
@@ -38,7 +38,7 @@ namespace AnyProcessor.CodeGen
             while (type != null)
             {
                 yield return type;
-                type = type.Resolve().BaseType;
+                type = type.Resolve()!.BaseType;
             }
         }
         
