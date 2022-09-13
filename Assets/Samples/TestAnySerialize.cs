@@ -10,7 +10,8 @@ namespace AnySerialize
         [AnySerialize] public int IntValue { get; set; }
         [AnySerialize] public int IntValueRO { get; }
         [AnySerialize] public int IntValueROWithoutBacking => throw new NotImplementedException();
-        [AnySerialize] public Dictionary<int, long> DictionaryStringInt { get; }
+        [AnySerialize] public Dictionary<string, long> DictionaryStringInt { get; }
+        [AnySerialize] public Dictionary<int, Dictionary<string, string>> DictionaryStringDict { get; }
         [AnySerialize] public string[][] AnyStringArray2 { get; }
         [AnySerialize] public int[][][] AnyIntArray3 { get; }
         [AnySerialize] public A[] AnyClassArray { get; }

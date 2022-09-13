@@ -6,7 +6,7 @@ namespace AnySerialize
     [Serializable, AnySerializePriority(5000)]
     public class ReadOnlyAnyArray<T, [AnyConstraintType] TAny> : IReadOnlyAny<T[]> where TAny : IReadOnlyAny<T>
     {
-        [SerializeField] private TAny[] _value;
+        [SerializeField] private TAny[] _value = default!;
         private T[] _cache = Array.Empty<T>();
         public T[] Value
         {

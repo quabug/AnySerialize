@@ -12,10 +12,10 @@ namespace AnySerialize
     
     [Serializable]
     public class ReadOnlyAnyDictionary<TKey, TValue, [AnyConstraintType] TAnyPair> : IReadOnlyAny<Dictionary<TKey, TValue>>
-        where TAnyPair : IReadOnlyAny<AnyKeyValuePair<TKey, TValue>>
+        where TAnyPair : IReadOnlyAnyClass<AnyKeyValuePair<TKey, TValue>>
     {
-        [SerializeField] private List<TAnyPair> _pairs;
-        private Dictionary<TKey, TValue> _cache;
+        [SerializeField] private List<TAnyPair> _pairs = default!;
+        private Dictionary<TKey, TValue>? _cache;
         public Dictionary<TKey, TValue> Value
         {
             get

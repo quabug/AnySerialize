@@ -9,9 +9,9 @@ namespace AnySerialize
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
+        [SerializeField] private TAny0 _field0 = default!;
 
         public T Value
         {
@@ -34,10 +34,10 @@ namespace AnySerialize
         where TAny0 : IReadOnlyAny<T0>
         where TAny1 : IReadOnlyAny<T1>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
 
         public T Value
         {
@@ -62,11 +62,11 @@ namespace AnySerialize
         where TAny1 : IReadOnlyAny<T1>
         where TAny2 : IReadOnlyAny<T2>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
 
         public T Value
         {
@@ -93,12 +93,12 @@ namespace AnySerialize
         where TAny2 : IReadOnlyAny<T2>
         where TAny3 : IReadOnlyAny<T3>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
 
         public T Value
         {
@@ -127,13 +127,13 @@ namespace AnySerialize
         where TAny3 : IReadOnlyAny<T3>
         where TAny4 : IReadOnlyAny<T4>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
 
         public T Value
         {
@@ -164,14 +164,14 @@ namespace AnySerialize
         where TAny4 : IReadOnlyAny<T4>
         where TAny5 : IReadOnlyAny<T5>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
 
         public T Value
         {
@@ -204,15 +204,15 @@ namespace AnySerialize
         where TAny5 : IReadOnlyAny<T5>
         where TAny6 : IReadOnlyAny<T6>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
 
         public T Value
         {
@@ -247,16 +247,16 @@ namespace AnySerialize
         where TAny6 : IReadOnlyAny<T6>
         where TAny7 : IReadOnlyAny<T7>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
 
         public T Value
         {
@@ -293,17 +293,17 @@ namespace AnySerialize
         where TAny7 : IReadOnlyAny<T7>
         where TAny8 : IReadOnlyAny<T8>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
 
         public T Value
         {
@@ -342,18 +342,18 @@ namespace AnySerialize
         where TAny8 : IReadOnlyAny<T8>
         where TAny9 : IReadOnlyAny<T9>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
 
         public T Value
         {
@@ -394,19 +394,19 @@ namespace AnySerialize
         where TAny9 : IReadOnlyAny<T9>
         where TAny10 : IReadOnlyAny<T10>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
 
         public T Value
         {
@@ -449,20 +449,20 @@ namespace AnySerialize
         where TAny10 : IReadOnlyAny<T10>
         where TAny11 : IReadOnlyAny<T11>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
-        [SerializeField] private TAny11 _field11;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
+        [SerializeField] private TAny11 _field11 = default!;
 
         public T Value
         {
@@ -507,21 +507,21 @@ namespace AnySerialize
         where TAny11 : IReadOnlyAny<T11>
         where TAny12 : IReadOnlyAny<T12>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
-        [SerializeField] private TAny11 _field11;
-        [SerializeField] private TAny12 _field12;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
+        [SerializeField] private TAny11 _field11 = default!;
+        [SerializeField] private TAny12 _field12 = default!;
 
         public T Value
         {
@@ -568,22 +568,22 @@ namespace AnySerialize
         where TAny12 : IReadOnlyAny<T12>
         where TAny13 : IReadOnlyAny<T13>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
-        [SerializeField] private TAny11 _field11;
-        [SerializeField] private TAny12 _field12;
-        [SerializeField] private TAny13 _field13;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
+        [SerializeField] private TAny11 _field11 = default!;
+        [SerializeField] private TAny12 _field12 = default!;
+        [SerializeField] private TAny13 _field13 = default!;
 
         public T Value
         {
@@ -632,23 +632,23 @@ namespace AnySerialize
         where TAny13 : IReadOnlyAny<T13>
         where TAny14 : IReadOnlyAny<T14>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
-        [SerializeField] private TAny11 _field11;
-        [SerializeField] private TAny12 _field12;
-        [SerializeField] private TAny13 _field13;
-        [SerializeField] private TAny14 _field14;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
+        [SerializeField] private TAny11 _field11 = default!;
+        [SerializeField] private TAny12 _field12 = default!;
+        [SerializeField] private TAny13 _field13 = default!;
+        [SerializeField] private TAny14 _field14 = default!;
 
         public T Value
         {
@@ -699,24 +699,24 @@ namespace AnySerialize
         where TAny14 : IReadOnlyAny<T14>
         where TAny15 : IReadOnlyAny<T15>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
-        [SerializeField] private TAny11 _field11;
-        [SerializeField] private TAny12 _field12;
-        [SerializeField] private TAny13 _field13;
-        [SerializeField] private TAny14 _field14;
-        [SerializeField] private TAny15 _field15;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
+        [SerializeField] private TAny11 _field11 = default!;
+        [SerializeField] private TAny12 _field12 = default!;
+        [SerializeField] private TAny13 _field13 = default!;
+        [SerializeField] private TAny14 _field14 = default!;
+        [SerializeField] private TAny15 _field15 = default!;
 
         public T Value
         {
@@ -769,25 +769,25 @@ namespace AnySerialize
         where TAny15 : IReadOnlyAny<T15>
         where TAny16 : IReadOnlyAny<T16>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
-        [SerializeField] private TAny11 _field11;
-        [SerializeField] private TAny12 _field12;
-        [SerializeField] private TAny13 _field13;
-        [SerializeField] private TAny14 _field14;
-        [SerializeField] private TAny15 _field15;
-        [SerializeField] private TAny16 _field16;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
+        [SerializeField] private TAny11 _field11 = default!;
+        [SerializeField] private TAny12 _field12 = default!;
+        [SerializeField] private TAny13 _field13 = default!;
+        [SerializeField] private TAny14 _field14 = default!;
+        [SerializeField] private TAny15 _field15 = default!;
+        [SerializeField] private TAny16 _field16 = default!;
 
         public T Value
         {
@@ -842,26 +842,26 @@ namespace AnySerialize
         where TAny16 : IReadOnlyAny<T16>
         where TAny17 : IReadOnlyAny<T17>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
-        [SerializeField] private TAny11 _field11;
-        [SerializeField] private TAny12 _field12;
-        [SerializeField] private TAny13 _field13;
-        [SerializeField] private TAny14 _field14;
-        [SerializeField] private TAny15 _field15;
-        [SerializeField] private TAny16 _field16;
-        [SerializeField] private TAny17 _field17;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
+        [SerializeField] private TAny11 _field11 = default!;
+        [SerializeField] private TAny12 _field12 = default!;
+        [SerializeField] private TAny13 _field13 = default!;
+        [SerializeField] private TAny14 _field14 = default!;
+        [SerializeField] private TAny15 _field15 = default!;
+        [SerializeField] private TAny16 _field16 = default!;
+        [SerializeField] private TAny17 _field17 = default!;
 
         public T Value
         {
@@ -918,27 +918,27 @@ namespace AnySerialize
         where TAny17 : IReadOnlyAny<T17>
         where TAny18 : IReadOnlyAny<T18>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
-        [SerializeField] private TAny11 _field11;
-        [SerializeField] private TAny12 _field12;
-        [SerializeField] private TAny13 _field13;
-        [SerializeField] private TAny14 _field14;
-        [SerializeField] private TAny15 _field15;
-        [SerializeField] private TAny16 _field16;
-        [SerializeField] private TAny17 _field17;
-        [SerializeField] private TAny18 _field18;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
+        [SerializeField] private TAny11 _field11 = default!;
+        [SerializeField] private TAny12 _field12 = default!;
+        [SerializeField] private TAny13 _field13 = default!;
+        [SerializeField] private TAny14 _field14 = default!;
+        [SerializeField] private TAny15 _field15 = default!;
+        [SerializeField] private TAny16 _field16 = default!;
+        [SerializeField] private TAny17 _field17 = default!;
+        [SerializeField] private TAny18 _field18 = default!;
 
         public T Value
         {
@@ -997,28 +997,28 @@ namespace AnySerialize
         where TAny18 : IReadOnlyAny<T18>
         where TAny19 : IReadOnlyAny<T19>
     {
-        private object _cache;
+        private object? _cache;
         
-        [SerializeField] private TAny0 _field0;
-        [SerializeField] private TAny1 _field1;
-        [SerializeField] private TAny2 _field2;
-        [SerializeField] private TAny3 _field3;
-        [SerializeField] private TAny4 _field4;
-        [SerializeField] private TAny5 _field5;
-        [SerializeField] private TAny6 _field6;
-        [SerializeField] private TAny7 _field7;
-        [SerializeField] private TAny8 _field8;
-        [SerializeField] private TAny9 _field9;
-        [SerializeField] private TAny10 _field10;
-        [SerializeField] private TAny11 _field11;
-        [SerializeField] private TAny12 _field12;
-        [SerializeField] private TAny13 _field13;
-        [SerializeField] private TAny14 _field14;
-        [SerializeField] private TAny15 _field15;
-        [SerializeField] private TAny16 _field16;
-        [SerializeField] private TAny17 _field17;
-        [SerializeField] private TAny18 _field18;
-        [SerializeField] private TAny19 _field19;
+        [SerializeField] private TAny0 _field0 = default!;
+        [SerializeField] private TAny1 _field1 = default!;
+        [SerializeField] private TAny2 _field2 = default!;
+        [SerializeField] private TAny3 _field3 = default!;
+        [SerializeField] private TAny4 _field4 = default!;
+        [SerializeField] private TAny5 _field5 = default!;
+        [SerializeField] private TAny6 _field6 = default!;
+        [SerializeField] private TAny7 _field7 = default!;
+        [SerializeField] private TAny8 _field8 = default!;
+        [SerializeField] private TAny9 _field9 = default!;
+        [SerializeField] private TAny10 _field10 = default!;
+        [SerializeField] private TAny11 _field11 = default!;
+        [SerializeField] private TAny12 _field12 = default!;
+        [SerializeField] private TAny13 _field13 = default!;
+        [SerializeField] private TAny14 _field14 = default!;
+        [SerializeField] private TAny15 _field15 = default!;
+        [SerializeField] private TAny16 _field16 = default!;
+        [SerializeField] private TAny17 _field17 = default!;
+        [SerializeField] private TAny18 _field18 = default!;
+        [SerializeField] private TAny19 _field19 = default!;
 
         public T Value
         {

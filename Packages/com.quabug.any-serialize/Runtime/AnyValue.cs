@@ -6,7 +6,7 @@ namespace AnySerialize
     [Serializable]
     public abstract class AnyValue<T> : IAny<T>, IReadOnlyAny<T>
     {
-        [SerializeField] private T _value;
+        [SerializeField] private T _value = default!;
         public T Value
         {
             get => _value;
