@@ -8,7 +8,7 @@ namespace AnyProcessor.CodeGen
     public static class TypeEqualsExtension
     {
         [Pure]
-        public static bool TypeEquals([NotNull] this TypeReference lhs, [NotNull] TypeReference rhs)
+        public static bool TypeEquals(this TypeReference lhs, TypeReference rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             if (ReferenceEquals(lhs, rhs)) return true;
@@ -42,14 +42,14 @@ namespace AnyProcessor.CodeGen
         }
 
         [Pure]
-        public static bool TypeEquals([NotNull] this TypeDefinition lhs, [NotNull] TypeDefinition rhs)
+        public static bool TypeEquals(this TypeDefinition lhs, TypeDefinition rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             return lhs.MetadataToken == rhs.MetadataToken && lhs.Module.Name == rhs.Module.Name;
         }
         
         [Pure]
-        public static bool TypeEquals([NotNull] this GenericParameter lhs, [NotNull] GenericParameter rhs)
+        public static bool TypeEquals(this GenericParameter lhs, GenericParameter rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             return lhs.IsContravariant == rhs.IsContravariant && lhs.IsCovariant == rhs.IsCovariant && lhs.IsNonVariant == rhs.IsNonVariant
@@ -58,21 +58,21 @@ namespace AnyProcessor.CodeGen
         }
         
         [Pure]
-        public static bool TypeEquals([NotNull] this GenericParameterConstraint lhs, [NotNull] GenericParameterConstraint rhs)
+        public static bool TypeEquals(this GenericParameterConstraint lhs, GenericParameterConstraint rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             return TypeEquals(lhs.ConstraintType, rhs.ConstraintType);
         }
         
         [Pure]
-        public static bool TypeEquals([NotNull] this TypeSpecification lhs, [NotNull] TypeSpecification rhs)
+        public static bool TypeEquals(this TypeSpecification lhs, TypeSpecification rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             return TypeEquals(lhs.ElementType, rhs.ElementType);
         }
         
         [Pure]
-        public static bool TypeEquals([NotNull] this GenericInstanceType lhs, [NotNull] GenericInstanceType rhs)
+        public static bool TypeEquals(this GenericInstanceType lhs, GenericInstanceType rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             if (lhs.HasGenericArguments != rhs.HasGenericArguments) return false;
@@ -82,21 +82,21 @@ namespace AnyProcessor.CodeGen
         }
         
         [Pure]
-        public static bool TypeEquals([NotNull] this OptionalModifierType lhs, [NotNull] OptionalModifierType rhs)
+        public static bool TypeEquals(this OptionalModifierType lhs, OptionalModifierType rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             return TypeEquals(lhs.ModifierType, rhs.ModifierType) && TypeEquals(lhs.ElementType, rhs.ElementType);
         }
         
         [Pure]
-        public static bool TypeEquals([NotNull] this RequiredModifierType lhs, [NotNull] RequiredModifierType rhs)
+        public static bool TypeEquals(this RequiredModifierType lhs, RequiredModifierType rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             return TypeEquals(lhs.ModifierType, rhs.ModifierType) && TypeEquals(lhs.ElementType, rhs.ElementType);
         }
         
         [Pure]
-        public static bool TypeEquals([NotNull] this FunctionPointerType lhs, [NotNull] FunctionPointerType rhs)
+        public static bool TypeEquals(this FunctionPointerType lhs, FunctionPointerType rhs)
         {
             throw new NotSupportedException();
         }

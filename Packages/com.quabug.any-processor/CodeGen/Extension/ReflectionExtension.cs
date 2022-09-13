@@ -10,14 +10,14 @@ namespace AnyProcessor.CodeGen
 {
     public static class ReflectionExtension
     {
-        [Pure, NotNull]
-        public static string ToReadableName([NotNull] this Type type)
+        [Pure]
+        public static string ToReadableName(this Type type)
         {
             return type.IsGenericType ? Regex.Replace(type.ToString(), @"(\w+)`\d+\[(.*)\]", "$1<$2>") : type.ToString();
         }
         
-        [Pure, NotNull, ItemNotNull]
-        public static IEnumerable<Type> GetSelfAndAllBases([NotNull] this Type type)
+        [Pure]
+        public static IEnumerable<Type> GetSelfAndAllBases(this Type type)
         {
             do
             {
@@ -26,8 +26,8 @@ namespace AnyProcessor.CodeGen
             } while (type != null);
         }
 
-        [Pure, NotNull]
-        public static Type ToReflectionType([NotNull] this TypeReference cecilType)
+        [Pure]
+        public static Type ToReflectionType(this TypeReference cecilType)
         {
             return cecilType switch
             {
@@ -46,8 +46,8 @@ namespace AnyProcessor.CodeGen
             };
         }
 
-        [Pure, NotNull]
-        public static TypeReference ImportType([NotNull] this ModuleDefinition module, [NotNull] Type type, ILPostProcessorLogger logger = null)
+        [Pure]
+        public static TypeReference ImportType(this ModuleDefinition module, Type type, ILPostProcessorLogger logger = null)
         {
             if (type.IsArray) return module.ImportType(type.GetElementType(), logger).MakeArrayType();
             if (type.IsByRef) return module.ImportType(type.GetElementType(), logger).MakeByReferenceType();

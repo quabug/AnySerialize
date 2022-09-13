@@ -14,7 +14,7 @@ namespace AnyProcessor.CodeGen
         private readonly IDictionary<string, AssemblyDefinition> _cache = new Dictionary<string, AssemblyDefinition>();
         private readonly IReadOnlyList<string> _references;
 
-        public PostProcessorAssemblyResolver([NotNull] params string[] references)
+        public PostProcessorAssemblyResolver(params string[] references)
         {
             _references = references.Distinct().ToArray();
         }
