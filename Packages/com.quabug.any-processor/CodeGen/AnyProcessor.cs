@@ -80,23 +80,30 @@ namespace AnyProcessor.CodeGen
                 var modified = false;
                 modified = ProcessEachAttribute(Assembly, ProcessAssembly) || modified;
                 modified = ProcessEachAttribute(Module, ProcessModule) || modified;
-                var explicitTypeProcessor = Assembly.GetAttributesOf<ExplicitAnyProcessorTypeAttribute>().Any();
-                foreach (var type in Module.GetAllTypes())
-                {
-                    modified = ProcessEachAttribute(type, ProcessType) || modified;
-                    if (type.HasGenericParameters) modified = ProcessEachAttribute(type.GenericParameters, ProcessGenericParameter) || modified;
-                    if (explicitTypeProcessor && !type.GetAttributesOf<AnyProcessorTypeAttribute>().Any()) continue;
-
-                    if (type.HasMethods) modified = ProcessEachAttribute(type.Methods, ProcessMethod) || modified;
-                    if (type.HasProperties) modified = ProcessEachAttribute(type.Properties, ProcessProperty) || modified;
-                    if (type.HasFields) modified = ProcessEachAttribute(type.Fields, ProcessField) || modified;
-                }
+                modified = ProcessModuleTypes() || modified;
                 return modified;
             }
             finally
             {
                 foreach (var @ref in referenceAssemblies) @ref.Dispose();
             }
+        }
+
+        private bool ProcessModuleTypes()
+        {
+            var modified = false;
+            var explicitTypeProcessor = Assembly.GetAttributesOf<ExplicitAnyProcessorTypeAttribute>().Any();
+            foreach (var type in Module.GetAllTypes())
+            {
+                modified = ProcessEachAttribute(type, ProcessType) || modified;
+                if (type.HasGenericParameters) modified = ProcessEachAttribute(type.GenericParameters, ProcessGenericParameter) || modified;
+                if (explicitTypeProcessor && !type.GetAttributesOf<AnyProcessorTypeAttribute>().Any()) continue;
+
+                if (type.HasMethods) modified = ProcessEachAttribute(type.Methods, ProcessMethod) || modified;
+                if (type.HasProperties) modified = ProcessEachAttribute(type.Properties, ProcessProperty) || modified;
+                if (type.HasFields) modified = ProcessEachAttribute(type.Fields, ProcessField) || modified;
+            }
+            return modified;
         }
 
         private bool ProcessEachAttribute<TAttributeProvider>(TAttributeProvider value, Func<TAttributeProvider, CustomAttribute, bool> processor)

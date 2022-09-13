@@ -36,8 +36,8 @@ namespace AnyProcessor.CodeGen
                      && !lhs.IsRequiredModifier && !rhs.IsRequiredModifier
                      && !lhs.IsSentinel && !rhs.IsSentinel
                      && lhs.GetGenericParametersOrArgumentsCount() == rhs.GetGenericParametersOrArgumentsCount()
-                     && lhs.Resolve().TypeEquals(rhs.Resolve())
-                     && (lhs.GetGenericParametersOrArgumentsCount() == 0 || lhs.GetGenericParametersOrArguments().Zip(rhs.GetGenericParametersOrArguments(), (l, r) => (l, r)).All(t => TypeEquals(t.l, t.r)))
+                     && lhs.Resolve()!.TypeEquals(rhs.Resolve()!)
+                     && (lhs.GetGenericParametersOrArgumentsCount() == 0 || lhs.GetGenericParametersOrArguments().Zip(rhs.GetGenericParametersOrArguments(), (l, r) => (l, r)).All(t => TypeEquals(t.l!, t.r!)))
             };
         }
 
@@ -45,7 +45,7 @@ namespace AnyProcessor.CodeGen
         public static bool TypeEquals(this TypeDefinition lhs, TypeDefinition rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
-            return lhs.MetadataToken == rhs.MetadataToken && lhs.Module.Name == rhs.Module.Name;
+            return lhs.MetadataToken == rhs.MetadataToken && lhs.Module!.Name == rhs.Module!.Name;
         }
         
         [Pure]
@@ -53,22 +53,22 @@ namespace AnyProcessor.CodeGen
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             return lhs.IsContravariant == rhs.IsContravariant && lhs.IsCovariant == rhs.IsCovariant && lhs.IsNonVariant == rhs.IsNonVariant
-                   && lhs.HasConstraints == rhs.HasConstraints && lhs.Constraints.Count == rhs.Constraints.Count
-                   && lhs.Constraints.Zip(rhs.Constraints, (l, r) => (l, r)).All(t => TypeEquals(t.l, t.r));
+                   && lhs.HasConstraints == rhs.HasConstraints && lhs.Constraints!.Count == rhs.Constraints!.Count
+                   && lhs.Constraints.Zip(rhs.Constraints, (l, r) => (l, r)).All(t => TypeEquals(t.l!, t.r!));
         }
         
         [Pure]
         public static bool TypeEquals(this GenericParameterConstraint lhs, GenericParameterConstraint rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
-            return TypeEquals(lhs.ConstraintType, rhs.ConstraintType);
+            return TypeEquals(lhs.ConstraintType!, rhs.ConstraintType!);
         }
         
         [Pure]
         public static bool TypeEquals(this TypeSpecification lhs, TypeSpecification rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
-            return TypeEquals(lhs.ElementType, rhs.ElementType);
+            return TypeEquals(lhs.ElementType!, rhs.ElementType!);
         }
         
         [Pure]
@@ -76,23 +76,23 @@ namespace AnyProcessor.CodeGen
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
             if (lhs.HasGenericArguments != rhs.HasGenericArguments) return false;
-            if (lhs.GenericArguments.Count != rhs.GenericArguments.Count) return false;
-            if (!TypeEquals(lhs.Resolve(), rhs.Resolve())) return false;
-            return lhs.GenericArguments.Zip(rhs.GenericArguments, (l, r) => (l, r)).All(t => TypeEquals(t.l, t.r));
+            if (lhs.GenericArguments!.Count != rhs.GenericArguments!.Count) return false;
+            if (!TypeEquals(lhs.Resolve()!, rhs.Resolve()!)) return false;
+            return lhs.GenericArguments.Zip(rhs.GenericArguments, (l, r) => (l, r)).All(t => TypeEquals(t.l!, t.r!));
         }
         
         [Pure]
         public static bool TypeEquals(this OptionalModifierType lhs, OptionalModifierType rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
-            return TypeEquals(lhs.ModifierType, rhs.ModifierType) && TypeEquals(lhs.ElementType, rhs.ElementType);
+            return TypeEquals(lhs.ModifierType!, rhs.ModifierType!) && TypeEquals(lhs.ElementType!, rhs.ElementType!);
         }
         
         [Pure]
         public static bool TypeEquals(this RequiredModifierType lhs, RequiredModifierType rhs)
         {
             if (lhs == null || rhs == null) throw new ArgumentNullException();
-            return TypeEquals(lhs.ModifierType, rhs.ModifierType) && TypeEquals(lhs.ElementType, rhs.ElementType);
+            return TypeEquals(lhs.ModifierType!, rhs.ModifierType!) && TypeEquals(lhs.ElementType!, rhs.ElementType!);
         }
         
         [Pure]
