@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Default Rule Set" Description=" " ToolsVersion="10.0">
+    <Rules AnalyzerId="Microsoft.Unity.Analyzers" RuleNamespace="Microsoft.Unity.Analyzers">
+        <!-- Full list of rule description available here https://github.com/microsoft/Microsoft.Unity.Analyzers/blob/706b0a0afdc1cdd965a90cb1f2474d62d4f400b5/doc/index.md -->
+        <Rule Id="UNT0001" Action="Error" />
+        <Rule Id="UNT0002" Action="Error" />
+        <Rule Id="UNT0003" Action="Error" />
+        <Rule Id="UNT0004" Action="Error" />
+        <Rule Id="UNT0005" Action="Error" />
+        <Rule Id="UNT0006" Action="Error" />
+        <Rule Id="UNT0007" Action="Error" />
+        <Rule Id="UNT0008" Action="Error" />
+        <Rule Id="UNT0009" Action="Error" />
+        <Rule Id="UNT0010" Action="Error" />
+        <Rule Id="UNT0011" Action="Error" />
+        <Rule Id="UNT0012" Action="Error" />
+        <Rule Id="UNT0013" Action="Error" />
+        <Rule Id="UNT0014" Action="Error" />
+        <Rule Id="UNT0015" Action="Error" />
+        <Rule Id="UNT0016" Action="Error" />
+        <Rule Id="UNT0017" Action="Error" />
+        <Rule Id="UNT0018" Action="Error" />
+        <Rule Id="UNT0019" Action="Error" />
+        <Rule Id="UNT0020" Action="Error" />
+        <Rule Id="UNT0021" Action="None" />
+        <Rule Id="UNT0022" Action="Error" />
+        <Rule Id="UNT0023" Action="Error" />
+        <Rule Id="UNT0024" Action="Error" />
+        <Rule Id="UNT0025" Action="Error" />
+        <Rule Id="UNT0026" Action="Error" />
+        <Rule Id="UNT0027" Action="Error" />
+        <Rule Id="UNT0028" Action="Error" />
+        <Rule Id="UNT0029" Action="Error" />
+        <Rule Id="UNT0030" Action="Error" />
+        <Rule Id="UNT0031" Action="Error" />
+    </Rules>
+</RuleSet>
