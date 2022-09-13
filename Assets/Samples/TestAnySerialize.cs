@@ -22,6 +22,13 @@ namespace AnySerialize
         
         [AnySerialize] public Vector2 Vector2 { get; }
         
+        [AnySerialize] public R Record { get; }
+        
+        // [AnySerialize] public Lazy<int> LazyInt { get; }
+        //
+        // [AnySerialize] public Lazy<int[]> LazyIntArray { get; }
+        // [AnySerialize] public Lazy<Dictionary<int, long[]>> LazyDictIntLongArray { get; }
+        
         private void Awake()
         {
             Debug.Log($"{nameof(IntValue)} = {IntValue}");
@@ -50,5 +57,11 @@ namespace AnySerialize
         public T[] TArray;
         public T[][] TArrayArray;
         public float ReadOnlyProperty { get; }
+    }
+    
+    [Serializable]
+    public record R
+    {
+        public int Int { get; } = 123;
     }
 }
