@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace AnyProcessor.CodeGen
 {
     public static class EnumerableExtension
     {
+        [ItemNotNull]
         public static IEnumerable<T> Yield<T>(this T value)
         {
             yield return value;

@@ -10,24 +10,24 @@ namespace AnyProcessor.CodeGen
     public static class TypeGenericExtension
     {
         [Pure]
-        public static bool IsConcreteType([NotNull] this TypeReference type)
+        public static bool IsConcreteType(this TypeReference type)
         {
             return type switch
             {
-                null => throw new ArgumentNullException(),
-                GenericParameter _ => false,
-                GenericInstanceType genericInstanceType => genericInstanceType.GenericArguments.All(arg => arg.IsConcreteType()),
-                TypeSpecification typeSpecification => typeSpecification.ElementType.IsConcreteType(),
+                null => throw new ArgumentNullException(nameof(type)),
+                GenericParameter => false,
+                GenericInstanceType genericInstanceType => genericInstanceType.GenericArguments!.All(arg => arg.IsConcreteType()),
+                TypeSpecification typeSpecification => typeSpecification.ElementType!.IsConcreteType(),
                 _ => !type.HasGenericParameters
             };
         }
 
         [Pure]
-        public static bool IsGenericType([NotNull] this TypeReference type)
+        public static bool IsGenericType(this TypeReference type)
         {
             return type switch
             {
-                null => throw new ArgumentNullException(),
+                null => throw new ArgumentNullException(nameof(type)),
                 GenericParameter _ => true,
                 GenericInstanceType _ => true,
                 _ => type.HasGenericParameters
@@ -36,38 +36,41 @@ namespace AnyProcessor.CodeGen
         
         // TODO: Covariant and contravariant?
         [Pure]
-        public static bool IsPartialGenericTypeOf([NotNull] this TypeReference partial, [NotNull] TypeReference generic)
+        public static bool IsPartialGenericTypeOf(this TypeReference partial, TypeReference generic)
         {
-            if (partial == null || generic == null) throw new ArgumentNullException();
-            if (partial.IsArray || generic.IsArray) throw new ArgumentException();
+            if (partial == null) throw new ArgumentNullException(nameof(partial));
+            if (generic == null) throw new ArgumentNullException(nameof(generic));
+            if (partial.IsArray) throw new ArgumentException("not support array type", nameof(partial));
+            if (generic.IsArray) throw new ArgumentException("not support array type", nameof(generic));
+            
             if (partial.IsGenericParameter || generic.IsGenericParameter) return generic.IsGenericParameter;
             if (!partial.IsGenericType() && !generic.IsGenericType()) return partial.Resolve().TypeEquals(generic.Resolve());
             if (!partial.IsGenericType() || !generic.IsGenericType()) return false;
             var partialArguments = partial.GetGenericParametersOrArguments();
             var genericArguments = generic.GetGenericParametersOrArguments();
             return partial.Resolve().TypeEquals(generic.Resolve()) && 
-                   partialArguments.Zip(genericArguments, (p, g) => (p, g)).All(t => t.p.IsPartialGenericTypeOf(t.g));
+                   partialArguments.Zip(genericArguments, (p, g) => (p, g)).All(t => t.p!.IsPartialGenericTypeOf(t.g!));
         }
 
-        [Pure, NotNull, ItemNotNull]
-        public static IEnumerable<TypeReference> GetGenericParametersOrArguments([NotNull] this TypeReference type)
+        [Pure]
+        public static IEnumerable<TypeReference> GetGenericParametersOrArguments(this TypeReference type)
         {
             if (type.IsGenericParameter) return type.Yield();
-            if (type.HasGenericParameters) return type.GenericParameters;
+            if (type.HasGenericParameters) return type.GenericParameters!;
             if (type.IsGenericInstance) return ((GenericInstanceType)type).GenericArguments;
             return Enumerable.Empty<TypeReference>();
         }
         
-        [Pure, NotNull, ItemNotNull]
-        public static IEnumerable<GenericParameter> GetGenericParameters([NotNull] this TypeReference type)
+        [Pure]
+        public static IEnumerable<GenericParameter> GetGenericParameters(this TypeReference type)
         {
             if (type.IsGenericParameter) return ((GenericParameter)type).Yield();
-            if (type.HasGenericParameters) return type.GenericParameters;
+            if (type.HasGenericParameters) return type.GenericParameters!;
             if (type.IsGenericInstance) return ((GenericInstanceType)type).ElementType.GenericParameters;
             return Enumerable.Empty<GenericParameter>();
         }
         
-        public static void GetGenericParametersOrArguments([NotNull] this TypeReference type, [NotNull] IList<TypeReference> arguments)
+        public static void GetGenericParametersOrArguments(this TypeReference type, IList<TypeReference> arguments)
         {
             var i = 0;
             foreach (var arg in type.GetGenericParametersOrArguments())
@@ -78,27 +81,27 @@ namespace AnyProcessor.CodeGen
         }
         
         [Pure]
-        public static int GetGenericParametersOrArgumentsCount([NotNull] this TypeReference type)
+        public static int GetGenericParametersOrArgumentsCount(this TypeReference type)
         {
-            if (type.HasGenericParameters) return type.GenericParameters.Count;
+            if (type.HasGenericParameters) return type.GenericParameters!.Count;
             if (type.IsGenericInstance) return ((GenericInstanceType)type).GenericArguments.Count;
             return 0;
         }
 
         [Pure]
-        public static bool IsMatchTypeConstraints([NotNull] this TypeReference type)
+        public static bool IsMatchTypeConstraints(this TypeReference type)
         {
             if (!(type is GenericInstanceType genericInstanceType)) return true;
-            return genericInstanceType.GenericArguments
-                .Zip(genericInstanceType.ElementType.GenericParameters, (argument, parameter) => (argument, parameter))
-                .All(t => IsArgumentMatch(t.argument, t.parameter))
+            return genericInstanceType.GenericArguments!
+                .Zip(genericInstanceType.ElementType!.GenericParameters!, (argument, parameter) => (argument, parameter))
+                .All(t => IsArgumentMatch(t.argument!, t.parameter!))
             ;
         
             static bool IsArgumentMatch(TypeReference genericArgument, GenericParameter genericParameter)
             {
                 if (!genericParameter.HasConstraints) return true;
                 if (genericArgument.IsGenericParameter) return true;
-                return genericParameter.Constraints
+                return genericParameter.Constraints!
                     .Select(constraint => constraint.ConstraintType)
                     .All(genericArgument.IsDerivedFrom)
                 ;
@@ -107,9 +110,11 @@ namespace AnyProcessor.CodeGen
 
         // TODO: covariant/contravariant
         [Pure]
-        public static bool IsDerivedFrom([NotNull] this TypeReference derived, [NotNull] TypeReference @base)
+        public static bool IsDerivedFrom(this TypeReference derived, TypeReference @base)
         {
-            if (!derived.Resolve().IsDerivedFrom(@base.Resolve())) return false;
+            if (derived.Resolve() == null) throw new ArgumentException("cannot resolve type", nameof(derived));
+            if (@base.Resolve() == null) throw new ArgumentException("cannot resolve type", nameof(@base));
+            if (!derived.Resolve()!.IsDerivedFrom(@base.Resolve()!)) return false;
             if (derived.GetGenericParametersOrArgumentsCount() != @base.GetGenericParametersOrArgumentsCount()) return false;
             return derived.GetGenericParametersOrArguments()
                 .Zip(@base.GetGenericParametersOrArguments(), (d, b) => (d, b))
@@ -118,7 +123,7 @@ namespace AnyProcessor.CodeGen
         }
         
         [Pure]
-        public static bool IsDerivedFrom([NotNull] this TypeDefinition derived, [NotNull] TypeDefinition @base)
+        public static bool IsDerivedFrom(this TypeDefinition derived, TypeDefinition @base)
         {
             return derived.GetAllBasesAndInterfaces().Any(type => type.Resolve().TypeEquals(@base));
         }
@@ -130,14 +135,17 @@ namespace AnyProcessor.CodeGen
         
         public static IEnumerable<TypeReference> GetImplementationsOf(this TypeReference self, TypeReference @base)
         {
+            if (self.Resolve() == null) throw new ArgumentException("cannot resolve type", nameof(self));
+            if (@base.Resolve() == null) throw new ArgumentException("cannot resolve type", nameof(@base));
+            
             var selfDef = self.Resolve();
             var genericDef = @base.Resolve();
-            foreach (var parentType in selfDef.GetBaseAndInterfaces())
+            foreach (var parentType in selfDef!.GetBaseAndInterfaces())
             {
                 if (!parentType.Resolve().TypeEquals(genericDef)) continue;
                 if (!parentType.IsGenericType())
                     yield return parentType;
-                else if (parentType.GetGenericParametersOrArguments().Zip(@base.GetGenericParametersOrArguments(), (s, g) => (s, g)).All(t => IsMatch(t.s, t.g)))
+                else if (parentType.GetGenericParametersOrArguments().Zip(@base.GetGenericParametersOrArguments(), (s, g) => (s, g)).All(t => IsMatch(t.s!, t.g!)))
                     yield return parentType;
             }
         
@@ -145,7 +153,7 @@ namespace AnyProcessor.CodeGen
             {
                 if (selfArgument.IsGenericParameter || genericArgument.IsGenericParameter) return true;
                 if (selfArgument is ArrayType selfArray && genericArgument is ArrayType genericArray)
-                    return IsMatch(selfArray.ElementType, genericArray.ElementType);
+                    return IsMatch(selfArray.ElementType!, genericArray.ElementType!);
                 if (selfArgument.IsArray || genericArgument.IsArray) return false;
                 if (!selfArgument.IsGenericType() && !genericArgument.IsGenericType()) return selfArgument.TypeEquals(genericArgument);
                 if (!(selfArgument.IsGenericType() && genericArgument.IsGenericType())) return false;
@@ -153,25 +161,25 @@ namespace AnyProcessor.CodeGen
                 if (selfArgument.GetGenericParametersOrArgumentsCount() != genericArgument.GetGenericParametersOrArgumentsCount()) return false;
                 return selfArgument.GetGenericParametersOrArguments()
                     .Zip(genericArgument.GetGenericParametersOrArguments(), (s, g) => (s, g))
-                    .All(t => IsMatch(t.s, t.g))
+                    .All(t => IsMatch(t.s!, t.g!))
                 ;
             }
         }
         
-        [Pure, NotNull]
-        public static TypeReference FillGenericTypesByReferenceGenericIndex([NotNull] this TypeReference self, [NotNull] TypeReference referenceGeneric)
+        [Pure]
+        public static TypeReference FillGenericTypesByReferenceGenericIndex(this TypeReference self, TypeReference referenceGeneric)
         {
             if (!self.Resolve().TypeEquals(referenceGeneric.Resolve()))
                 throw new ArgumentException($"{nameof(self)}({self.Resolve()}) and {nameof(referenceGeneric)}({referenceGeneric.Resolve()}) must have same type", nameof(self));
             
             if (self is ArrayType arrayType && referenceGeneric is ArrayType referenceArray)
             {
-                var elementType = FillGenericTypesByReferenceGenericIndex(arrayType.ElementType, referenceArray.ElementType);
+                var elementType = FillGenericTypesByReferenceGenericIndex(arrayType.ElementType!, referenceArray.ElementType!);
                 return new ArrayType(elementType, arrayType.Rank);
             }
             if (!self.IsGenericType()) return self;
 
-            if (!(referenceGeneric is GenericInstanceType referenceGenericInstance))
+            if (referenceGeneric is not GenericInstanceType referenceGenericInstance)
                 throw new ArgumentException( $"{nameof(referenceGeneric)}({referenceGeneric}) must be a {nameof(GenericInstanceType)}", nameof(referenceGeneric));
             
             // TODO: array pool on MacOS not working?
@@ -181,25 +189,25 @@ namespace AnyProcessor.CodeGen
             for (var i = 0; i < genericArguments.Length; i++)
             {
                 var arg = genericArguments[i];
-                var refArg = referenceGenericInstance.GenericArguments[i];
+                var refArg = referenceGenericInstance.GenericArguments![i]!;
                 if (!refArg.IsGenericParameter) genericArguments[i] = arg.IsGenericParameter
                     ? refArg : FillGenericTypesByReferenceGenericIndex(arg, refArg)
                 ;
             }
-            return genericArguments.All(arg => arg.IsGenericParameter) ? self : self.MakeGenericInstanceType(genericArguments);
+            return genericArguments.All(arg => arg.IsGenericParameter) ? self : self.MakeGenericInstanceType(genericArguments)!;
         }
         
-        [Pure, NotNull]
-        public static TypeReference FillGenericTypesByReferenceGenericName([NotNull] this TypeReference self, [NotNull] GenericInstanceType referenceGeneric)
+        [Pure]
+        public static TypeReference FillGenericTypesByReferenceGenericName(this TypeReference self, GenericInstanceType referenceGeneric)
         {
-            return self.FillGenericTypesByReferenceGenericName(referenceGeneric.ElementType.GenericParameters, referenceGeneric.GenericArguments);
+            return self.FillGenericTypesByReferenceGenericName(referenceGeneric.ElementType!.GenericParameters!, referenceGeneric.GenericArguments!);
         }
         
-        [Pure, NotNull]
+        [Pure]
         public static TypeReference FillGenericTypesByReferenceGenericName(
-            [NotNull] this TypeReference self,
-            [NotNull, ItemNotNull] IList<GenericParameter> referenceGenericParameters,
-            [NotNull, ItemNotNull] IList<TypeReference> referenceGenericArguments
+            this TypeReference self,
+            IList<GenericParameter> referenceGenericParameters,
+            IList<TypeReference> referenceGenericArguments
         )
         {
             if (referenceGenericArguments.Count != referenceGenericParameters.Count)
@@ -207,7 +215,7 @@ namespace AnyProcessor.CodeGen
             
             if (self is ArrayType arrayType)
             {
-                var elementType = FillGenericTypesByReferenceGenericName(arrayType.ElementType, referenceGenericParameters, referenceGenericArguments);
+                var elementType = FillGenericTypesByReferenceGenericName(arrayType.ElementType!, referenceGenericParameters, referenceGenericArguments);
                 return new ArrayType(elementType, arrayType.Rank);
             }
             if (!self.IsGenericType()) return self;
@@ -222,7 +230,7 @@ namespace AnyProcessor.CodeGen
                 if (arg.IsGenericParameter)
                 {
                     var typeIndex = referenceGenericParameters.FindIndexOf(t =>  t.IsGenericParameter && t.Name == arg.Name);
-                    if (typeIndex < 0) throw new IndexOutOfRangeException();
+                    if (typeIndex < 0) throw new IndexOutOfRangeException($"cannot found generic parameter with name {arg.Name}");
                     genericArguments[i] = referenceGenericArguments[typeIndex];
                 }
                 else
@@ -234,19 +242,19 @@ namespace AnyProcessor.CodeGen
             return self.CreateGenericInstanceType(genericArguments);
         }
 
-        public static TypeReference CreateGenericInstanceType([NotNull] this TypeReference self, [NotNull, ItemNotNull] IList<TypeReference> arguments)
+        public static TypeReference CreateGenericInstanceType(this TypeReference self, IList<TypeReference> arguments)
         {
-            if (self == null)
-                throw new ArgumentNullException(nameof(self));
-            if (arguments == null)
-                throw new ArgumentNullException(nameof(arguments));
+            if (self == null) throw new ArgumentNullException(nameof(self));
+            if (arguments == null) throw new ArgumentNullException(nameof(arguments));
             if (self.GetGenericParametersOrArgumentsCount() != arguments.Count)
-                throw new ArgumentException();
+                throw new ArgumentException($"the count of generic parameters({self.GetGenericParametersOrArgumentsCount()}) and arguments({arguments.Count}) are not match", nameof(self));
             
             if (arguments.Count == 0) return self;
             
-            var genericInstanceType = new GenericInstanceType(self.Resolve());
-            foreach (var arg in arguments) genericInstanceType.GenericArguments.Add(arg);
+            if (self.Resolve() == null) throw new ArgumentException("cannot resolve type", nameof(self));
+            
+            var genericInstanceType = new GenericInstanceType(self.Resolve()!);
+            foreach (var arg in arguments) genericInstanceType.GenericArguments!.Add(arg);
             return genericInstanceType;
         }
     
@@ -257,13 +265,13 @@ namespace AnyProcessor.CodeGen
             foreach (var (generic, index) in implementation.GetGenericParametersOrArguments().Select((generic, index) => (g: generic, index)))
             {
                 if (generic.IsGenericParameter && generic.Name == parameter.Name)
-                    return genericBaseType.GenericArguments[index];
+                    return genericBaseType.GenericArguments![index]!;
                 if (generic is ArrayType arrayGeneric && arrayGeneric.Name == $"{parameter.Name}[]")
-                    return ((ArrayType)genericBaseType.GenericArguments[index]).ElementType;
+                    return ((ArrayType)genericBaseType.GenericArguments![index]!).ElementType;
                 
                 if (generic is GenericInstanceType genericImplementation)
                 {
-                    var innerParameter = parameter.FindGenericParameterType(genericBaseType.GenericArguments[index], genericImplementation);
+                    var innerParameter = parameter.FindGenericParameterType(genericBaseType.GenericArguments![index]!, genericImplementation);
                     if (innerParameter != parameter) return innerParameter;
                     // continue searching
                 }

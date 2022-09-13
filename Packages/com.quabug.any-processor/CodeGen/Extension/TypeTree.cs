@@ -61,7 +61,7 @@ namespace AnyProcessor.CodeGen
 
         private class Node
         {
-            [NotNull] public TypeDefinition Type { get; }
+            public TypeDefinition Type { get; }
             public List<Node> ChildrenNodes { get; } = new List<Node>();
             public Node(TypeDefinition type) => Type = type;
             public override string ToString() => $"{Type.Name}({Type.Module.Name})";
@@ -76,7 +76,7 @@ namespace AnyProcessor.CodeGen
         /// </summary>
         /// <param name="sourceTypes">The source types of tree.</param>
         /// <param name="logger">logger</param>
-        public TypeTree([NotNull, ItemNotNull] IEnumerable<TypeDefinition> sourceTypes)
+        public TypeTree(IEnumerable<TypeDefinition> sourceTypes)
         {
             _typeTreeNodeMap = new Dictionary<TypeKey, Node>();
             foreach (var type in sourceTypes.Where(t => t.IsClass || t.IsInterface)) CreateTypeTree(type);
@@ -88,7 +88,7 @@ namespace AnyProcessor.CodeGen
         // /// </summary>
         // /// <param name="sourceTypes">The source types of tree.</param>
         // /// <param name="baseTypes">Excluded any types from <paramref name="sourceTypes"/> which is not derived from base type.</param>
-        // public TypeTree([NotNull] ICollection<TypeDefinition> sourceTypes, [NotNull] ICollection<TypeDefinition> baseTypes)
+        // public TypeTree(ICollection<TypeDefinition> sourceTypes, ICollection<TypeDefinition> baseTypes)
         // {
         // }
 

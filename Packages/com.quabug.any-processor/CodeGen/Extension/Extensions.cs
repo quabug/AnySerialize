@@ -148,12 +148,12 @@ namespace AnyProcessor.CodeGen
             return nestedType;
         }
 
-        public static IEnumerable<CustomAttribute> GetAttributesOf<T>([NotNull] this ICustomAttributeProvider provider) where T : Attribute
+        public static IEnumerable<CustomAttribute> GetAttributesOf<T>(this ICustomAttributeProvider provider) where T : Attribute
         {
             return provider.GetAttributesOf(typeof(T));
         }
         
-        public static IEnumerable<CustomAttribute> GetAttributesOf([NotNull] this ICustomAttributeProvider provider, Type type)
+        public static IEnumerable<CustomAttribute> GetAttributesOf(this ICustomAttributeProvider provider, Type type)
         {
             return provider.HasCustomAttributes
                 ? provider.CustomAttributes.Where(attribute => attribute.AttributeType.FullName == type.FullName)
@@ -161,18 +161,17 @@ namespace AnyProcessor.CodeGen
             ;
         }
         
-        public static string GetBackingFieldName([NotNull] this PropertyDefinition property)
+        public static string GetBackingFieldName(this PropertyDefinition property)
         {
             return property.Name.GetBackingFieldName();
         }
         
-        public static string GetBackingFieldName([NotNull] this string propertyName)
+        public static string GetBackingFieldName(this string propertyName)
         {
             return $"<{propertyName}>k__BackingField";
         }
         
-        [NotNull]
-        public static FieldDefinition CreateOrReplaceBackingField([NotNull] this PropertyDefinition property, [NotNull] TypeReference fieldType)
+        public static FieldDefinition CreateOrReplaceBackingField(this PropertyDefinition property, TypeReference fieldType)
         {
             var backingFieldName = property.GetBackingFieldName();
             var backingField = property.DeclaringType.Fields.FirstOrDefault(field => field.Name == backingFieldName)
@@ -182,8 +181,7 @@ namespace AnyProcessor.CodeGen
             return backingField;
         }
         
-        [NotNull]
-        public static FieldDefinition CreateSerializeReferenceField([NotNull] this PropertyDefinition property, [NotNull] TypeReference fieldType)
+        public static FieldDefinition CreateSerializeReferenceField(this PropertyDefinition property, TypeReference fieldType)
         {
             //.field private class AnySerialize.Tests.TestMonoBehavior/__generic_serialize_reference_GenericInterface__/IBase _GenericInterface
             //  .custom instance void [UnityEngine.CoreModule]UnityEngine.SerializeReference::.ctor()
@@ -197,7 +195,7 @@ namespace AnyProcessor.CodeGen
             return serializedField;
         }
         
-        public static void ReplacePropertyGetterByFieldMethod([NotNull] this PropertyDefinition property, [NotNull] FieldDefinition serializedField, [NotNull] string fieldMethodName)
+        public static void ReplacePropertyGetterByFieldMethod(this PropertyDefinition property, FieldDefinition serializedField, string fieldMethodName)
         {
             // before
             //     IL_0000: ldarg.0      // this
@@ -219,7 +217,7 @@ namespace AnyProcessor.CodeGen
             instructions.Add(Instruction.Create(OpCodes.Ret));
         }
         
-        public static void ReplacePropertySetterByFieldMethod([NotNull] this PropertyDefinition property, [NotNull] FieldDefinition serializedField, [NotNull] string fieldMethodName)
+        public static void ReplacePropertySetterByFieldMethod(this PropertyDefinition property, FieldDefinition serializedField, string fieldMethodName)
         {
             // before
             //     IL_0000: ldarg.0      // this
