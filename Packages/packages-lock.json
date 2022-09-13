@@ -14,7 +14,7 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.nuget.mono-cecil": "1.11.4",
-        "com.quabug.any-processor": "0.1.0",
+        "com.quabug.any-processor": "0.2.0",
         "com.quabug.one-shot-injection": "2.2.0"
       }
     },
@@ -72,7 +72,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.settings-manager": {
-      "version": "1.0.1",
+      "version": "1.0.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {},

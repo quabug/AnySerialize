@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AnyProcessor.CodeGen;
-using AnySerialize;
+using AnyProcessor.Tests;
 using AnySerialize.CodeGen;
 using Mono.Cecil;
 using NUnit.Framework;
 using OneShot;
 
-namespace AnyProcessor.Tests
+namespace AnySerialize.Tests
 {
     public class TestDefaultTypeSearcher : CecilTestBase
     {
@@ -40,6 +40,7 @@ namespace AnyProcessor.Tests
             Assert.IsTrue(target is GenericInstanceType genericTarget && genericTarget.GenericArguments.Count == 1);
             var container = _container.CreateChildContainer();
             container.RegisterInstance(container).AsSelf();
+            container.RegisterInstance(_module).AsSelf();
             container.RegisterInstance(target).AsSelf(typeof(TargetLabel<>)).AsBases(typeof(TargetLabel<>));
             return container.Instantiate<SerializeTypeSearcher>().Search();
         }
@@ -87,7 +88,7 @@ namespace AnyProcessor.Tests
         [Test]
         public void should_find_replace_type_for_dictionary_type()
         {
-            AssertTypeEqual<ReadOnlyAnyDictionary<int, long, ReadOnlyAnyClass<KeyValuePair<int, long>, int, long, AnyValue_Int32, AnyValue_Int64>>>(SearchReadOnly<Dictionary<int, long>>());
+            AssertTypeEqual<ReadOnlyAnyDictionary<int, long, ReadOnlyAnyClass<AnyKeyValuePair<int, long>, int, long, AnyValue_Int32, AnyValue_Int64>>>(SearchReadOnly<Dictionary<int, long>>());
         }
     }
 }

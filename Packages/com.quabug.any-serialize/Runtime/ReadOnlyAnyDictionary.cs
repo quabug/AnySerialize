@@ -4,9 +4,15 @@ using UnityEngine;
 
 namespace AnySerialize
 {
+    public class AnyKeyValuePair<TKey, TValue>
+    {
+        public TKey Key { get; }
+        public TValue Value { get; }
+    }
+    
     [Serializable]
     public class ReadOnlyAnyDictionary<TKey, TValue, [AnyConstraintType] TAnyPair> : IReadOnlyAny<Dictionary<TKey, TValue>>
-        where TAnyPair : IReadOnlyAny<KeyValuePair<TKey, TValue>>
+        where TAnyPair : IReadOnlyAny<AnyKeyValuePair<TKey, TValue>>
     {
         [SerializeField] private List<TAnyPair> _pairs;
         private Dictionary<TKey, TValue> _cache;
