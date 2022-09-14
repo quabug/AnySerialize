@@ -14,7 +14,7 @@ namespace AnyProcessor.CodeGen
         class PostProcessorReflectionImporter : DefaultReflectionImporter
         {
             private const string SystemPrivateCoreLib = "System.Private.CoreLib";
-            private AssemblyNameReference _correctCorlib;
+            private readonly AssemblyNameReference _correctCorlib;
 
             public PostProcessorReflectionImporter(ModuleDefinition module) : base(module)
             {

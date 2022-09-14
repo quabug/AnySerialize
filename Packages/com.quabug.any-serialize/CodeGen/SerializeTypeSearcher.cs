@@ -4,7 +4,6 @@ using System.Linq;
 using AnyProcessor.CodeGen;
 using JetBrains.Annotations;
 using Mono.Cecil;
-using Mono.Cecil.Rocks;
 using OneShot;
 
 namespace AnySerialize.CodeGen

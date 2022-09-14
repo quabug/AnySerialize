@@ -12,17 +12,16 @@ namespace AnySerialize
 
     public static class AnyClassUtility
     {
-        public const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        public static readonly BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         
-        [Pure]
+        [Pure, ItemNotNull]
         public static T[] Reorder<T>(this T[] array, IEnumerable<int> newIndices)
         {
             var newArray = new T[array.Length];
             var index = 0;
             foreach (var newIndex in newIndices)
             {
-                if (array[index] == null)
-                    throw new ArgumentException($"element of {nameof(array)} cannot be null", nameof(array));
+                if (array[index] == null) throw new ArgumentException($"element of {nameof(array)} cannot be null", nameof(array));
                 newArray[newIndex] = array[index];
                 index++;
             }
