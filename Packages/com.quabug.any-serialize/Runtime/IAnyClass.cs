@@ -30,7 +30,7 @@ namespace AnySerialize
                 if (order.HasValue) sortedCache.Add(order.Value, item);
                 else orderedItems.Add(item);
             }
-            foreach (var (order, item) in sortedCache) orderedItems.Insert(order, item);
+            foreach (var (order, item) in sortedCache) orderedItems.Insert(Math.Min(order, orderedItems.Count), item);
             return orderedItems;
         }
 
