@@ -11,7 +11,6 @@ namespace AnySerialize.CodeGen
 
         public FieldTypeSearcher(
             ILPostProcessorLogger logger,
-            ModuleDefinition module,
             [Inject(typeof(AttributeLabel<>))] string fieldDeclaringTypeParameterName,
             [Inject(typeof(GenericLabel<>))] GenericInstanceType genericType,
             [Inject(typeof(GenericLabel<>))] GenericParameter parameter
@@ -19,8 +18,8 @@ namespace AnySerialize.CodeGen
         {
             var fieldIndex = -1;
             var searcherFieldCount = 0;
-            var genericTypeDefinition = genericType.Resolve();
-            foreach (var genericParameter in genericTypeDefinition.GenericParameters)
+            var genericTypeDefinition = genericType.Resolve()!;
+            foreach (var genericParameter in genericTypeDefinition.GenericParameters!)
             {
                 if (genericParameter.Name == parameter.Name)
                     fieldIndex = searcherFieldCount;
@@ -31,7 +30,10 @@ namespace AnySerialize.CodeGen
 
             var declaringGenericIndex = genericTypeDefinition.GenericParameters.FindIndexOf(parameter => parameter.Name == fieldDeclaringTypeParameterName);
             var declaringType = genericType.GenericArguments![declaringGenericIndex]!;
-            var fields =  declaringType.Resolve()!.Fields.Where(field => !field.IsStatic).Select(field => field.FieldType).ToArray();
+            var fields =  AnyClassUtility.Reorder(
+                declaringType.Resolve()!.Fields.Where(field => !field.IsStatic),
+                field => (int?)field.GetAttributesOf<AnySerializeFieldOrderAttribute>().SingleOrDefault()?.ConstructorArguments[0].Value
+            ).Select(field => field.FieldType).ToArray();
             if (searcherFieldCount != fields.Length || fieldIndex < 0) return;
 
             _fieldType = !fields[fieldIndex]!.IsConcreteType() && declaringType is GenericInstanceType genericInstanceType

@@ -76,10 +76,11 @@ namespace AnySerialize
     [Serializable]
     public class B<T> : IB<T>
     {
+        [field: AnySerializeFieldOrder(3)]
+        public float ReadOnlyProperty { get; }
         public readonly T ReadOnlyTValue;
         public T[] TArray;
         public T[][] TArrayArray;
-        public float ReadOnlyProperty { get; }
         
         public override string ToString()
         {
