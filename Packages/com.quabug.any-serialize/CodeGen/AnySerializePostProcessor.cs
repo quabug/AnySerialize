@@ -1,5 +1,6 @@
 using System.Linq;
 using AnyProcessor.CodeGen;
+using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
 using OneShot;
@@ -10,6 +11,7 @@ using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
+    [UsedImplicitly]
     public class AnySerializePostProcessor : ILPostProcessor
     {
         public override ILPostProcessor GetInstance()
@@ -58,12 +60,12 @@ namespace AnySerialize.CodeGen
                     attribute,
                     (propertyType, typeof(TargetLabel<>))
                 );
-                processor.Logger.Debug($"field type: {fieldType?.FullName}");
+                processor.Logger.Debug($"field type: {fieldType.FullName}");
                 fieldType = processor.Module.ImportReference(fieldType);
                 var serializedField = property.CreateOrReplaceBackingField(fieldType);
                 serializedField.AddCustomAttribute<SerializeField>(property.Module);
                 processor.Logger.Info($"serialize field type: {serializedField.FullName}");
-                property.ReplacePropertyGetterByFieldMethod(serializedField, "get_Value");
+                property.ReplacePropertyGetterByFieldMethod(serializedField, "get_Value", processor.Logger);
                 if (property.SetMethod != null) property.ReplacePropertySetterByFieldMethod(serializedField, "set_Value");
             
                 TypeReference CreatePropertyType()
