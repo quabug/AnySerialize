@@ -15,15 +15,15 @@ namespace AnyProcessor.CodeGen
         {
             return type.IsGenericType ? Regex.Replace(type.ToString(), @"(\w+)`\d+\[(.*)\]", "$1<$2>") : type.ToString();
         }
-        
+
         [Pure]
-        public static IEnumerable<Type> GetSelfAndAllBases(this Type type)
+        public static IEnumerable<Type> GetSelfAndAllBases(this Type? type)
         {
-            do
+            while (type != null)
             {
                 yield return type;
                 type = type.BaseType;
-            } while (type != null);
+            }
         }
 
         [Pure]
@@ -31,7 +31,7 @@ namespace AnyProcessor.CodeGen
         {
             return cecilType switch
             {
-                TypeDefinition _ => Type.GetType(cecilType.FullName.Replace('/', '+') + ", " + cecilType.Module.Assembly.FullName),
+                TypeDefinition _ => Type.GetType(cecilType.FullName!.Replace('/', '+') + ", " + cecilType.Module.Assembly.FullName),
                 GenericInstanceType genericType => genericType.Resolve().ToReflectionType().MakeGenericType(
                     genericType.Resolve().ToReflectionType().GetGenericArguments()
                         .Zip(genericType.GenericArguments.Select(arg => arg.IsGenericParameter ? null : arg.ToReflectionType()), (reflectionArg, cecilArg) => cecilArg ?? reflectionArg)
@@ -47,22 +47,22 @@ namespace AnyProcessor.CodeGen
         }
 
         [Pure]
-        public static TypeReference ImportType(this ModuleDefinition module, Type type, ILPostProcessorLogger logger = null)
+        public static TypeReference ImportType(this ModuleDefinition module, Type type, ILPostProcessorLogger? logger = null)
         {
-            if (type.IsArray) return module.ImportType(type.GetElementType(), logger).MakeArrayType();
-            if (type.IsByRef) return module.ImportType(type.GetElementType(), logger).MakeByReferenceType();
-            if (type.IsPointer) return module.ImportType(type.GetElementType(), logger).MakePointerType();
+            if (type.IsArray) return module.ImportType(type.GetElementType()!, logger).MakeArrayType()!;
+            if (type.IsByRef) return module.ImportType(type.GetElementType()!, logger).MakeByReferenceType()!;
+            if (type.IsPointer) return module.ImportType(type.GetElementType()!, logger).MakePointerType()!;
             if (type.IsGenericParameter) throw new NotSupportedException();
             if (type.IsGenericType)
             {
-                var genericTypeReference = module.ImportReference(type.GetGenericTypeDefinition());
+                var genericTypeReference = module.ImportReference(type.GetGenericTypeDefinition()!)!;
                 var genericTypeArguments = type.GetGenericArguments()
                     .Select(arg => arg.IsGenericParameter ? new GenericParameter(arg.Name, genericTypeReference) : module.ImportType(arg, logger))
                 ;
                 logger?.Debug($"[{nameof(ImportType)}] import generic type: {genericTypeReference}<{string.Join(",", genericTypeArguments.Select(a => a.Name))}>");
                 return genericTypeReference.MakeGenericInstanceType(genericTypeArguments.ToArray());
             }
-            return module.ImportReference(type);
+            return module.ImportReference(type)!;
         }
     }
 }
