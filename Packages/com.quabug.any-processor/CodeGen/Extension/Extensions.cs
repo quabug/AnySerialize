@@ -48,18 +48,26 @@ namespace AnyProcessor.CodeGen
                 .SelectMany(t => t.Resolve()!.Methods.Select(m => (type, method: m)))
                 .FirstOrDefault(t => t.method!.Name == methodName)
             ;
-            logger?.Info($"{declaringType.FullName}({declaringType.HasGenericParameters})");
+            logger?.Debug($"[{nameof(GetMethodReference)}] {declaringType}: {method}@{method.DeclaringType}");
             if (method == null) return null;
             
             var methodReference = declaringType.Module!.ImportReference(method);
-            if (!declaringType.IsGenericInstance) return methodReference;
-            var parameters = ((GenericInstanceType)declaringType).GenericArguments;
-            logger?.Info($"{declaringType.FullName}({declaringType.HasGenericParameters}): {string.Join(",", parameters.Select(p => p.Name))}");
-            return methodReference!.CreateGenericMethodReference(parameters.ToArray()!);
+            if (methodReference.DeclaringType.IsConcreteType()) return methodReference;
+
+            while (!methodReference.DeclaringType.Resolve().TypeEquals(declaringType.Resolve()))
+            {
+                logger?.Debug($"[{nameof(GetMethodReference)}] find {method.DeclaringType} {declaringType.Resolve()}:{declaringType.Resolve()!.BaseType}");
+                declaringType = declaringType.Resolve()!.BaseType;
+            }
+            
+            var parameters = ((GenericInstanceType)declaringType).GenericArguments.Select(argument => type.Module!.ImportReference(argument));
+            logger?.Debug($"[{nameof(GetMethodReference)}] {declaringType}<{string.Join(",", parameters.Select(p => p.Name))}>");
+            return methodReference.CreateGenericMethodReference(parameters.ToArray(), logger);
         }
         
-        public static MethodReference CreateGenericMethodReference(this MethodReference method, TypeReference[] genericArguments)
+        public static MethodReference CreateGenericMethodReference(this MethodReference method, TypeReference[] genericArguments, ILPostProcessorLogger? logger = null)
         {
+            logger?.Debug($"[{nameof(CreateGenericMethodReference)}] {method.Name}: {method.DeclaringType}");
             var reference = new MethodReference(method.Name!, method.ReturnType!) {
                 DeclaringType = method.DeclaringType!.MakeGenericInstanceType(genericArguments),
                 HasThis = method.HasThis,
@@ -171,13 +179,13 @@ namespace AnyProcessor.CodeGen
         {
             var backingFieldName = property.GetBackingFieldName();
             var backingField = property.DeclaringType!.Fields!.FirstOrDefault(field => field.Name == backingFieldName)
-                               ?? property.CreateSerializeReferenceField(fieldType);
+                               ?? property.CreateBackingField(fieldType);
             backingField.FieldType = fieldType;
             backingField.IsInitOnly = false;
             return backingField;
         }
         
-        public static FieldDefinition CreateSerializeReferenceField(this PropertyDefinition property, TypeReference fieldType)
+        public static FieldDefinition CreateBackingField(this PropertyDefinition property, TypeReference fieldType)
         {
             //.field private class AnySerialize.Tests.TestMonoBehavior/__generic_serialize_reference_GenericInterface__/IBase _GenericInterface
             //  .custom instance void [UnityEngine.CoreModule]UnityEngine.SerializeReference::.ctor()
@@ -191,7 +199,7 @@ namespace AnyProcessor.CodeGen
             return serializedField;
         }
         
-        public static void ReplacePropertyGetterByFieldMethod(this PropertyDefinition property, FieldDefinition serializedField, string fieldMethodName)
+        public static void ReplacePropertyGetterByFieldMethod(this PropertyDefinition property, FieldDefinition serializedField, string fieldMethodName, ILPostProcessorLogger? logger = null)
         {
             // before
             //     IL_0000: ldarg.0      // this
@@ -204,7 +212,7 @@ namespace AnyProcessor.CodeGen
             //     IL_0006: callvirt     instance !0/*object*/ class [AnySerialize]AnySerialize.AnyValue`1<object>::get_Value()
             //     IL_000b: ret
             var instructions = property.GetMethod!.Body!.Instructions;
-            var getValueMethod = serializedField.FieldType!.GetMethodReference(fieldMethodName);
+            var getValueMethod = serializedField.FieldType!.GetMethodReference(fieldMethodName, logger);
             getValueMethod = property.Module!.ImportReference(getValueMethod!);
             instructions!.Clear();
             instructions.Add(Instruction.Create(OpCodes.Ldarg_0));

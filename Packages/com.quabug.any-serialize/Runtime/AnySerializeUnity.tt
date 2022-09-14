@@ -1,6 +1,6 @@
 <#@ template language="C#" #>
 <#@ output extension=".cs" #>
-<#@ assembly name="C:/Program Files/Unity/Hub/Editor/2021.3.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
+<#@ assembly name="C:/Program Files/Unity/Hub/Editor/2021.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
 <#@ assembly name="$(SolutionDir)/Library/ScriptAssemblies/Unity.Mathematics.dll" #>
 <#@ import namespace="System" #>
 <#@ import namespace="Unity.Mathematics" #>

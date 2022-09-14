@@ -24,6 +24,7 @@ namespace AnySerialize
                 if (_cache != null) return _cache;
 #endif
                 _cache ??= new Dictionary<TKey, TValue>();
+                _cache.Clear();
                 foreach (var pair in _pairs) _cache.Add(pair.Value.Key, pair.Value.Value);
                 return _cache;
             }
