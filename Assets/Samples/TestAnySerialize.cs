@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -24,11 +25,13 @@ namespace AnySerialize
         
         [AnySerialize] public R Record { get; }
         
-        // [AnySerialize] public Lazy<int> LazyInt { get; }
-        //
-        // [AnySerialize] public Lazy<int[]> LazyIntArray { get; }
-        // [AnySerialize] public Lazy<Dictionary<int, long[]>> LazyDictIntLongArray { get; }
+        [AnySerialize] public Lazy<int> LazyInt { get; }
         
+        [AnySerialize] public Lazy<int[]> LazyIntArray { get; }
+        [AnySerialize] public Lazy<Dictionary<int, long[]>> LazyDictIntLongArray { get; }
+        
+        #pragma warning disable UNT0001
+
         private void Awake()
         {
             Debug.Log($"{nameof(IntValue)} = {IntValue}");
@@ -36,7 +39,12 @@ namespace AnySerialize
             IntValue = IntValueRO;
             Debug.Log($"{nameof(IntValue)} = {IntValue}");
             Debug.Log($"{nameof(IntValueROWithoutBacking)} = {IntValueROWithoutBacking}");
+            Debug.Log($"{nameof(DictionaryStringInt)} = {string.Join(",", DictionaryStringInt.Select(t => $"{t.Key}=>{t.Value}"))}");
+            Debug.Log($"{nameof(DictionaryStringDict)} = {string.Join(",", DictionaryStringDict.Select(t => $"{t.Key}=>({string.Join(",", t.Value.Select(x => $"{x.Key}=>{x.Value}"))})"))}");
+            Debug.Log($"{nameof(AnyStringArray2)} = {string.Join(",", AnyStringArray2.SelectMany(arr => arr))}");
         }
+        
+        #pragma warning restore UNT0001
     }
     
     public interface IB {}

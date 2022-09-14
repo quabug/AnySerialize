@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AnySerialize
 {
     [Serializable]
-    public class ReadOnlyAnyLazy<T, TAny> : IReadOnlyAny<Lazy<T>> where TAny : IReadOnlyAny<T>
+    public class ReadOnlyAnyLazy<T, [AnyConstraintType] TAny> : IReadOnlyAny<Lazy<T>> where TAny : IReadOnlyAny<T>
     {
         [SerializeField] private TAny _value = default!;
         public Lazy<T> Value { get; }

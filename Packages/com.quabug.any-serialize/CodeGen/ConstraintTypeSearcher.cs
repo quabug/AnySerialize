@@ -7,7 +7,7 @@ namespace AnySerialize.CodeGen
 {
     public class ConstraintTypeSearcher : ITypeSearcher<AnyConstraintTypeAttribute>
     {
-        private readonly TypeReference _result;
+        private readonly TypeReference? _result;
         
         public ConstraintTypeSearcher(
             Container container,

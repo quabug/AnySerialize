@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AnyProcessor.CodeGen;
 using AnyProcessor.Tests;
@@ -89,6 +90,12 @@ namespace AnySerialize.Tests
         public void should_find_replace_type_for_dictionary_type()
         {
             AssertTypeEqual<ReadOnlyAnyDictionary<int, long, ReadOnlyAnyClass<AnyKeyValuePair<int, long>, int, long, AnyValue_Int32, AnyValue_Int64>>>(SearchReadOnly<Dictionary<int, long>>());
+        }
+        
+        [Test]
+        public void should_find_replace_type_for_lazy_type()
+        {
+            AssertTypeEqual<ReadOnlyAnyLazy<int, AnyValue_Int32>>(SearchReadOnly<Lazy<int>>());
         }
     }
 }

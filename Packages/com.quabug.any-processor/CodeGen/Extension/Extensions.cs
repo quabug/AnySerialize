@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -12,8 +11,8 @@ namespace AnyProcessor.CodeGen
     {
         public static string ToReadableName(this TypeReference type)
         {
-            if (!type.IsGenericInstance) return type.Name;
-            return $"{type.Name.Split('`')[0]}<{string.Join(",", ((GenericInstanceType)type).GenericArguments.Select(a => a.Name))}>";
+            if (!type.IsGenericInstance) return type.Name!;
+            return $"{type.Name!.Split('`')![0]}<{string.Join(",", ((GenericInstanceType)type).GenericArguments.Select(a => a.Name))}>";
         }
 
         public static void AddEmptyCtor(this TypeDefinition type, MethodReference baseCtor)
@@ -30,59 +29,56 @@ namespace AnyProcessor.CodeGen
 
             //} // end of method Object::.ctor
             var attributes = MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName;
-            var ctor = new MethodDefinition(".ctor", attributes, baseCtor.ReturnType);
-            ctor.Body.Instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
+            var ctor = new MethodDefinition(".ctor", attributes, baseCtor.ReturnType!);
+            ctor.Body!.Instructions!.Add(Instruction.Create(OpCodes.Ldarg_0));
             ctor.Body.Instructions.Add(Instruction.Create(OpCodes.Call, baseCtor));
             ctor.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
-            type.Methods.Add(ctor);
+            type.Methods!.Add(ctor);
         }
 
         public static TypeReference CreateGenericTypeReference(this TypeDefinition type, params TypeReference[] genericArguments)
         {
-            return type.HasGenericParameters
-                ? (TypeReference) type.MakeGenericInstanceType(genericArguments)
-                : type
-            ;
+            return type.HasGenericParameters ? type.MakeGenericInstanceType(genericArguments)! : type;
         }
         
-        public static MethodReference GetMethodReference(this TypeReference type, string methodName, ILPostProcessorLogger logger = null)
+        public static MethodReference? GetMethodReference(this TypeReference type, string methodName, ILPostProcessorLogger? logger = null)
         {
             if (!type.IsConcreteType()) throw new ArgumentException($"{type} must be concrete type.", nameof(type));
             var (declaringType, method) = type.GetSelfAndAllBasesWithConcreteGenericType()
-                .SelectMany(type => type.Resolve().Methods.Select(method => (type, method)))
-                .FirstOrDefault(t => t.method.Name == methodName)
+                .SelectMany(t => t.Resolve()!.Methods.Select(m => (type, method: m)))
+                .FirstOrDefault(t => t.method!.Name == methodName)
             ;
             logger?.Info($"{declaringType.FullName}({declaringType.HasGenericParameters})");
             if (method == null) return null;
             
-            var methodReference = declaringType.Module.ImportReference(method);
+            var methodReference = declaringType.Module!.ImportReference(method);
             if (!declaringType.IsGenericInstance) return methodReference;
             var parameters = ((GenericInstanceType)declaringType).GenericArguments;
             logger?.Info($"{declaringType.FullName}({declaringType.HasGenericParameters}): {string.Join(",", parameters.Select(p => p.Name))}");
-            return methodReference.CreateGenericMethodReference(parameters.ToArray(), logger);
+            return methodReference!.CreateGenericMethodReference(parameters.ToArray()!);
         }
         
-        public static MethodReference CreateGenericMethodReference(this MethodReference method, TypeReference[] genericArguments, ILPostProcessorLogger logger = null)
+        public static MethodReference CreateGenericMethodReference(this MethodReference method, TypeReference[] genericArguments)
         {
-            var reference = new MethodReference(method.Name, method.ReturnType) {
-                DeclaringType = method.DeclaringType.MakeGenericInstanceType(genericArguments),
+            var reference = new MethodReference(method.Name!, method.ReturnType!) {
+                DeclaringType = method.DeclaringType!.MakeGenericInstanceType(genericArguments),
                 HasThis = method.HasThis,
                 ExplicitThis = method.ExplicitThis,
                 CallingConvention = method.CallingConvention,
             };
 
-            foreach (var parameter in method.Parameters)
-                reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));
+            foreach (var parameter in method.Parameters!)
+                reference.Parameters!.Add(new ParameterDefinition(parameter.ParameterType!));
 
-            foreach (var genericParameter in method.GenericParameters)
-                reference.GenericParameters.Add(new GenericParameter(genericParameter.Name, reference));
+            foreach (var genericParameter in method.GenericParameters!)
+                reference.GenericParameters!.Add(new GenericParameter(genericParameter.Name!, reference));
 
             return reference;
         }
 
         public static string NameWithOuterClasses(this TypeDefinition type)
         {
-            return type.GetSelfAndAllDeclaringTypes().Aggregate("", (name, t) => $"{t.Name}.{name}");
+            return type.GetSelfAndAllDeclaringTypes().Aggregate("", (name, t) => $"{t.Name}.{name}")!;
         }
 
         public static CustomAttribute AddCustomAttribute<T>(
@@ -91,12 +87,12 @@ namespace AnyProcessor.CodeGen
             , params Type[] constructorTypes
         ) where T : Attribute
         {
-            var attribute = new CustomAttribute(module.ImportReference(typeof(T).GetConstructor(constructorTypes)));
-            attributeProvider.CustomAttributes.Add(attribute);
+            var attribute = new CustomAttribute(module.ImportReference(typeof(T).GetConstructor(constructorTypes)!)!);
+            attributeProvider.CustomAttributes!.Add(attribute);
             return attribute;
         }
 
-        public static TypeDefinition GenerateDerivedClass(this TypeReference baseType, IEnumerable<TypeReference> genericArguments, string className, ModuleDefinition module = null)
+        public static TypeDefinition GenerateDerivedClass(this TypeReference baseType, IEnumerable<TypeReference> genericArguments, string className, ModuleDefinition? module = null)
         {
             // .class nested public auto ansi beforefieldinit
             //   Object
@@ -120,8 +116,8 @@ namespace AnyProcessor.CodeGen
             var classAttributes = TypeAttributes.Class | TypeAttributes.NestedPublic | TypeAttributes.BeforeFieldInit;
             var type = new TypeDefinition("", className, classAttributes);
             type.BaseType = baseType.HasGenericParameters ? baseType.MakeGenericInstanceType(genericArguments.ToArray()) : baseType;
-            var ctor = module.ImportReference(baseType.Resolve().GetConstructors().First(c => !c.HasParameters)).Resolve();
-            var ctorCall = new MethodReference(ctor.Name, module.ImportReference(ctor.ReturnType))
+            var ctor = module!.ImportReference(baseType.Resolve()!.GetConstructors()!.First(c => !c.HasParameters))!.Resolve();
+            var ctorCall = new MethodReference(ctor!.Name!, module.ImportReference(ctor.ReturnType!)!)
             {
                 DeclaringType = type.BaseType,
                 HasThis = ctor.HasThis,
@@ -143,8 +139,8 @@ namespace AnyProcessor.CodeGen
                                  TypeAttributes.NestedPrivate |
                                  TypeAttributes.BeforeFieldInit;
             var nestedType = new TypeDefinition("", name, typeAttributes);
-            nestedType.BaseType = type.Module.ImportReference(typeof(object));
-            type.NestedTypes.Add(nestedType);
+            nestedType.BaseType = type.Module!.ImportReference(typeof(object));
+            type.NestedTypes!.Add(nestedType);
             return nestedType;
         }
 
@@ -156,14 +152,14 @@ namespace AnyProcessor.CodeGen
         public static IEnumerable<CustomAttribute> GetAttributesOf(this ICustomAttributeProvider provider, Type type)
         {
             return provider.HasCustomAttributes
-                ? provider.CustomAttributes.Where(attribute => attribute.AttributeType.FullName == type.FullName)
+                ? provider.CustomAttributes!.Where(attribute => attribute.AttributeType!.FullName == type.FullName)
                 : Enumerable.Empty<CustomAttribute>()
             ;
         }
         
         public static string GetBackingFieldName(this PropertyDefinition property)
         {
-            return property.Name.GetBackingFieldName();
+            return property.Name!.GetBackingFieldName();
         }
         
         public static string GetBackingFieldName(this string propertyName)
@@ -174,7 +170,7 @@ namespace AnyProcessor.CodeGen
         public static FieldDefinition CreateOrReplaceBackingField(this PropertyDefinition property, TypeReference fieldType)
         {
             var backingFieldName = property.GetBackingFieldName();
-            var backingField = property.DeclaringType.Fields.FirstOrDefault(field => field.Name == backingFieldName)
+            var backingField = property.DeclaringType!.Fields!.FirstOrDefault(field => field.Name == backingFieldName)
                                ?? property.CreateSerializeReferenceField(fieldType);
             backingField.FieldType = fieldType;
             backingField.IsInitOnly = false;
@@ -191,7 +187,7 @@ namespace AnyProcessor.CodeGen
                 , FieldAttributes.Private
                 , fieldType
             );
-            property.DeclaringType.Fields.Add(serializedField);
+            property.DeclaringType!.Fields!.Add(serializedField);
             return serializedField;
         }
         
@@ -207,13 +203,13 @@ namespace AnyProcessor.CodeGen
             //     IL_0001: ldfld        class [AnySerialize]AnySerialize.AnyValue`1<object> TestAnySerialize::_value
             //     IL_0006: callvirt     instance !0/*object*/ class [AnySerialize]AnySerialize.AnyValue`1<object>::get_Value()
             //     IL_000b: ret
-            var instructions = property.GetMethod.Body.Instructions;
-            var getValueMethod = serializedField.FieldType.GetMethodReference(fieldMethodName);
-            getValueMethod = property.Module.ImportReference(getValueMethod);
-            instructions.Clear();
+            var instructions = property.GetMethod!.Body!.Instructions;
+            var getValueMethod = serializedField.FieldType!.GetMethodReference(fieldMethodName);
+            getValueMethod = property.Module!.ImportReference(getValueMethod!);
+            instructions!.Clear();
             instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
             instructions.Add(Instruction.Create(OpCodes.Ldfld, serializedField));
-            instructions.Add(Instruction.Create(OpCodes.Callvirt, getValueMethod));
+            instructions.Add(Instruction.Create(OpCodes.Callvirt, getValueMethod!));
             instructions.Add(Instruction.Create(OpCodes.Ret));
         }
         
@@ -231,14 +227,14 @@ namespace AnyProcessor.CodeGen
             //     IL_0006: ldarg.1      // 'value'
             //     IL_0007: callvirt     instance void class [AnySerialize]AnySerialize.AnyValue`1<object>::set_Value(!0/*object*/)
             //     IL_000d: ret
-            var instructions = property.SetMethod.Body.Instructions;
-            var setValueMethod = serializedField.FieldType.GetMethodReference(fieldMethodName);
-            setValueMethod = property.Module.ImportReference(setValueMethod);
-            instructions.Clear();
+            var instructions = property.SetMethod!.Body!.Instructions;
+            var setValueMethod = serializedField.FieldType!.GetMethodReference(fieldMethodName);
+            setValueMethod = property.Module!.ImportReference(setValueMethod!);
+            instructions!.Clear();
             instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
             instructions.Add(Instruction.Create(OpCodes.Ldfld, serializedField));
             instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
-            instructions.Add(Instruction.Create(OpCodes.Callvirt, setValueMethod));
+            instructions.Add(Instruction.Create(OpCodes.Callvirt, setValueMethod!));
             instructions.Add(Instruction.Create(OpCodes.Ret));
         }
     }

@@ -37,7 +37,7 @@ namespace AnyProcessor.CodeGen
             return logger;
         }
         
-        public static TypeTree CreateTypeTree(this PostProcessorAssemblyResolver resolver, AssemblyDefinition selfAssembly, IEnumerable<string> references, ILPostProcessorLogger logger = null)
+        public static TypeTree CreateTypeTree(this PostProcessorAssemblyResolver resolver, AssemblyDefinition selfAssembly, IEnumerable<string> references, ILPostProcessorLogger? logger = null)
         {
             var referenceAssemblies = resolver.LoadLibraryAssemblies(references);
             var allTypes = referenceAssemblies.Append(selfAssembly)
