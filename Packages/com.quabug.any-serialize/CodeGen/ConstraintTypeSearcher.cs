@@ -16,21 +16,21 @@ namespace AnySerialize.CodeGen
             [Inject(typeof(GenericLabel<>))] GenericParameter parameter
         )
         {
-            if (parameter.Constraints.Count != 1)
+            if (parameter.Constraints!.Count != 1)
                 throw new ArgumentException($"Must have and only have one constraint of {nameof(parameter)}", nameof(parameter));
-            var constraint = parameter.Constraints[0].ConstraintType;
+            var constraint = parameter.Constraints[0]!.ConstraintType;
             var constraintType = constraint.FillGenericTypesByReferenceGenericName(genericType);
             if (constraintType.IsConcreteType())
             {
                 container = container.CreateChildContainer();
                 var label = typeof(TargetLabel<>);
-                container.RegisterInstance(constraintType).AsSelf(label).AsBases(label);
+                container.RegisterInstance(constraintType)!.AsSelf(label).AsBases(label);
                 _result = container.Search<SerializeTypeSearcher>();
             }
             logger.Debug($"[{GetType()}] {parameter.Name}:{constraintType}={_result}");
         }
         
-        public TypeReference Search()
+        public TypeReference? Search()
         {
             return _result;
         }

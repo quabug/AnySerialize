@@ -31,7 +31,7 @@ namespace AnySerialize.CodeGen
             logger.Debug($"[{GetType()}] create search of {_targetType}");
         }
 
-        public TypeReference Search()
+        public TypeReference? Search()
         {
             if (!_targetType.IsGenericInstance || !_targetType.IsConcreteType() || _targetType.GetGenericParametersOrArgumentsCount() != 1)
                 throw new ArgumentException($"{nameof(_targetType)} must be a concrete generic instance with one and only one arguments.", nameof(_targetType));
@@ -39,15 +39,15 @@ namespace AnySerialize.CodeGen
             _logger.Debug($"[{GetType()}] search {_targetType}");
             
             var propertyType = _targetType.GetGenericParametersOrArguments().First();
-            TypeReference closestType = null;
-            TypeReference closestImplementation = null;
+            TypeReference? closestType = null;
+            TypeReference? closestImplementation = null;
             var closestPriority = int.MaxValue;
-            foreach (var (type, implementation) in FindTypes(_targetType, ((GenericInstanceType)_targetType).ElementType.GenericParameters[0]))
+            foreach (var (type, implementation) in FindTypes(_targetType, ((GenericInstanceType)_targetType).ElementType.GenericParameters[0]!))
             {
-                var priorityAttribute = type.Resolve().GetAttributesOf<AnySerializePriorityAttribute>().SingleOrDefault();
-                var priority = priorityAttribute == null ? 0 : (int)priorityAttribute.ConstructorArguments[0].Value;
+                var priorityAttribute = type.Resolve()!.GetAttributesOf<AnySerializePriorityAttribute>().SingleOrDefault();
+                var priority = priorityAttribute == null ? 0 : (int)priorityAttribute.ConstructorArguments![0].Value;
                 if (priority > closestPriority) continue;
-                if (!IsCloserImplementation(closestImplementation, implementation, propertyType)) continue;
+                if (closestPriority == priority && !IsCloserImplementation(closestImplementation, implementation, propertyType)) continue;
                 
                 var concreteType = _container.CreateConcreteTypeFrom(type);
                 if (concreteType == null) continue;
@@ -60,18 +60,18 @@ namespace AnySerialize.CodeGen
             }
             return closestType;
 
-            bool IsCloserImplementation(TypeReference previous, TypeReference current, TypeReference target)
+            bool IsCloserImplementation(TypeReference? previous, TypeReference? current, TypeReference target)
             {
                 if (previous == null || previous.IsGenericParameter) return true;
                 if (current == null || current.IsGenericParameter) return false;
                 if (previous.TypeEquals(current)) return true;
                 if (previous is ArrayType previousArray && current is ArrayType currentArray && target is ArrayType targetArray)
-                    return IsCloserImplementation(previousArray.ElementType, currentArray.ElementType, targetArray.ElementType);
+                    return IsCloserImplementation(previousArray.ElementType, currentArray.ElementType, targetArray.ElementType!);
                 if (current.IsArray && target.IsArray) return true;
                 
-                var previousDefinition = previous.Resolve();
-                var currentDefinition = current.Resolve();
-                var targetDefinition = target.Resolve();
+                var previousDefinition = previous.Resolve()!;
+                var currentDefinition = current.Resolve()!;
+                var targetDefinition = target.Resolve()!;
                 var previousDistance = TypeHierarchyDistance(previousDefinition, target) ?? TypeHierarchyDistance(targetDefinition, previous);
                 var currentDistance = TypeHierarchyDistance(currentDefinition, target) ?? TypeHierarchyDistance(targetDefinition, current);
                 if (!previousDistance.HasValue && !currentDistance.HasValue) return true;
