@@ -14,33 +14,32 @@ namespace AnySerialize
     {
         public static readonly BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         
-        [Pure, ItemNotNull]
-        public static T[] Reorder<T>(this T[] array, IEnumerable<int> newIndices)
+        [Pure]
+        public static IReadOnlyList<FieldInfo> GetOrderedFields<T>()
         {
-            var newArray = new T[array.Length];
-            var index = 0;
-            foreach (var newIndex in newIndices)
+            return GetOrderedFields(typeof(T));
+        }
+
+        [Pure, ItemNotNull]
+        public static IReadOnlyList<T> Reorder<T>([ItemNotNull] IEnumerable<T> items, Func<T, int?> getOrder)
+        {
+            var orderedItems = new List<T>();
+            var sortedCache = new SortedList<int, T>();
+            foreach (var item in items)
             {
-                if (array[index] == null) throw new ArgumentException($"element of {nameof(array)} cannot be null", nameof(array));
-                newArray[newIndex] = array[index];
-                index++;
+                var order = getOrder(item);
+                if (order.HasValue) sortedCache.Add(order.Value, item);
+                else orderedItems.Add(item);
             }
-            if (index != array.Length)
-                throw new ArgumentException($"{nameof(array)}({array.Length}) and {nameof(newIndices)}({index}) must have same count of elements", nameof(newIndices));
-            return array;
+            foreach (var (order, item) in sortedCache) orderedItems.Insert(order, item);
+            return orderedItems;
         }
 
         [Pure]
-        public static FieldInfo[] GetOrderedFields<T>()
+        public static IReadOnlyList<FieldInfo> GetOrderedFields(Type type)
         {
-            var fields = typeof(T).GetFields(DefaultBindingFlags);
-            var newIndices = fields
-                .Select((f, i) => (index: i, order: f.GetCustomAttribute<AnySerializeFieldOrderAttribute>()?.Order ?? i))
-                .OrderBy(t => t.order)
-                .Select(t => t.index)
-            ;
-            fields = fields.Reorder(newIndices);
-            return fields;
+            var fields = type.GetFields(DefaultBindingFlags);
+            return Reorder(fields, field => field.GetCustomAttribute<AnySerializeFieldOrderAttribute>()?.Order);
         }
     }
 }

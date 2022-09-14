@@ -20,7 +20,7 @@ namespace AnySerialize.Tests
 
         FieldTypeSearcher CreateSearcher(string fieldDeclaringTypeParameterName, string parameterName, GenericInstanceType genericType)
         {
-            return new FieldTypeSearcher(_logger, _module, fieldDeclaringTypeParameterName, genericType, new GenericParameter(parameterName, genericType.Resolve()));
+            return new FieldTypeSearcher(_logger, fieldDeclaringTypeParameterName, genericType, new GenericParameter(parameterName, genericType.Resolve()));
         }
         
         [Test]

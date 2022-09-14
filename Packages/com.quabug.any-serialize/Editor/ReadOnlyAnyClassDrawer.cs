@@ -45,7 +45,7 @@ namespace AnySerialize.Editor
             property.serializedObject.Update();
             
             var classType = property.GetFieldsByPath().Last().field.GetType().GenericTypeArguments[0];
-            var fields = classType.GetFields(AnyClassUtility.DefaultBindingFlags);
+            var fields = AnyClassUtility.GetOrderedFields(classType);
             var fieldIndex = 0;
             var end = property.GetEndProperty(includeInvisible: false);
             property.NextVisible(enterChildren: true);
