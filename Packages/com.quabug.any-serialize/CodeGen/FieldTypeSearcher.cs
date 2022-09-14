@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using AnyProcessor.CodeGen;
 using Mono.Cecil;
-using NUnit.Framework;
 using OneShot;
 
 namespace AnySerialize.CodeGen
