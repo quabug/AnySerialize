@@ -5,7 +5,7 @@ namespace AnySerialize
 {
     public class CycleClasses : MonoBehaviour
     {
-        [Serializable]
+        [Serializable, AnySerializable]
         public class SelfCycle
         {
             public int Int;
@@ -14,7 +14,7 @@ namespace AnySerialize
 
         [AnySerialize(typeof(AnyValue<SelfCycle>))] public SelfCycle Self { get; }
         
-        [Serializable]
+        [AnySerializable]
         public class SelfCycle2
         {
             public int Int;

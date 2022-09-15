@@ -162,23 +162,30 @@ MonoBehaviour:
       _value: 2230
     _field1:
       <Value>k__BackingField:
-        rid: 1828758670502264985
+        rid: 1828758672445276160
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1828758670502264985
+    - rid: 1828758672445276160
       type: {class: CycleClasses/SelfCycle2, ns: AnySerialize, asm: AnySerialize.Samples}
       data:
-        Int: 78
+        Int: 123
         <Self2>k__BackingField:
           <Value>k__BackingField:
-            rid: 1828758670502264986
-    - rid: 1828758670502264986
+            rid: 1828758672445276161
+    - rid: 1828758672445276161
       type: {class: CycleClasses/SelfCycle2, ns: AnySerialize, asm: AnySerialize.Samples}
       data:
-        Int: 36
+        Int: 44
+        <Self2>k__BackingField:
+          <Value>k__BackingField:
+            rid: 1828758672445276162
+    - rid: 1828758672445276162
+      type: {class: CycleClasses/SelfCycle2, ns: AnySerialize, asm: AnySerialize.Samples}
+      data:
+        Int: 2222
         <Self2>k__BackingField:
           <Value>k__BackingField:
             rid: -2
