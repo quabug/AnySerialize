@@ -56,17 +56,20 @@ namespace AnySerialize.CodeGen
             return container.CreateSearcher(typeof(T), instances!).Search();
         }
 
-        private static ITypeSearcher CreateSearcher(this Container container, CustomAttribute attribute, IEnumerable<(object instance, Type? label)> instances)
+        private static ITypeSearcher CreateSearcher(this Container container, ICustomAttribute attribute, IEnumerable<(object instance, Type? label)> instances)
         {
             var searcher = _value[attribute.AttributeType!.FullName];
             container = container.CreateChildContainer();
             container.RegisterInstance(container)!.AsSelf();
             
-            foreach (var attributeArgument in attribute.ConstructorArguments!) container.RegisterInstance(attributeArgument.Value)!
-                .AsSelf(typeof(AttributeLabel<>))
-                .AsBases(typeof(AttributeLabel<>))
-                .AsInterfaces(typeof(AttributeLabel<>))
-            ;
+            foreach (var attributeArgumentValue in attribute.ConstructorArguments!.Select(arg => arg.Value).Where(value => value != null))
+            {
+                container.RegisterInstance(attributeArgumentValue)!
+                    .AsSelf(typeof(AttributeLabel<>))
+                    .AsBases(typeof(AttributeLabel<>))
+                    .AsInterfaces(typeof(AttributeLabel<>))
+                ;
+            }
             
             foreach (var (instance, label) in instances) container.RegisterInstance(instance)!.AsSelf(label).AsBases(label).AsInterfaces(label);
             return (ITypeSearcher)container.Instantiate(searcher!)!;

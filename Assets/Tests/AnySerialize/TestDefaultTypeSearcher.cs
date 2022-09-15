@@ -54,6 +54,7 @@ namespace AnySerialize.Tests
             AssertTypeEqual<AnyValue_Int64>(SearchReadOnly<long>());
         }
 
+        [AnySerializable]
         class A
         {
             public int ReadWriteField;

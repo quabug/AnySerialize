@@ -46,5 +46,13 @@ namespace AnySerialize.CodeGen
             return genericType;
         }
         
+        public static TypeReference CreateAnySerializePropertyType(this PropertyDefinition property, ILPostProcessorLogger? logger = null)
+        {
+            var isReadOnly = property.SetMethod == null;
+            var baseType = isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>);
+            var baseTypeReference = property.Module.ImportReference(baseType);
+            logger?.Info($"create property {baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
+            return baseTypeReference.MakeGenericInstanceType(property.PropertyType);
+        }
     }
 }
