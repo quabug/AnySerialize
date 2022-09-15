@@ -18,14 +18,16 @@ namespace AnySerialize.CodeGen
 
         public SerializeTypeSearcher(
             Container container,
+            ModuleDefinition module,
             TypeTree typeTree,
             [Inject(typeof(TargetLabel<>))] TypeReference targetType,
-            ILPostProcessorLogger logger
+            ILPostProcessorLogger logger,
+            [Inject(typeof(AttributeLabel<>))] TypeReference? baseType = null
         )
         {
             _container = container;
             _typeTree = typeTree;
-            _targetType = targetType;
+            _targetType = baseType ?? targetType;
             _logger = logger;
             logger.Debug($"[{GetType()}] create search of {_targetType}");
         }
@@ -35,9 +37,10 @@ namespace AnySerialize.CodeGen
             if (!_targetType.IsGenericInstance || !_targetType.IsConcreteType() || _targetType.GetGenericParametersOrArgumentsCount() != 1)
                 throw new ArgumentException($"{nameof(_targetType)} must be a concrete generic instance with one and only one arguments.", nameof(_targetType));
             
-            _logger.Debug($"[{GetType()}] search {_targetType}");
-            
             var propertyType = _targetType.GetGenericParametersOrArguments().First();
+            
+            _logger.Debug($"[{GetType()}] search {_targetType}({propertyType})");
+            
             TypeReference? closestType = null;
             TypeReference? closestImplementation = null;
             var closestPriority = int.MaxValue;
@@ -95,8 +98,9 @@ namespace AnySerialize.CodeGen
                 return null;
             }
 
-            IEnumerable<(TypeReference type, TypeReference typeGeneric)> FindTypes(TypeReference target, TypeReference targetGeneric)
+            IEnumerable<(TypeReference type, TypeReference? implementation)> FindTypes(TypeReference target, TypeReference targetGeneric)
             {
+                yield return (target, null);
                 foreach (var (type, implementation) in _typeTree.GetOrCreateDirectDerivedReferences(target))
                 {
                     if (implementation is GenericInstanceType genericImplementation)
