@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AnySerialize
 {
+    [AnySerializable]
     public class AnyKeyValuePair<TKey, TValue>
     {
         public TKey Key { get; }

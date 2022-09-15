@@ -54,31 +54,19 @@ namespace AnySerialize.CodeGen
             
             void GenerateField(PropertyDefinition property, CustomAttribute attribute)
             {
-                var propertyType = CreatePropertyType();
-                processor.Logger.Info($"property type: {propertyType.FullName}");
+                var propertyType = property.CreateAnySerializePropertyType(processor.Logger);
+                processor.Logger.Info($"property type: {propertyType}({string.Join(",", attribute.ConstructorArguments!.Select(a => a.Value))})");
                 var fieldType = container.Search(
                     attribute,
                     (propertyType, typeof(TargetLabel<>))
                 );
-                processor.Logger.Debug($"field type: {fieldType.FullName}");
+                processor.Logger.Debug($"field type: {fieldType}");
                 fieldType = processor.Module.ImportReference(fieldType);
                 var serializedField = property.CreateOrReplaceBackingField(fieldType);
                 serializedField.AddCustomAttribute<SerializeField>(property.Module);
                 processor.Logger.Info($"serialize field type: {serializedField.FullName}");
                 property.ReplacePropertyGetterByFieldMethod(serializedField, "get_Value", processor.Logger);
                 if (property.SetMethod != null) property.ReplacePropertySetterByFieldMethod(serializedField, "set_Value");
-            
-                TypeReference CreatePropertyType()
-                {
-                    var isReadOnly = property.SetMethod == null;
-                    var baseType = isReadOnly ? typeof(IReadOnlyAny<>) : typeof(IAny<>);
-                    Assert.IsTrue(typeof(IAny<>).IsAssignableFrom(baseType) || typeof(IReadOnlyAny<>).IsAssignableFrom(baseType));
-                    var baseTypeReference = processor.Module.ImportReference(baseType);
-                    processor.Logger.Info($"create property {baseTypeReference.FullName}<{string.Join(",", baseTypeReference.GenericParameters.Select(g => g.Name))}> {property.FullName}");
-                    // TODO: only support base type with one and only one property type parameter?
-                    Assert.IsTrue(baseTypeReference.GenericParameters.Count == 1);
-                    return baseTypeReference.MakeGenericInstanceType(property.PropertyType);
-                }
             }
         }
     }

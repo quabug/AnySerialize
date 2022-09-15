@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7557180844171351635}
   - component: {fileID: 7557180844171351634}
+  - component: {fileID: 2050478359041717691}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -27,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -43,4 +45,147 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b255ee690891d1c46b8f93dcd95e33c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  '[A] IntValue': 40
+  <IntValue>k__BackingField:
+    _value: 123
+  <IntValueRO>k__BackingField:
+    _value: 321
+  <DictionaryStringInt>k__BackingField:
+    _pairs:
+    - _field0:
+        _value: fdafda
+      _field1:
+        _value: 213
+    - _field0:
+        _value: fg1213
+      _field1:
+        _value: 34312
+  <DictionaryStringDict>k__BackingField:
+    _pairs:
+    - _field0:
+        _value: 3213
+      _field1:
+        _pairs:
+        - _field0:
+            _value: gfda
+          _field1:
+            _value: fdafda
+  <AnyStringArray2>k__BackingField:
+    _value:
+    - _value:
+      - jkfjkl123
+      - fjio321
+    - _value:
+      - frewr
+  <AnyIntArray3>k__BackingField:
+    _value:
+    - _value:
+      - _value: 03000000bc010000
+    - _value:
+      - _value: 7b00000041010000
+      - _value: 030000000200000001000000
+  <AnyClassArray>k__BackingField:
+    _value:
+    - _field0:
+        _value: 321
+      _field1:
+        _value: 123
+  <A>k__BackingField:
+    _field0:
+      _value: 12333
+    _field1:
+      _value: 3333
+  <B>k__BackingField:
+    _field0:
+      _value: 1
+    _field1:
+      _value: 0200000003000000
+    _field2:
+      _value:
+      - _value: 0400000005000000
+    _field3:
+      _value: 123.321
+  <BB>k__BackingField:
+    _field0:
+      _value: 0600000007000000
+    _field1:
+      _value:
+      - _value: 04000000
+      - _value: 05000000
+    _field2:
+      _value:
+      - _value:
+        - _value: 01000000
+        - _value: 0200000003000000
+    _field3:
+      _value: 432321
+  <Vector2>k__BackingField:
+    _value: {x: 123, y: 123123}
+  <Record>k__BackingField:
+    _field0:
+      _value: 5423321
+  <LazyInt>k__BackingField:
+    _value:
+      _value: 321312
+  <LazyIntArray>k__BackingField:
+    _value:
+      _value: e1100000c9140000
+  <LazyDictIntLongArray>k__BackingField:
+    _value:
+      _pairs:
+      - _field0:
+          _value: 22222
+        _field1:
+          _value: e110000000000000211b420000000000
+      - _field0:
+          _value: 111
+        _field1:
+          _value: f3e0010000000000
+  <IntValueROWithoutBacking>k__BackingField:
+    _value: 333
+--- !u!114 &2050478359041717691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7557180844171351637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9752afb77b5043a7b59b931ca0525b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Self>k__BackingField:
+    _value:
+      Int: 1064
+  <Self2>k__BackingField:
+    _field0:
+      _value: 2230
+    _field1:
+      <Value>k__BackingField:
+        rid: 1828758672445276160
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1828758672445276160
+      type: {class: CycleClasses/SelfCycle2, ns: AnySerialize, asm: AnySerialize.Samples}
+      data:
+        Int: 123
+        <Self2>k__BackingField:
+          <Value>k__BackingField:
+            rid: 1828758672445276161
+    - rid: 1828758672445276161
+      type: {class: CycleClasses/SelfCycle2, ns: AnySerialize, asm: AnySerialize.Samples}
+      data:
+        Int: 44
+        <Self2>k__BackingField:
+          <Value>k__BackingField:
+            rid: 1828758672445276162
+    - rid: 1828758672445276162
+      type: {class: CycleClasses/SelfCycle2, ns: AnySerialize, asm: AnySerialize.Samples}
+      data:
+        Int: 2222
+        <Self2>k__BackingField:
+          <Value>k__BackingField:
+            rid: -2
