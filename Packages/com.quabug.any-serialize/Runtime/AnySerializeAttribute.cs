@@ -45,4 +45,7 @@ namespace AnySerialize
         public int Value { get; }
         public AnySerializePriorityAttribute(int value) => Value = value;
     }
+    
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    public class AnySerializableAttribute : Attribute {}
 }

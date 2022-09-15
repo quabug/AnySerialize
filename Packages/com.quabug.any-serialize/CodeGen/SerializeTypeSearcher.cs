@@ -12,6 +12,7 @@ namespace AnySerialize.CodeGen
     internal class SerializeTypeSearcher : ITypeSearcher<AnySerializeAttribute>
     {
         private readonly Container _container;
+        private readonly ModuleDefinition _module;
         private readonly TypeTree _typeTree;
         private readonly TypeReference _targetType;
         private readonly ILPostProcessorLogger _logger;
@@ -26,6 +27,7 @@ namespace AnySerialize.CodeGen
         )
         {
             _container = container;
+            _module = module;
             _typeTree = typeTree;
             _targetType = baseType ?? targetType;
             _logger = logger;
@@ -38,14 +40,18 @@ namespace AnySerialize.CodeGen
                 throw new ArgumentException($"{nameof(_targetType)} must be a concrete generic instance with one and only one arguments.", nameof(_targetType));
             
             var propertyType = _targetType.GetGenericParametersOrArguments().First();
+            var isAnySerializable = propertyType.Resolve().GetAttributesOf<AnySerializableAttribute>().Any();
+            var anyClassInterface = _module.ImportReference(typeof(IReadOnlyAnyClass<>)).Resolve();
             
             _logger.Debug($"[{GetType()}] search {_targetType}({propertyType})");
             
             TypeReference? closestType = null;
             TypeReference? closestImplementation = null;
             var closestPriority = int.MaxValue;
-            foreach (var (type, implementation) in FindTypes(_targetType, ((GenericInstanceType)_targetType).ElementType.GenericParameters[0]!))
+            foreach (var (type, implementation) in FindTypes(_targetType, ((GenericInstanceType)_targetType).ElementType.GenericParameters[0]!).Append((_targetType, null)))
             {
+                if (!isAnySerializable && type.Resolve().IsDerivedFrom(anyClassInterface)) continue;
+                
                 var priorityAttribute = type.Resolve()!.GetAttributesOf<AnySerializePriorityAttribute>().SingleOrDefault();
                 var priority = priorityAttribute == null ? 0 : (int)priorityAttribute.ConstructorArguments![0].Value;
                 if (priority > closestPriority) continue;
@@ -100,7 +106,6 @@ namespace AnySerialize.CodeGen
 
             IEnumerable<(TypeReference type, TypeReference? implementation)> FindTypes(TypeReference target, TypeReference targetGeneric)
             {
-                yield return (target, null);
                 foreach (var (type, implementation) in _typeTree.GetOrCreateDirectDerivedReferences(target))
                 {
                     if (implementation is GenericInstanceType genericImplementation)

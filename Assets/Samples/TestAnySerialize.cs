@@ -60,7 +60,7 @@ namespace AnySerialize
     public interface IB {}
     public interface IB<T> : IB {}
 
-    [Serializable]
+    [AnySerializable]
     public class A
     {
         public int Int;
@@ -73,7 +73,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable]
+    [AnySerializable]
     public class B<T> : IB<T>
     {
         [field: AnySerializeFieldOrder(3)]
@@ -88,7 +88,7 @@ namespace AnySerialize
         }
     }
     
-    [Serializable]
+    [AnySerializable]
     public record R
     {
         public int Int { get; } = 123;
