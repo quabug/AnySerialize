@@ -42,6 +42,11 @@ namespace AnySerialize
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public class AnySerializePriorityAttribute : Attribute
     {
+        public const int DefaultPriority = 0;
+        public const int AnyArrayPriority = 10000;
+        public const int AnyClassPriority = 50000;
+        public const int AnyValuePriority = 100000;
+            
         public int Value { get; }
         public AnySerializePriorityAttribute(int value) => Value = value;
     }
