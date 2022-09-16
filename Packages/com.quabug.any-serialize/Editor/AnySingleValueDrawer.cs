@@ -18,12 +18,8 @@ namespace AnySerialize.Editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            property.serializedObject.Update();
-            
             property.NextVisible(enterChildren: true);
             EditorGUI.PropertyField(position, property, label, includeChildren: true);
-            
-            property.serializedObject.ApplyModifiedProperties();
         }
     }
 }

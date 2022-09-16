@@ -15,7 +15,6 @@ namespace AnySerialize.Editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            property.serializedObject.Update();
             property.NextVisible(enterChildren: true);
 
             var hasValue = property.managedReferenceValue != null;
@@ -36,8 +35,6 @@ namespace AnySerialize.Editor
                 var type = Type.GetType($"{names[1]}, {names[0]}");
                 property.managedReferenceValue = Activator.CreateInstance(type);
             }
-            
-            property.serializedObject.ApplyModifiedProperties();
         }
     }
 }

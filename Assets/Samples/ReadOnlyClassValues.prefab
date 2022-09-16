@@ -83,20 +83,23 @@ MonoBehaviour:
       - 1
   <PlainNullable>k__BackingField:
     <Value>k__BackingField:
-      rid: 1828758672445276197
+      rid: 1828758672445276200
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1828758672445276197
-      type: {class: PlainClass, ns: AnySerialize, asm: AnySerialize.Samples}
-      data:
-        Int: 0
-        Float: 0
-        DoubleArray: []
     - rid: 1828758672445276199
       type: {class: Class, ns: AnySerialize, asm: AnySerialize.Samples}
       data:
         Int: 0
         Float: 0
+    - rid: 1828758672445276200
+      type: {class: PlainClass, ns: AnySerialize, asm: AnySerialize.Samples}
+      data:
+        Int: 22
+        Float: 33
+        DoubleArray:
+        - 44
+        - 55
+        - 66
