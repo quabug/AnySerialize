@@ -98,5 +98,13 @@ namespace AnySerialize.Tests
         {
             AssertTypeEqual<ReadOnlyAnyLazy<int, AnyValue_Int32>>(SearchReadOnly<Lazy<int>>());
         }
+        
+#if UNITY_EDITOR
+        [Test]
+        public void should_find_replace_type_for_gameobject()
+        {
+            AssertTypeEqual<AnyValue_Object<UnityEngine.GameObject>>(SearchReadOnly<UnityEngine.GameObject>());
+        }
+#endif
     }
 }

@@ -57,9 +57,14 @@ namespace AnyProcessor.CodeGen
             while (!methodReference.DeclaringType.Resolve().TypeEquals(declaringType.Resolve()))
             {
                 logger?.Debug($"[{nameof(GetMethodReference)}] find {method.DeclaringType} {declaringType.Resolve()}:{declaringType.Resolve()!.BaseType}");
-                declaringType = declaringType.Resolve()!.BaseType;
+                var baseType = declaringType.Resolve()!.BaseType;
+                declaringType = declaringType is GenericInstanceType genericDeclaringType
+                    ? baseType.FillGenericTypesByReferenceGenericName(genericDeclaringType)
+                    : baseType
+                ;
             }
             
+            logger?.Debug($"[{nameof(GetMethodReference)}] {declaringType}<{string.Join(",", ((GenericInstanceType)declaringType).GenericArguments)}>");
             var parameters = ((GenericInstanceType)declaringType).GenericArguments.Select(argument => type.Module!.ImportReference(argument));
             logger?.Debug($"[{nameof(GetMethodReference)}] {declaringType}<{string.Join(",", parameters.Select(p => p.Name))}>");
             return methodReference.CreateGenericMethodReference(parameters.ToArray(), logger);
