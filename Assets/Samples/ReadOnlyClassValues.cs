@@ -65,12 +65,7 @@ namespace AnySerialize
 
         private void Awake()
         {
-            Debug.Log($"-------------------------{nameof(ReadOnlyClassValues)}---------------------------");
-            Debug.Log($"{nameof(Foo)}={Foo}");
-            Debug.Log($"{nameof(GenericClass)}={GenericClass}");
-            Debug.Log($"{nameof(AnotherClass)}={AnotherClass}");
-            Debug.Log($"{nameof(Plain)}={Plain}");
-            Debug.Log($"{nameof(PlainNullable)}={(PlainNullable == null ? "null" : PlainNullable.ToString())}");
+            this.JsonLog();
         }
     }
 }

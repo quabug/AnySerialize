@@ -89,12 +89,70 @@ MonoBehaviour:
           _field1:
             _value: 7
   <DictArray>k__BackingField:
-    _pairs: []
+    _pairs:
+    - _field0:
+        _value: 33
+      _field1:
+        _value:
+        - 1
+        - 2
+        - 3
+    - _field0:
+        _value: 22
+      _field1:
+        _value:
+        - 123
+        - 321
   <DictList>k__BackingField:
-    _pairs: []
+    _pairs:
+    - _field0:
+        _value: 444
+      _field1:
+        _value: 01000000020000000300000004000000
+    - _field0:
+        _value: 2
+      _field1:
+        _value: 3700000042000000
   <IDict>k__BackingField:
-    _pairs: []
+    _pairs:
+    - _field0:
+        _value: 111
+      _field1:
+        _value: 222
+    - _field0:
+        _value: 333
+      _field1:
+        _value: 444
   <ReadOnlyDict>k__BackingField:
-    _pairs: []
+    _pairs:
+    - _field0:
+        _value: 1
+      _field1:
+        _value: 2
+    - _field0:
+        _value: 3
+      _field1:
+        _value: 4
+    - _field0:
+        _value: 5
+      _field1:
+        _value: 6
   <PlainClasses>k__BackingField:
-    _pairs: []
+    _pairs:
+    - _field0:
+        _value: 1
+      _field1:
+        _value:
+          Int: 123
+          Float: 234
+          DoubleArray:
+          - 111
+    - _field0:
+        _value: 2
+      _field1:
+        _value:
+          Int: 123
+          Float: 234
+          DoubleArray:
+          - 345
+          - 456

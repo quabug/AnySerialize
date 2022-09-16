@@ -14,18 +14,10 @@ namespace AnySerialize
         [AnySerialize] public long Long => throw new NotImplementedException();
         [AnySerialize] public string String => throw new NotImplementedException();
 
-        private static readonly Regex _backingFieldName = new(@"<(\w*)>k__BackingField");
 
         private void Awake()
         {
-            Debug.Log($"-------------------------{nameof(ReadOnlySimpleValues)}---------------------------");
-            var type = GetType();
-            foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
-            {
-                var propertyName = _backingFieldName.Match(field.Name).Groups[1].Value;
-                var property = type.GetProperty(propertyName)!;
-                Debug.Log($"{property.Name}:{field.FieldType} = {property.GetValue(this)}");
-            }
+            this.JsonLog();
         }
     }
 }

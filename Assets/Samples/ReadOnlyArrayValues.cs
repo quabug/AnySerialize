@@ -16,14 +16,7 @@ namespace AnySerialize
 
         private void Awake()
         {
-            Debug.Log($"-------------------------{nameof(ReadOnlyArrayValues)}---------------------------");
-            Debug.Log($"{nameof(IntArray)} = {string.Join(",", IntArray)}");
-            Debug.Log($"{nameof(IntArray2)} = {string.Join(",", IntArray2.SelectMany(arr => arr))}");
-            Debug.Log($"{nameof(LongListArray)} = {string.Join(",", LongListArray.SelectMany(arr => arr))}");
-            Debug.Log($"{nameof(DictionaryArray)} = {string.Join(",", DictionaryArray.SelectMany(dict => dict.Select(t => $"{{ {t.Key}=>{t.Value} }}")))}");
-            Debug.Log($"{nameof(StringArray3)} = {string.Join(",", StringArray3.SelectMany(arr2 => arr2).SelectMany(arr => arr))}");
-            Debug.Log($"{nameof(StringReadOnlyList)} = {string.Join(",", StringReadOnlyList.Select(arr => arr))}");
-            Debug.Log($"{nameof(PlainClasses2)} = {string.Join(",", PlainClasses2.SelectMany(arr => arr))}");
+            this.JsonLog();
         }
     }
 }
