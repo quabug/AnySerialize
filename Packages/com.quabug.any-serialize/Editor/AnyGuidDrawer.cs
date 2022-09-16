@@ -17,7 +17,7 @@ namespace AnySerialize.Editor
         {
             property.NextVisible(enterChildren: true);
             var buttonWidth = 40;
-            var propertyPosition = new Rect(position.x, position.y, position.width - buttonWidth * 1.5f, position.height);
+            var propertyPosition = new Rect(position.x, position.y, position.width - buttonWidth - 20, position.height);
             var buttonPosition = new Rect(position.width - buttonWidth, position.y, buttonWidth, position.height);
             EditorGUI.PropertyField(propertyPosition, property, label, includeChildren: true);
             if (GUI.Button(buttonPosition, "new")) property.stringValue = Guid.NewGuid().ToString();
