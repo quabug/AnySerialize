@@ -21,10 +21,10 @@ namespace AnySerialize.Editor
             var hasValue = property.managedReferenceValue != null;
             
             var toggleWidth = 20;
-            var togglePosition = new Rect(position.width - toggleWidth, position.y, toggleWidth, EditorGUIUtility.singleLineHeight);
+            var togglePosition = new Rect(position.width - EditorGUI.indentLevel * 15f, position.y, toggleWidth, EditorGUIUtility.singleLineHeight);
             var propertyPosition = new Rect(position.x, position.y, position.width - toggleWidth, position.height);
-            EditorGUI.PropertyField(propertyPosition, property, label, includeChildren: true);
             var isToggle = EditorGUI.Toggle(togglePosition, hasValue);
+            EditorGUI.PropertyField(propertyPosition, property, label, includeChildren: true);
             
             if (hasValue && !isToggle)
             {
