@@ -73,3 +73,12 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+  <GameObjectArray2>k__BackingField:
+    _value:
+    - _value:
+      - {fileID: 0}
+      - {fileID: 0}
+    - _value:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}

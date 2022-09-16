@@ -91,7 +91,7 @@ namespace AnyProcessor.CodeGen
         [Pure]
         public static bool IsMatchTypeConstraints(this TypeReference type)
         {
-            if (!(type is GenericInstanceType genericInstanceType)) return true;
+            if (type is not GenericInstanceType genericInstanceType) return true;
             return genericInstanceType.GenericArguments!
                 .Zip(genericInstanceType.ElementType!.GenericParameters!, (argument, parameter) => (argument, parameter))
                 .All(t => IsArgumentMatch(t.argument!, t.parameter!))
@@ -114,6 +114,9 @@ namespace AnyProcessor.CodeGen
         {
             if (derived.Resolve() == null) throw new ArgumentException("cannot resolve type", nameof(derived));
             if (@base.Resolve() == null) throw new ArgumentException("cannot resolve type", nameof(@base));
+            if (derived is ArrayType derivedArray && @base is ArrayType baseArray)
+                return derivedArray.ElementType.IsDerivedFrom(baseArray.ElementType);
+            if (derived.IsArray || @base.IsArray) return false;
             if (!derived.Resolve()!.IsDerivedFrom(@base.Resolve()!)) return false;
             if (derived.GetGenericParametersOrArgumentsCount() != @base.GetGenericParametersOrArgumentsCount()) return false;
             return derived.GetGenericParametersOrArguments()

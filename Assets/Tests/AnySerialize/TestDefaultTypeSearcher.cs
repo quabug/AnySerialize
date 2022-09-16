@@ -105,6 +105,18 @@ namespace AnySerialize.Tests
         {
             AssertTypeEqual<AnyValue_Object<UnityEngine.GameObject>>(SearchReadOnly<UnityEngine.GameObject>());
         }
+        
+        [Test]
+        public void should_find_replace_type_for_gameobject_array()
+        {
+            AssertTypeEqual<AnyArray_Object<UnityEngine.GameObject>>(SearchReadOnly<UnityEngine.GameObject[]>());
+        }
+        
+        [Test]
+        public void should_find_replace_type_for_gameobject_array2()
+        {
+            AssertTypeEqual<ReadOnlyAnyArray<UnityEngine.GameObject[], AnyArray_Object<UnityEngine.GameObject>>>(SearchReadOnly<UnityEngine.GameObject[][]>());
+        }
 #endif
     }
 }

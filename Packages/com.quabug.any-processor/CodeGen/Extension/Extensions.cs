@@ -64,7 +64,6 @@ namespace AnyProcessor.CodeGen
                 ;
             }
             
-            logger?.Debug($"[{nameof(GetMethodReference)}] {declaringType}<{string.Join(",", ((GenericInstanceType)declaringType).GenericArguments)}>");
             var parameters = ((GenericInstanceType)declaringType).GenericArguments.Select(argument => type.Module!.ImportReference(argument));
             logger?.Debug($"[{nameof(GetMethodReference)}] {declaringType}<{string.Join(",", parameters.Select(p => p.Name))}>");
             return methodReference.CreateGenericMethodReference(parameters.ToArray(), logger);
