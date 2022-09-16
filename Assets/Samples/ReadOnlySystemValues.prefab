@@ -63,3 +63,15 @@ MonoBehaviour:
         _hasValue: 0
         _value:
           _value: 0
+      _field3:
+        _hasValue: 1
+        _value:
+          _guid: d417809a-259f-4070-ba5b-0f0ac76cfa5d
+  <Guid>k__BackingField:
+    _guid: e1abca74-8de3-467e-917f-2fb297041819
+  <TimeSpan>k__BackingField:
+    _displayUnit: 5
+    _ticks: 315360000000000
+  <DateTime>k__BackingField:
+    _dateTimeKind: 2
+    _ticks: 637989535461090000
