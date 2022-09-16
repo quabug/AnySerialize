@@ -63,3 +63,9 @@ MonoBehaviour:
         _hasValue: 0
         _value:
           _value: 0
+      _field3:
+        _hasValue: 1
+        _value:
+          _guid: d417809a-259f-4070-ba5b-0f0ac76cfa5d
+  <Guid>k__BackingField:
+    _guid: e1abca74-8de3-467e-917f-2fb297041819
