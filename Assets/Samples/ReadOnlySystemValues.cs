@@ -19,6 +19,7 @@ namespace AnySerialize
         [AnySerialize] public Struct? NullableStruct { get; }
         [AnySerialize] public Guid Guid { get; }
         [AnySerialize] public TimeSpan TimeSpan { get; }
+        [AnySerialize] public DateTime DateTime { get; }
 
         private void Awake()
         {

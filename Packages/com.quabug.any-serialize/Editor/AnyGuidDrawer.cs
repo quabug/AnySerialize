@@ -9,8 +9,7 @@ namespace AnySerialize.Editor
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            property.NextVisible(enterChildren: true);
-            return EditorGUI.GetPropertyHeight(property, label, includeChildren: true);
+            return EditorGUIUtility.singleLineHeight;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -19,7 +18,7 @@ namespace AnySerialize.Editor
             var buttonWidth = 40;
             var propertyPosition = new Rect(position.x, position.y, position.width - buttonWidth - 20, position.height);
             var buttonPosition = new Rect(position.width - buttonWidth, position.y, buttonWidth, position.height);
-            EditorGUI.PropertyField(propertyPosition, property, label, includeChildren: true);
+            EditorGUI.PropertyField(propertyPosition, property, label);
             if (GUI.Button(buttonPosition, "new")) property.stringValue = Guid.NewGuid().ToString();
         }
     }

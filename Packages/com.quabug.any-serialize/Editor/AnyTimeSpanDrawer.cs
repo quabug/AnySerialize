@@ -9,8 +9,7 @@ namespace AnySerialize.Editor
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            property.FindPropertyRelative(nameof(AnyTimeSpan._ticks));
-            return EditorGUI.GetPropertyHeight(property, label, includeChildren: true);
+            return EditorGUIUtility.singleLineHeight;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
