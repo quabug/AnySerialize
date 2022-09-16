@@ -5,6 +5,8 @@ namespace AnySerialize.Editor
 {
     [CustomPropertyDrawer(typeof(AnyValue<>), true)]
     [CustomPropertyDrawer(typeof(ReadOnlyAnyArray<,>))]
+    [CustomPropertyDrawer(typeof(ReadOnlyAnyList<,>))]
+    [CustomPropertyDrawer(typeof(ReadOnlyAnyDictionary<,,>))]
     [CustomPropertyDrawer(typeof(ReadOnlyAnyLazy<,>))]
     public class AnySingleValueDrawer : PropertyDrawer
     {
