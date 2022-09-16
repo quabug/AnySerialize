@@ -109,3 +109,11 @@ MonoBehaviour:
     - _value:
       - _value: 55
       - _value: 44
+  <PlainClasses2>k__BackingField:
+    _value:
+    - _value:
+      - _value:
+          Int: 33
+          Float: 333
+          DoubleArray:
+          - 1111

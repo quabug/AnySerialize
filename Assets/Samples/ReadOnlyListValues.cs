@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -14,6 +13,7 @@ namespace AnySerialize
         [AnySerialize] public List<List<List<double>>> DoubleList3 { get; }
         [AnySerialize] public IList<string> StringIList { get; }
         [AnySerialize] public IList<IReadOnlyList<int>> IntReadOnlyListList { get; }
+        [AnySerialize] public List<List<PlainClass>> PlainClasses2 { get; }
 
         private void Awake()
         {
@@ -25,6 +25,7 @@ namespace AnySerialize
             Debug.Log($"{nameof(DoubleList3)} = {string.Join(",", DoubleList3.SelectMany(arr2 => arr2).SelectMany(arr => arr))}");
             Debug.Log($"{nameof(StringIList)} = {string.Join(",", StringIList)}");
             Debug.Log($"{nameof(IntReadOnlyListList)} = {string.Join(",", IntReadOnlyListList.SelectMany(arr => arr))}");
+            Debug.Log($"{nameof(PlainClasses2)} = {string.Join(",", PlainClasses2.SelectMany(arr => arr))}");
         }
     }
 }

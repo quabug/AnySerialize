@@ -93,3 +93,10 @@ MonoBehaviour:
     - _value: fdafdas
     - _value: 321312
     - _value: f3e12321
+  <PlainClasses2>k__BackingField:
+    _value:
+    - _value:
+      - _value:
+          Int: 0
+          Float: 0
+          DoubleArray: []
