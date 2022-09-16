@@ -34,6 +34,9 @@ namespace AnySerialize.CodeGen
             container.RegisterInstance(processor.Module).AsSelf();
             container.RegisterInstance(processor.Resolver).AsSelf();
             container.RegisterInstance(processor.TypeTree.Value).AsSelf();
+
+            var unityObjectDefinition = processor.Module.ImportReference(typeof(UnityEngine.Object)).Resolve();
+            
             processor.ProcessProperty += OnProcessProperty;
             var (pe, pdb) = processor.Process();
             var warnings = processor.Logger.Warnings.Select(msg => new DiagnosticMessage { DiagnosticType = DiagnosticType.Warning, MessageData = msg });
@@ -48,6 +51,13 @@ namespace AnySerialize.CodeGen
                     processor.Logger.Error($"Cannot process on property {propertyDefinition.DeclaringType.FullName}.{propertyDefinition.Name} without getter");
                     return false;
                 }
+
+                if (!propertyDefinition.DeclaringType.IsDerivedFrom(unityObjectDefinition))
+                {
+                    processor.Logger.Info("this processor will only running on properties of type derived from UnityEngine.Object");
+                    return false;
+                }
+                
                 GenerateField(propertyDefinition, attribute);
                 return true;
             }
