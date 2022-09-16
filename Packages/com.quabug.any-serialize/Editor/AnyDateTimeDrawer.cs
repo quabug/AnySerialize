@@ -23,25 +23,27 @@ namespace AnySerialize.Editor
             var propertyPosition = new Rect(labelPosition.width + 20, position.y, position.width, position.height);
             EditorGUI.LabelField(labelPosition, label);
             
-            var year = IntField(dateTime.Year, "Y", 4, min: 1);
-            var month = IntField(dateTime.Month, "M", 2, min: 1, max: 12);
-            var day = IntField(dateTime.Day, "D", 2, min: 1, max: 31);
-            var hour = IntField(dateTime.Hour, "H", 2, min: 0, max: 23);
-            var minute = IntField(dateTime.Minute, "M", 2, min: 0, max: 59);
-            var second = IntField(dateTime.Second, "S", 2, min: 0, max: 59);
-            var millisecond = IntField(dateTime.Millisecond, "MS", 3, min: 0, max: 999);
-
             var kindWidth = 50;
             propertyPosition.width = kindWidth;
             EditorGUI.PropertyField(propertyPosition, kind, new GUIContent());
-            
-            ticks.longValue = new DateTime(year, month, day, hour, minute, second, millisecond, kindEnum).Ticks;
-
             propertyPosition.x += kindWidth;
+            
+            var year = IntField(dateTime.Year, "Y", 4, min: 1);
+            var month = IntField(dateTime.Month, "M", 2, min: 1, max: 12);
+            var day = IntField(dateTime.Day, "D", 2, min: 1, max: 31);
+            var hour = IntField(dateTime.Hour, ":", 2, min: 0, max: 23);
+            var minute = IntField(dateTime.Minute, ":", 2, min: 0, max: 59);
+            var second = IntField(dateTime.Second, ".", 2, min: 0, max: 59);
+            var millisecond = IntField(dateTime.Millisecond, "", 3, min: 0, max: 999);
+
             if (GUI.Button(propertyPosition, "now"))
             {
                 ticks.longValue = DateTime.Now.Ticks;
                 kind.enumValueIndex = (int)DateTimeKind.Local;
+            }
+            else
+            {
+                ticks.longValue = new DateTime(year, month, day, hour, minute, second, millisecond, kindEnum).Ticks;
             }
 
             int IntField(int number, string name, int digits, int min = 0, int max = int.MaxValue)
