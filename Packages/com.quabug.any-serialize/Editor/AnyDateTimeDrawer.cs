@@ -25,6 +25,7 @@ namespace AnySerialize.Editor
             
             var kindWidth = 50;
             propertyPosition.width = kindWidth;
+            propertyPosition.x -= kindWidth;
             EditorGUI.PropertyField(propertyPosition, kind, new GUIContent());
             propertyPosition.x += kindWidth;
             
@@ -36,6 +37,7 @@ namespace AnySerialize.Editor
             var second = IntField(dateTime.Second, ".", 2, min: 0, max: 59);
             var millisecond = IntField(dateTime.Millisecond, "", 3, min: 0, max: 999);
 
+            propertyPosition.width = 40;
             if (GUI.Button(propertyPosition, "now"))
             {
                 ticks.longValue = DateTime.Now.Ticks;
