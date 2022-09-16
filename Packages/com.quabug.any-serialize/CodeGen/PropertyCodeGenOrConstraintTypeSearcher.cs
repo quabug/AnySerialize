@@ -8,7 +8,7 @@ namespace AnySerialize.CodeGen
 {
     public class PropertyCodeGenOrConstraintTypeSearcher : ITypeSearcher<AnyPropertyCodeGenOrConstraintTypeAttribute>
     {
-        private TypeReference? _result;
+        private readonly TypeReference? _result;
         
         public PropertyCodeGenOrConstraintTypeSearcher(
             ILPostProcessorLogger logger,
@@ -42,11 +42,9 @@ namespace AnySerialize.CodeGen
             ).ToArray();
             if (searcherFieldCount != fields.Length || fieldIndex < 0) return;
             
-            const string backingField = "k__BackingField";
             var attributeType = module.ImportReference(typeof(IAnyCodeGenAttribute))!;
             var field = fields[fieldIndex];
-            var propertyName = field.Name.EndsWith(backingField) ? field.Name.Substring(1, field.Name.Length - backingField.Length - 2) : null;
-            var property = declaringType.Resolve().Properties.FirstOrDefault(p => p.Name == propertyName);
+            var property = field.GetBackingFieldProperty();
             var codeGenAttribute = property?.CustomAttributes?.FirstOrDefault(attribute => attribute.AttributeType!.IsDerivedFrom(attributeType));
             
             var label = typeof(TargetLabel<>);

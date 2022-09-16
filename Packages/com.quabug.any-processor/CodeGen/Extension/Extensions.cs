@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 
 namespace AnyProcessor.CodeGen
 {
-    public static class CecilExtension
+    public static partial class Extension
     {
         public static string ToReadableName(this TypeReference type)
         {
@@ -245,6 +244,12 @@ namespace AnyProcessor.CodeGen
             instructions.Add(Instruction.Create(OpCodes.Ldarg_1));
             instructions.Add(Instruction.Create(OpCodes.Callvirt, setValueMethod!));
             instructions.Add(Instruction.Create(OpCodes.Ret));
+        }
+
+        public static PropertyDefinition? GetBackingFieldProperty(this FieldDefinition field)
+        {
+            var propertyName = field.Name!.EndsWith(BackingField) ? field.Name.Substring(1, field.Name.Length - BackingFieldLength - 2) : null;
+            return field.DeclaringType!.Properties!.FirstOrDefault(p => p.Name == propertyName);
         }
     }
 }

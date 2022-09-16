@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace AnyProcessor.CodeGen
 {
-    public static class EnumerableExtension
+    public static partial class Extension
     {
         [ItemNotNull]
         public static IEnumerable<T> Yield<T>(this T value)

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AnySerialize
 {
-    [Serializable, AnySerializePriority(5000)]
-    public class ReadOnlyAnyArray<T, [AnyConstraintType] TAny> : IReadOnlyAny<T[]> where TAny : IReadOnlyAny<T>
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyArrayPriority)]
+    public class ReadOnlyAnyArray<T, [AnyConstraintType] TAny> : IReadOnlyAny<T[]>, IReadOnlyAny<IReadOnlyList<T>>
+        where TAny : IReadOnlyAny<T>
     {
         [SerializeField] private TAny[] _value = default!;
         private T[] _cache = Array.Empty<T>();
@@ -20,5 +22,7 @@ namespace AnySerialize
                 return _cache;
             }
         }
+
+        IReadOnlyList<T> IReadOnlyAny<IReadOnlyList<T>>.Value => Value;
     }
 }

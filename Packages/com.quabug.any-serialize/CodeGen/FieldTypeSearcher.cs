@@ -33,12 +33,17 @@ namespace AnySerialize.CodeGen
             var fields =  AnyClassUtility.Reorder(
                 declaringType.Resolve()!.Fields.Where(field => !field.IsStatic),
                 field => (int?)field.GetAttributesOf<AnySerializeFieldOrderAttribute>().SingleOrDefault()?.ConstructorArguments[0].Value
-            ).Select(field => field.FieldType).ToArray();
+            ).ToArray();
             if (searcherFieldCount != fields.Length || fieldIndex < 0) return;
 
-            _fieldType = !fields[fieldIndex]!.IsConcreteType() && declaringType is GenericInstanceType genericInstanceType
-                ? fields[fieldIndex]!.FillGenericTypesByReferenceGenericName(genericInstanceType)
-                : fields[fieldIndex]!
+
+            var field = fields[fieldIndex];
+            var property = field.GetBackingFieldProperty();
+            var fieldType = property == null ? field.FieldType! : property.PropertyType!;
+
+            _fieldType = !fieldType.IsConcreteType() && declaringType is GenericInstanceType genericInstanceType
+                ? fieldType.FillGenericTypesByReferenceGenericName(genericInstanceType)
+                : fieldType
             ;
             logger.Debug($"[{GetType()}] {genericType}: {parameter.Name} = {_fieldType}");
         }

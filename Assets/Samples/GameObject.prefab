@@ -10,14 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 7557180844171351635}
   - component: {fileID: 7557180844171351634}
-  - component: {fileID: 2050478359041717691}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7557180844171351635
 Transform:
   m_ObjectHideFlags: 0
@@ -85,15 +84,13 @@ MonoBehaviour:
       - _value: 030000000200000001000000
   <AnyClassArray>k__BackingField:
     _value:
-    - _field0:
-        _value: 321
-      _field1:
-        _value: 123
+    - _value:
+        Int: 0
+        Float: 0
   <A>k__BackingField:
-    _field0:
-      _value: 12333
-    _field1:
-      _value: 3333
+    _value:
+      Int: 111
+      Float: 2222
   <B>k__BackingField:
     _field0:
       _value: 1
@@ -142,50 +139,3 @@ MonoBehaviour:
           _value: f3e0010000000000
   <IntValueROWithoutBacking>k__BackingField:
     _value: 333
---- !u!114 &2050478359041717691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7557180844171351637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9752afb77b5043a7b59b931ca0525b5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Self>k__BackingField:
-    _value:
-      Int: 1064
-  <Self2>k__BackingField:
-    _field0:
-      _value: 2230
-    _field1:
-      <Value>k__BackingField:
-        rid: 1828758672445276160
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 1828758672445276160
-      type: {class: CycleClasses/SelfCycle2, ns: AnySerialize, asm: AnySerialize.Samples}
-      data:
-        Int: 123
-        <Self2>k__BackingField:
-          <Value>k__BackingField:
-            rid: 1828758672445276161
-    - rid: 1828758672445276161
-      type: {class: CycleClasses/SelfCycle2, ns: AnySerialize, asm: AnySerialize.Samples}
-      data:
-        Int: 44
-        <Self2>k__BackingField:
-          <Value>k__BackingField:
-            rid: 1828758672445276162
-    - rid: 1828758672445276162
-      type: {class: CycleClasses/SelfCycle2, ns: AnySerialize, asm: AnySerialize.Samples}
-      data:
-        Int: 2222
-        <Self2>k__BackingField:
-          <Value>k__BackingField:
-            rid: -2

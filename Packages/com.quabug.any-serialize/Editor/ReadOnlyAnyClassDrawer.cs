@@ -42,8 +42,6 @@ namespace AnySerialize.Editor
             EditorGUI.PropertyField(position, property, label, includeChildren: false);
             if (!property.isExpanded) return;
             
-            property.serializedObject.Update();
-            
             var classType = property.GetFieldsByPath().Last().field.GetType().GenericTypeArguments[0];
             var fields = AnyClassUtility.GetOrderedFields(classType);
             var fieldIndex = 0;
@@ -63,8 +61,6 @@ namespace AnySerialize.Editor
                     fieldIndex++;
                 } while (property.NextVisible(enterChildren: false) && !SerializedProperty.EqualContents(property, end));
             }
-            
-            property.serializedObject.ApplyModifiedProperties();
         }
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AnySerialize
 {
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -28,7 +28,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -55,7 +55,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -85,7 +85,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -118,7 +118,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -154,7 +154,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -193,7 +193,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -235,7 +235,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -280,7 +280,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -328,7 +328,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -379,7 +379,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -433,7 +433,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyFieldType(nameof(T))] T11, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny11> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -490,7 +490,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyFieldType(nameof(T))] T11, [AnyFieldType(nameof(T))] T12, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny11, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny12> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -550,7 +550,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyFieldType(nameof(T))] T11, [AnyFieldType(nameof(T))] T12, [AnyFieldType(nameof(T))] T13, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny11, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny12, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny13> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -613,7 +613,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyFieldType(nameof(T))] T11, [AnyFieldType(nameof(T))] T12, [AnyFieldType(nameof(T))] T13, [AnyFieldType(nameof(T))] T14, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny11, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny12, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny13, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny14> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -679,7 +679,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyFieldType(nameof(T))] T11, [AnyFieldType(nameof(T))] T12, [AnyFieldType(nameof(T))] T13, [AnyFieldType(nameof(T))] T14, [AnyFieldType(nameof(T))] T15, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny11, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny12, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny13, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny14, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny15> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -748,7 +748,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyFieldType(nameof(T))] T11, [AnyFieldType(nameof(T))] T12, [AnyFieldType(nameof(T))] T13, [AnyFieldType(nameof(T))] T14, [AnyFieldType(nameof(T))] T15, [AnyFieldType(nameof(T))] T16, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny11, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny12, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny13, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny14, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny15, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny16> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -820,7 +820,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyFieldType(nameof(T))] T11, [AnyFieldType(nameof(T))] T12, [AnyFieldType(nameof(T))] T13, [AnyFieldType(nameof(T))] T14, [AnyFieldType(nameof(T))] T15, [AnyFieldType(nameof(T))] T16, [AnyFieldType(nameof(T))] T17, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny11, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny12, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny13, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny14, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny15, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny16, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny17> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -895,7 +895,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyFieldType(nameof(T))] T11, [AnyFieldType(nameof(T))] T12, [AnyFieldType(nameof(T))] T13, [AnyFieldType(nameof(T))] T14, [AnyFieldType(nameof(T))] T15, [AnyFieldType(nameof(T))] T16, [AnyFieldType(nameof(T))] T17, [AnyFieldType(nameof(T))] T18, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny11, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny12, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny13, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny14, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny15, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny16, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny17, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny18> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>
@@ -973,7 +973,7 @@ namespace AnySerialize
         }
     }
 
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T, [AnyFieldType(nameof(T))] T0, [AnyFieldType(nameof(T))] T1, [AnyFieldType(nameof(T))] T2, [AnyFieldType(nameof(T))] T3, [AnyFieldType(nameof(T))] T4, [AnyFieldType(nameof(T))] T5, [AnyFieldType(nameof(T))] T6, [AnyFieldType(nameof(T))] T7, [AnyFieldType(nameof(T))] T8, [AnyFieldType(nameof(T))] T9, [AnyFieldType(nameof(T))] T10, [AnyFieldType(nameof(T))] T11, [AnyFieldType(nameof(T))] T12, [AnyFieldType(nameof(T))] T13, [AnyFieldType(nameof(T))] T14, [AnyFieldType(nameof(T))] T15, [AnyFieldType(nameof(T))] T16, [AnyFieldType(nameof(T))] T17, [AnyFieldType(nameof(T))] T18, [AnyFieldType(nameof(T))] T19, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny1, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny2, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny3, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny4, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny5, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny6, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny7, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny8, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny9, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny10, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny11, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny12, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny13, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny14, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny15, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny16, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny17, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny18, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny19> : IReadOnlyAnyClass<T>
         where T : new()
         where TAny0 : IReadOnlyAny<T0>

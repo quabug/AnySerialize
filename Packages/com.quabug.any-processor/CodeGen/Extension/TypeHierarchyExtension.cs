@@ -5,7 +5,7 @@ using Mono.Cecil;
 
 namespace AnyProcessor.CodeGen
 {
-    public static class TypeHierarchyExtension
+    public static partial class Extension
     {
         [Pure]
         public static IEnumerable<TypeReference> GetInterfaces(this TypeDefinition type)

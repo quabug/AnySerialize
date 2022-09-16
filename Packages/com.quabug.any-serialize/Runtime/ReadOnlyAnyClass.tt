@@ -9,7 +9,7 @@ namespace AnySerialize
     for (var i = 1; i < 21; i++)
     {
 #>
-    [Serializable, AnySerializePriority(10000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyClass<T<# for (var n = 0; n < i; n++) { #>, [AnyFieldType(nameof(T))] T<#= n #><# } #><# for (var n = 0; n < i; n++) { #>, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny<#= n #><# } #>> : IReadOnlyAnyClass<T>
         where T : new()
 <#

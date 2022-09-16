@@ -8,8 +8,12 @@ using Mono.Cecil.Rocks;
 
 namespace AnyProcessor.CodeGen
 {
-    public static class ReflectionExtension
+    public static partial class Extension
     {
+        public static readonly string BackingField = "k__BackingField";
+        public static readonly int BackingFieldLength = BackingField.Length;
+        public static readonly Regex BackingFieldRegex = new(@"<(\w+)>"+BackingField);
+        
         [Pure]
         public static string ToReadableName(this Type type)
         {

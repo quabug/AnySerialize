@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AnySerialize
 {
-    [Serializable, AnySerializePriority(100000)]
+    [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyValuePriority)]
     public class AnyValue<T> : IAny<T>, IReadOnlyAny<T>
     {
         [SerializeField] private T _value = default!;

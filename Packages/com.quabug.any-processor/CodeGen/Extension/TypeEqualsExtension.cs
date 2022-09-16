@@ -5,7 +5,7 @@ using Mono.Cecil;
 
 namespace AnyProcessor.CodeGen
 {
-    public static class TypeEqualsExtension
+    public static partial class Extension
     {
         [Pure]
         public static bool TypeEquals(this TypeReference? lhs, TypeReference? rhs)

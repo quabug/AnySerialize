@@ -8,8 +8,8 @@ namespace AnySerialize
         where T : struct
         where TAny : IReadOnlyAny<T>
     {
-        [SerializeField] private bool _isNull = true;
-        [SerializeField] private TAny _value;
-        public T? Value => _isNull ? null : _value.Value;
+        [SerializeField] private bool _hasValue = true;
+        [SerializeField] private TAny _value = default!;
+        public T? Value => _hasValue ? _value.Value : null;
     }
 }

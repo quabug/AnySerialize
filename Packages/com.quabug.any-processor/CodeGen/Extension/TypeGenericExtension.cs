@@ -7,7 +7,7 @@ using Mono.Cecil.Rocks;
 
 namespace AnyProcessor.CodeGen
 {
-    public static class TypeGenericExtension
+    public static partial class Extension
     {
         [Pure]
         public static bool IsConcreteType(this TypeReference type)

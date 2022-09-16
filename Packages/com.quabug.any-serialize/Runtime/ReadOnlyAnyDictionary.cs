@@ -7,12 +7,12 @@ namespace AnySerialize
     [AnySerializable]
     public class AnyKeyValuePair<TKey, TValue>
     {
-        public TKey Key { get; }
-        public TValue Value { get; }
+        public TKey Key { get; } = default!;
+        public TValue Value { get; } = default!;
     }
     
     [Serializable]
-    public class ReadOnlyAnyDictionary<TKey, TValue, [AnyConstraintType] TAnyPair> : IReadOnlyAny<Dictionary<TKey, TValue>>
+    public class ReadOnlyAnyDictionary<TKey, TValue, [AnyConstraintType] TAnyPair> : IReadOnlyAny<Dictionary<TKey, TValue>>, IReadOnlyAny<IDictionary<TKey, TValue>>, IReadOnlyAny<IReadOnlyDictionary<TKey, TValue>>
         where TAnyPair : IReadOnlyAnyClass<AnyKeyValuePair<TKey, TValue>>
     {
         [SerializeField] private List<TAnyPair> _pairs = default!;
@@ -30,5 +30,8 @@ namespace AnySerialize
                 return _cache;
             }
         }
+
+        IDictionary<TKey, TValue> IReadOnlyAny<IDictionary<TKey, TValue>>.Value => Value;
+        IReadOnlyDictionary<TKey, TValue> IReadOnlyAny<IReadOnlyDictionary<TKey, TValue>>.Value => Value;
     }
 }

@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4986915765763396050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4986915765763396048}
+  - component: {fileID: 4986915765763396051}
+  m_Layer: 0
+  m_Name: ReadOnlyArrayValues
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4986915765763396048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4986915765763396050}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4986915765763396051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4986915765763396050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e363d0226e324431b29268d9e210dfad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IntArray>k__BackingField:
+    _value: 0100000002000000
+  <IntArray2>k__BackingField:
+    _value:
+    - _value: 03000000
+    - _value: 0400000005000000
+    - _value: 060000000700000008000000
+  <LongListArray>k__BackingField:
+    _value:
+    - _value: 09000000000000000a00000000000000
+    - _value: 0b000000000000000c000000000000000d00000000000000
+  <DictionaryArray>k__BackingField:
+    _value:
+    - _pairs:
+      - _field0:
+          _value: a
+        _field1:
+          _value: 14
+      - _field0:
+          _value: b
+        _field1:
+          _value: 15
+    - _pairs:
+      - _field0:
+          _value: c
+        _field1:
+          _value: 16
+      - _field0:
+          _value: d
+        _field1:
+          _value: 17
+      - _field0:
+          _value: e
+        _field1:
+          _value: 18
+  <StringArray3>k__BackingField:
+    _value:
+    - _value:
+      - _value:
+        - fdas
+        - ggg
+        - 3e21f
+      - _value:
+        - fdafdasfdas321
+  <StringReadOnlyList>k__BackingField:
+    _value:
+    - _value: fdafdas
+    - _value: 321312
+    - _value: f3e12321
+  <PlainClasses2>k__BackingField:
+    _value:
+    - _value:
+      - _value:
+          Int: 0
+          Float: 0
+          DoubleArray: []
