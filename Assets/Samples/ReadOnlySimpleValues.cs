@@ -18,6 +18,7 @@ namespace AnySerialize
 
         private void Awake()
         {
+            Debug.Log($"-------------------------{nameof(ReadOnlySimpleValues)}---------------------------");
             var type = GetType();
             foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
             {

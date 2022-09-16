@@ -60,11 +60,10 @@ namespace AnySerialize
     public interface IB {}
     public interface IB<T> : IB {}
 
-    [AnySerializable]
+    [Serializable]
     public class A
     {
         public int Int;
-        // [AnySerialize] public string[][] StringArray { get; }
         public float Float;
 
         public override string ToString()

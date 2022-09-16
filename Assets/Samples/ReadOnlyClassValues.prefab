@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7517629770195064582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7517629770195064581}
+  - component: {fileID: 633929575}
+  m_Layer: 0
+  m_Name: ReadOnlyClassValues
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7517629770195064581
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7517629770195064582}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &633929575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7517629770195064582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d89bacf1a14eb6ac0c0aa55863ee77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Foo>k__BackingField:
+    _field0:
+      _value: 1
+    _field1:
+      _value: 2
+    _field2:
+      _field0:
+        _field0:
+          <Value>k__BackingField:
+            rid: -2
+        _field1:
+          _value: 3
+      _field1:
+        _value: 4
+    _field3:
+      _value:
+        Int: 5
+        Float: 6
+        DoubleArray:
+        - 2
+  <GenericClass>k__BackingField:
+    _field0:
+      _value: 7
+    _field1:
+      _value: 8
+  <AnotherClass>k__BackingField:
+    _field0:
+      <Value>k__BackingField:
+        rid: 1828758672445276199
+    _field1:
+      _value: 11
+  <Plain>k__BackingField:
+    _value:
+      Int: 12
+      Float: 13
+      DoubleArray:
+      - 1
+  <PlainNullable>k__BackingField:
+    <Value>k__BackingField:
+      rid: 1828758672445276197
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1828758672445276197
+      type: {class: PlainClass, ns: AnySerialize, asm: AnySerialize.Samples}
+      data:
+        Int: 0
+        Float: 0
+        DoubleArray: []
+    - rid: 1828758672445276199
+      type: {class: Class, ns: AnySerialize, asm: AnySerialize.Samples}
+      data:
+        Int: 0
+        Float: 0

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AnySerialize
@@ -10,5 +11,17 @@ namespace AnySerialize
         [AnySerialize] public List<long>[] LongListArray { get; }
         [AnySerialize] public Dictionary<string, int>[] DictionaryArray { get; }
         [AnySerialize] public string[][][] StringArray3 { get; }
+        [AnySerialize] public IReadOnlyList<string> StringReadOnlyList { get; }
+
+        private void Awake()
+        {
+            Debug.Log($"-------------------------{nameof(ReadOnlyArrayValues)}---------------------------");
+            Debug.Log($"{nameof(IntArray)} = {string.Join(",", IntArray)}");
+            Debug.Log($"{nameof(IntArray2)} = {string.Join(",", IntArray2.SelectMany(arr => arr))}");
+            Debug.Log($"{nameof(LongListArray)} = {string.Join(",", LongListArray.SelectMany(arr => arr))}");
+            Debug.Log($"{nameof(DictionaryArray)} = {string.Join(",", DictionaryArray.SelectMany(dict => dict.Select(t => $"{{ {t.Key}=>{t.Value} }}")))}");
+            Debug.Log($"{nameof(StringArray3)} = {string.Join(",", StringArray3.SelectMany(arr2 => arr2).SelectMany(arr => arr))}");
+            Debug.Log($"{nameof(StringReadOnlyList)} = {string.Join(",", StringReadOnlyList.Select(arr => arr))}");
+        }
     }
 }
