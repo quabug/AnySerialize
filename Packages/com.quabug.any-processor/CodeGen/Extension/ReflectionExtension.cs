@@ -42,7 +42,8 @@ namespace AnyProcessor.CodeGen
                         .ToArray()
                 ),
                 GenericParameter _ => throw new NotSupportedException(),
-                ArrayType arrayType => arrayType.ElementType.ToReflectionType().MakeArrayType(/*arrayType.Rank*/), // array with rank become [*] which is not the same as array type in reflection.
+                ArrayType { Rank: > 1 } arrayType => arrayType.ElementType.ToReflectionType().MakeArrayType(arrayType.Rank),
+                ArrayType arrayType => arrayType.ElementType.ToReflectionType().MakeArrayType(), // array with rank become [*] which is not the same as array type in reflection.
                 ByReferenceType byReferenceType => byReferenceType.ElementType.ToReflectionType().MakeByRefType(),
                 PointerType pointerType => pointerType.ElementType.ToReflectionType().MakePointerType(),
                 TypeSpecification _ => throw new NotSupportedException(),

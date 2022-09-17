@@ -87,6 +87,12 @@ namespace AnySerialize.Tests
             AssertTypeEqual<ReadOnlyAnyArray<int[][], ReadOnlyAnyArray<int[], AnyArray_Int32>>>(SearchReadOnly<int[][][]>());
         }
         
+        [Test, Ignore("not support yet")]
+        public void should_find_replace_type_for_array_type_with_rank()
+        {
+            SearchReadOnly<int[,]>();
+        }
+        
         [Test]
         public void should_find_replace_type_for_dictionary_type()
         {

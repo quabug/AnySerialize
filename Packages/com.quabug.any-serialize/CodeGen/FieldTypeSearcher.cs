@@ -36,7 +36,6 @@ namespace AnySerialize.CodeGen
             ).ToArray();
             if (searcherFieldCount != fields.Length || fieldIndex < 0) return;
 
-
             var field = fields[fieldIndex];
             var property = field.GetBackingFieldProperty();
             var fieldType = property == null ? field.FieldType! : property.PropertyType!;

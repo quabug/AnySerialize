@@ -40,6 +40,9 @@ namespace AnySerialize.CodeGen
                 throw new ArgumentException($"{nameof(_targetType)} must be a concrete generic instance with one and only one arguments.", nameof(_targetType));
             
             var propertyType = _targetType.GetGenericParametersOrArguments().First();
+            if (propertyType is ArrayType propertyArrayType && propertyArrayType.Rank > 1)
+                throw new ArgumentException($"Invalid property type ({propertyType}): array type with rank is not supported yet.", nameof(_targetType));
+            
             var isAnySerializable = propertyType.Resolve().GetAttributesOf<AnySerializableAttribute>().Any();
             var anyClassInterface = _module.ImportReference(typeof(IReadOnlyAnyClass<>)).Resolve();
             
@@ -74,7 +77,7 @@ namespace AnySerialize.CodeGen
                 if (current == null || current.IsGenericParameter) return false;
                 if (previous.TypeEquals(current)) return true;
                 if (previous is ArrayType previousArray && current is ArrayType currentArray && target is ArrayType targetArray)
-                    return IsCloserImplementation(previousArray.ElementType, currentArray.ElementType, targetArray.ElementType!);
+                    return currentArray.Rank == targetArray.Rank && IsCloserImplementation(previousArray.ElementType, currentArray.ElementType, targetArray.ElementType!);
                 if (current.IsArray && target.IsArray) return true;
                 
                 var previousDefinition = previous.Resolve()!;

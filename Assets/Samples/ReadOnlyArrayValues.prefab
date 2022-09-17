@@ -97,6 +97,8 @@ MonoBehaviour:
     _value:
     - _value:
       - _value:
-          Int: 0
-          Float: 0
-          DoubleArray: []
+          Int: 321
+          Float: 432
+          DoubleArray:
+          - 33
+          - 44
