@@ -115,7 +115,7 @@ namespace AnyProcessor.CodeGen
             if (derived.Resolve() == null) throw new ArgumentException("cannot resolve type", nameof(derived));
             if (@base.Resolve() == null) throw new ArgumentException("cannot resolve type", nameof(@base));
             if (derived is ArrayType derivedArray && @base is ArrayType baseArray)
-                return derivedArray.ElementType.IsDerivedFrom(baseArray.ElementType);
+                return derivedArray.Rank == baseArray.Rank && derivedArray.ElementType.IsDerivedFrom(baseArray.ElementType);
             if (derived.IsArray || @base.IsArray) return false;
             if (!derived.Resolve()!.IsDerivedFrom(@base.Resolve()!)) return false;
             if (derived.GetGenericParametersOrArgumentsCount() != @base.GetGenericParametersOrArgumentsCount()) return false;
@@ -156,7 +156,7 @@ namespace AnyProcessor.CodeGen
             {
                 if (selfArgument.IsGenericParameter || genericArgument.IsGenericParameter) return true;
                 if (selfArgument is ArrayType selfArray && genericArgument is ArrayType genericArray)
-                    return IsMatch(selfArray.ElementType!, genericArray.ElementType!);
+                    return selfArray.Rank == genericArray.Rank && IsMatch(selfArray.ElementType!, genericArray.ElementType!);
                 if (selfArgument.IsArray || genericArgument.IsArray) return false;
                 if (!selfArgument.IsGenericType() && !genericArgument.IsGenericType()) return selfArgument.TypeEquals(genericArgument);
                 if (!(selfArgument.IsGenericType() && genericArgument.IsGenericType())) return false;

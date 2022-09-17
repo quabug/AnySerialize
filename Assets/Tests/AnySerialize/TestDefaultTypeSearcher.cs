@@ -88,6 +88,12 @@ namespace AnySerialize.Tests
         }
         
         [Test]
+        public void should_find_replace_type_for_array_type_with_rank()
+        {
+            AssertTypeEqual<AnyArray_Int32>(SearchReadOnly<int[,,,]>());
+        }
+        
+        [Test]
         public void should_find_replace_type_for_dictionary_type()
         {
             AssertTypeEqual<ReadOnlyAnyDictionary<int, long, ReadOnlyAnyClass<AnyKeyValuePair<int, long>, int, long, AnyValue_Int32, AnyValue_Int64>>>(SearchReadOnly<Dictionary<int, long>>());

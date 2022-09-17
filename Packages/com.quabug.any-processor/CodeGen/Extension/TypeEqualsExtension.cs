@@ -69,6 +69,14 @@ namespace AnyProcessor.CodeGen
         }
         
         [Pure]
+        public static bool TypeEquals(this ArrayType? lhs, ArrayType? rhs)
+        {
+            if (lhs == null) throw new ArgumentNullException(nameof(lhs));
+            if (rhs == null) throw new ArgumentNullException(nameof(rhs));
+            return lhs.Rank == rhs.Rank && TypeEquals(lhs.ElementType, rhs.ElementType);
+        }
+        
+        [Pure]
         public static bool TypeEquals(this TypeSpecification? lhs, TypeSpecification? rhs)
         {
             if (lhs == null) throw new ArgumentNullException(nameof(lhs));
