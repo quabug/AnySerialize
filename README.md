@@ -128,3 +128,20 @@ public class AnySerializableClass
 </table>
 
 [More Samples](Assets/Samples)
+
+## Custom Serializable Types
+``` c#
+[Serializable]
+public class AnyGuid : 
+    IReadOnlyAny<Guid>, // IReadOnlyAny<T> for readonly property (get only)
+    IAny<Guid>          // IAny<T> for read-write property (get and set)
+{
+    [SerializeField] private string _guid; // unity serialize field
+
+    public Guid Value
+    {
+        get => Guid.Parse(_guid);          // convert serialize field to output value
+        set => _guid = value.ToString();   // convert output value to serialize field
+    }
+}
+```
