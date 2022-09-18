@@ -58,23 +58,29 @@ namespace AnySerialize.CodeGen
         
         public static TypeReference? FindClosestType(
             this Container container,
-            TypeReference targetType,
-            Func<TypeReference, TypeReference?, bool>? skipType = null
+            TypeReference targetType
         )
         {
             if (!targetType.IsGenericInstance || targetType.GetGenericParametersOrArgumentsCount() != 1)
                 throw new ArgumentException($"{nameof(targetType)} must be a concrete generic instance with one and only one arguments.", nameof(targetType));
             
+            var propertyType = targetType.GetGenericParametersOrArguments().First();
+            if (propertyType is ArrayType { Rank: > 1 })
+                throw new ArgumentException($"Invalid property type ({propertyType}): array type with rank is not supported yet.", nameof(targetType));
+
+            var module = container.Resolve<ModuleDefinition>();
             var logger = container.Resolve<ILPostProcessorLogger>();
             var typeTree = container.Resolve<TypeTree>();
-            var propertyType = targetType.GetGenericParametersOrArguments().First();
+            
+            var hasAnySerializableAttribute = propertyType.Resolve().GetAttributesOf<AnySerializableAttribute>().Any();
+            var anyClassInterface = module.ImportReference(typeof(IReadOnlyAnyClass<>)).Resolve();
             
             TypeReference? closestType = null;
             TypeReference? closestImplementation = null;
             var closestPriority = int.MaxValue;
             foreach (var (type, implementation) in FindTypes(targetType, ((GenericInstanceType)targetType).ElementType.GenericParameters[0]!).Append((_targetType: targetType, null)))
             {
-                if (skipType != null && skipType(type, implementation)) continue;
+                if (!hasAnySerializableAttribute && type.Resolve().IsDerivedFrom(anyClassInterface)) continue;
                 
                 var priorityAttribute = type.Resolve()!.GetAttributesOf<AnySerializePriorityAttribute>().SingleOrDefault();
                 var priority = priorityAttribute == null ? 0 : (int)priorityAttribute.ConstructorArguments![0].Value;

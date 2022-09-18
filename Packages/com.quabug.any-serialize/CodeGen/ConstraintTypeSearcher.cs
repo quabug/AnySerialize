@@ -20,13 +20,7 @@ namespace AnySerialize.CodeGen
                 throw new ArgumentException($"Must have and only have one constraint of {nameof(parameter)}", nameof(parameter));
             var constraint = parameter.Constraints[0]!.ConstraintType;
             var constraintType = constraint.FillGenericTypesByReferenceGenericName(genericType);
-            if (constraintType.IsConcreteType())
-            {
-                container = container.CreateChildContainer();
-                var label = typeof(TargetLabel<>);
-                container.RegisterInstance(constraintType)!.AsSelf(label).AsBases(label);
-                _result = container.Search<SerializeTypeSearcher>();
-            }
+            if (constraintType.IsConcreteType()) _result = container.FindClosestType(constraintType);
             logger.Debug($"[{GetType()}] {parameter.Name}:{constraintType}={_result}");
         }
         

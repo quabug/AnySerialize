@@ -35,20 +35,14 @@ namespace AnySerialize.Tests
             _container.Dispose();
         }
 
-        private TypeReference SearchReadOnly<T>(Func<TypeReference, TypeReference?, bool>? skipType)
+        private TypeReference SearchReadOnly<T>()
         {
             var target = ImportReference(typeof(IReadOnlyAny<T>));
             Assert.IsTrue(target is GenericInstanceType genericTarget && genericTarget.GenericArguments.Count == 1);
             var container = _container.CreateChildContainer();
             container.RegisterInstance(container).AsSelf();
             container.RegisterInstance(_module).AsSelf();
-            return container.FindClosestType(target, skipType);
-        }
-        
-        private TypeReference SearchReadOnly<T>()
-        {
-            var anyClass = ImportDefinition(typeof(IReadOnlyAnyClass<>));
-            return SearchReadOnly<T>((type, _) => type.Resolve().IsDerivedFrom(anyClass));
+            return container.FindClosestType(target);
         }
 
         [Test]
@@ -71,7 +65,7 @@ namespace AnySerialize.Tests
         [Test]
         public void should_find_replace_type_for_simple_class_type()
         {
-            AssertTypeEqual<ReadOnlyAnyClass<A, int, int, float, float, AnyValue_Int32, AnyValue_Int32, AnyValue_Single, AnyValue_Single>>(SearchReadOnly<A>(null));
+            AssertTypeEqual<ReadOnlyAnyClass<A, int, int, float, float, AnyValue_Int32, AnyValue_Int32, AnyValue_Single, AnyValue_Single>>(SearchReadOnly<A>());
         }
         
         [Test]

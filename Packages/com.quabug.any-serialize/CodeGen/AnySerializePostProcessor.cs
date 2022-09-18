@@ -64,11 +64,9 @@ namespace AnySerialize.CodeGen
             
             void GenerateField(PropertyDefinition property, CustomAttribute attribute)
             {
-                var propertyType = property.CreateAnySerializePropertyType(processor.Logger);
-                processor.Logger.Info($"property type: {propertyType}({string.Join(",", attribute.ConstructorArguments!.Select(a => a.Value))})");
                 var fieldType = container.Search(
                     attribute,
-                    (propertyType, typeof(TargetLabel<>))
+                    (property, typeof(TargetLabel<>))
                 );
                 processor.Logger.Debug($"field type: {fieldType}");
                 fieldType = processor.Module.ImportReference(fieldType);

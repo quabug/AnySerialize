@@ -47,25 +47,18 @@ namespace AnySerialize.CodeGen
             var property = field.GetBackingFieldProperty();
             var codeGenAttribute = property?.CustomAttributes?.FirstOrDefault(attribute => attribute.AttributeType!.IsDerivedFrom(attributeType));
             
-            var label = typeof(TargetLabel<>);
             if (codeGenAttribute != null)
             {
-                var propertyType = property.CreateAnySerializePropertyType(logger);
                 _result = container.Search(
                     codeGenAttribute,
-                    (propertyType, label)
+                    (property!, typeof(TargetLabel<>))
                 );
             }
             else
             {
                 var constraint = parameter.Constraints[0]!.ConstraintType;
                 var constraintType = constraint.FillGenericTypesByReferenceGenericName(genericType);
-                if (constraintType.IsConcreteType())
-                {
-                    container = container.CreateChildContainer();
-                    container.RegisterInstance(constraintType)!.AsSelf(label).AsBases(label);
-                    _result = container.Search<SerializeTypeSearcher>();
-                }
+                if (constraintType.IsConcreteType()) _result = container.FindClosestType(constraintType);
                 logger.Debug($"[{GetType()}] {parameter.Name}:{constraintType}={_result}");
             }
             
