@@ -35,15 +35,20 @@ namespace AnySerialize.Tests
             _container.Dispose();
         }
 
-        private TypeReference SearchReadOnly<T>()
+        private TypeReference SearchReadOnly<T>(Func<TypeReference, TypeReference?, bool>? skipType)
         {
             var target = ImportReference(typeof(IReadOnlyAny<T>));
             Assert.IsTrue(target is GenericInstanceType genericTarget && genericTarget.GenericArguments.Count == 1);
             var container = _container.CreateChildContainer();
             container.RegisterInstance(container).AsSelf();
             container.RegisterInstance(_module).AsSelf();
-            container.RegisterInstance(target).AsSelf(typeof(TargetLabel<>)).AsBases(typeof(TargetLabel<>));
-            return container.Instantiate<SerializeTypeSearcher>().Search();
+            return container.FindClosestType(target, skipType);
+        }
+        
+        private TypeReference SearchReadOnly<T>()
+        {
+            var anyClass = ImportDefinition(typeof(IReadOnlyAnyClass<>));
+            return SearchReadOnly<T>((type, _) => type.Resolve().IsDerivedFrom(anyClass));
         }
 
         [Test]
@@ -66,7 +71,7 @@ namespace AnySerialize.Tests
         [Test]
         public void should_find_replace_type_for_simple_class_type()
         {
-            AssertTypeEqual<ReadOnlyAnyClass<A, int, int, float, float, AnyValue_Int32, AnyValue_Int32, AnyValue_Single, AnyValue_Single>>(SearchReadOnly<A>());
+            AssertTypeEqual<ReadOnlyAnyClass<A, int, int, float, float, AnyValue_Int32, AnyValue_Int32, AnyValue_Single, AnyValue_Single>>(SearchReadOnly<A>(null));
         }
         
         [Test]
@@ -103,6 +108,29 @@ namespace AnySerialize.Tests
         public void should_find_replace_type_for_lazy_type()
         {
             AssertTypeEqual<ReadOnlyAnyLazy<int, AnyValue_Int32>>(SearchReadOnly<Lazy<int>>());
+        }
+        
+        [Test]
+        public void should_find_replace_type_for_nullable_int()
+        {
+            AssertTypeEqual<ReadOnlyAnyNullableStruct<int, AnyValue_Int32>>(SearchReadOnly<int?>());
+        }
+
+        class Generic<T>
+        {
+            [AnySerialize] public T Value { get; }
+        }
+        
+        [Test]
+        public void should_find_replace_type_for_generic_type()
+        {
+            var target = ImportReference(typeof(IReadOnlyAny<int[][]>));
+            Assert.IsTrue(target is GenericInstanceType genericTarget && genericTarget.GenericArguments.Count == 1);
+            var container = _container.CreateChildContainer();
+            container.RegisterInstance(container).AsSelf();
+            container.RegisterInstance(_module).AsSelf();
+            container.RegisterInstance(target).AsSelf(typeof(TargetLabel<>)).AsBases(typeof(TargetLabel<>));
+            var fieldType = container.Instantiate<SerializeTypeSearcher>().Search();
         }
         
 #if UNITY_EDITOR
