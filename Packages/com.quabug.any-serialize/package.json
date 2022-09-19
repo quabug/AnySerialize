@@ -1,7 +1,7 @@
 {
   "name": "com.quabug.any-serialize",
   "description": "Generate serializable code of any properties for Unity3D serializer",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "unity": "2021.3",
   "displayName": "AnySerialize",
   "type": "library",
