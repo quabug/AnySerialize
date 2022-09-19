@@ -114,9 +114,16 @@ IReadOnlyDictionary<TKey, TValue>
 [AnySerializable]
 public class AnySerializableClass
 {
+    [AnySerializeFieldOrder(0)] // optional, but recommend. prevent issue on reorder fields.
     public int[][] Array2;
+    
+    [AnySerializeFieldOrder(1)]
     public Dictionary<int, string> Dict;
+    
+    [AnySerializeFieldOrder(2)]
     public int? Nullable;
+    
+    [AnySerializeFieldOrder(3)]
     public Lazy<int> Lazy;
 }
 ```
@@ -131,6 +138,7 @@ public class AnySerializableClass
 
 ## Custom Serializable Types
 ``` c#
+// custom serializable value type
 [Serializable]
 public class AnyGuid : 
     IReadOnlyAny<Guid>, // IReadOnlyAny<T> for readonly property (get only)
@@ -143,5 +151,18 @@ public class AnyGuid :
         get => Guid.Parse(_guid);          // convert serialize field to output value
         set => _guid = value.ToString();   // convert output value to serialize field
     }
+}
+```
+``` c#
+// custom serializable container type
+[Serializable]
+// use AnyConstraintTypeAttribute on generic parameter to automatically find type by its constraint
+// e.g. T is int, then TAny will be replaced by AnyValue_Int32
+public class ReadOnlyAnyList<T, [AnyConstraintType] TAny>
+    : IReadOnlyAny<List<T>>
+    where TAny : IReadOnlyAny<T>
+{
+    [SerializeField] private List<TAny> _value = default!;
+    public List<T> Value => _value.Select(v => v.Value);
 }
 ```
