@@ -1,5 +1,5 @@
 # Any Processor
-Easily write an ILPostProcessor with `AnyProcessor`
+Easily write an `ILPostProcessor` with `AnyProcessor`
 
 ``` c#
 public class WeavingAttribute : Attribute {}
