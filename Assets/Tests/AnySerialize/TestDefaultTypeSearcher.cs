@@ -109,23 +109,6 @@ namespace AnySerialize.Tests
         {
             AssertTypeEqual<ReadOnlyAnyNullableStruct<int, AnyValue_Int32>>(SearchReadOnly<int?>());
         }
-
-        class Generic<T>
-        {
-            [AnySerialize] public T Value { get; }
-        }
-        
-        [Test]
-        public void should_find_replace_type_for_generic_type()
-        {
-            var target = ImportReference(typeof(IReadOnlyAny<int[][]>));
-            Assert.IsTrue(target is GenericInstanceType genericTarget && genericTarget.GenericArguments.Count == 1);
-            var container = _container.CreateChildContainer();
-            container.RegisterInstance(container).AsSelf();
-            container.RegisterInstance(_module).AsSelf();
-            container.RegisterInstance(target).AsSelf(typeof(TargetLabel<>)).AsBases(typeof(TargetLabel<>));
-            var fieldType = container.Instantiate<SerializeTypeSearcher>().Search();
-        }
         
 #if UNITY_EDITOR
         [Test]
