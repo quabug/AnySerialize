@@ -42,8 +42,7 @@ namespace AnySerialize.Tests
             var container = _container.CreateChildContainer();
             container.RegisterInstance(container).AsSelf();
             container.RegisterInstance(_module).AsSelf();
-            container.RegisterInstance(target).AsSelf(typeof(TargetLabel<>)).AsBases(typeof(TargetLabel<>));
-            return container.Instantiate<SerializeTypeSearcher>().Search();
+            return container.FindClosestType(target);
         }
 
         [Test]
@@ -103,6 +102,12 @@ namespace AnySerialize.Tests
         public void should_find_replace_type_for_lazy_type()
         {
             AssertTypeEqual<ReadOnlyAnyLazy<int, AnyValue_Int32>>(SearchReadOnly<Lazy<int>>());
+        }
+        
+        [Test]
+        public void should_find_replace_type_for_nullable_int()
+        {
+            AssertTypeEqual<ReadOnlyAnyNullableStruct<int, AnyValue_Int32>>(SearchReadOnly<int?>());
         }
         
 #if UNITY_EDITOR

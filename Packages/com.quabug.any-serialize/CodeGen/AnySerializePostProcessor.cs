@@ -2,12 +2,10 @@ using System.Linq;
 using AnyProcessor.CodeGen;
 using JetBrains.Annotations;
 using Mono.Cecil;
-using Mono.Cecil.Rocks;
 using OneShot;
 using Unity.CompilationPipeline.Common.Diagnostics;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace AnySerialize.CodeGen
 {
@@ -58,18 +56,21 @@ namespace AnySerialize.CodeGen
                     return false;
                 }
                 
-                GenerateField(propertyDefinition, attribute);
-                return true;
+                return GenerateField(propertyDefinition, attribute);
             }
             
-            void GenerateField(PropertyDefinition property, CustomAttribute attribute)
+            bool GenerateField(PropertyDefinition property, CustomAttribute attribute)
             {
-                var propertyType = property.CreateAnySerializePropertyType(processor.Logger);
-                processor.Logger.Info($"property type: {propertyType}({string.Join(",", attribute.ConstructorArguments!.Select(a => a.Value))})");
                 var fieldType = container.Search(
                     attribute,
-                    (propertyType, typeof(TargetLabel<>))
+                    (property, typeof(TargetLabel<>))
                 );
+                if (fieldType == null)
+                {
+                    processor.Logger.Warning($"cannot find proper type of {property}:{property.PropertyType}");
+                    return false;
+                }
+                
                 processor.Logger.Debug($"field type: {fieldType}");
                 fieldType = processor.Module.ImportReference(fieldType);
                 var serializedField = property.CreateOrReplaceBackingField(fieldType);
@@ -77,6 +78,7 @@ namespace AnySerialize.CodeGen
                 processor.Logger.Info($"serialize field type: {serializedField.FullName}");
                 property.ReplacePropertyGetterByFieldMethod(serializedField, "get_Value", processor.Logger);
                 if (property.SetMethod != null) property.ReplacePropertySetterByFieldMethod(serializedField, "set_Value");
+                return true;
             }
         }
     }
