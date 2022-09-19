@@ -114,7 +114,9 @@ IReadOnlyDictionary<TKey, TValue>
 [AnySerializable]
 public class AnySerializableClass
 {
-    [AnySerializeFieldOrder(0)] // optional, but recommend. prevent issue on reorder fields.
+    // optional, but recommend.
+    // prevent issue on reorder fields.
+    [AnySerializeFieldOrder(0)]
     public int[][] Array2;
     
     [AnySerializeFieldOrder(1)]
