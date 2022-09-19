@@ -1,13 +1,15 @@
+![](https://img.shields.io/badge/unity-2021.3%20or%20later-green.svg)
+[![openupm](https://img.shields.io/npm/v/com.quabug.any-serialize?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.quabug.any-serialize/)
+
 # AnySerialize for Unity3D
 
 A complete serializer for Unity3D based on Unity3D serializer.
 
 `T[][]` `Dictionary` `record` `T?` `Lazy` `Guid` `TimeSpan` `DateTime` or your own type.
 
-## Requirement
-Unity3D >= 2021.3
-
 ## Installation
+- OpenUPM: follow the [instrustions on OpenUPM](https://openupm.com/packages/com.quabug.any-serialize/#modal-manualinstallation)
+- or Unity Package: download packages of both AnyProcessor and AnySerialize in release page and import them into Unity project.
 
 ## Usage
 Use `AnySerializeAttribute` for any property need to be serialized and edit in inspector.
