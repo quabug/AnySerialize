@@ -1,6 +1,6 @@
 ﻿#if USE_UNITY_BLOB
 
-namespace Blob
+namespace AnySerialize.Blob
 {
 
 #region Primitive Types

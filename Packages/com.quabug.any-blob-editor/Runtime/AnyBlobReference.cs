@@ -1,10 +1,11 @@
+#if USE_UNITY_BLOB
+
 using System;
-using AnySerialize;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Blob
+namespace AnySerialize.Blob
 {
     [Serializable]
     public class AnyBlobReference<T, [AnyConstraintType] TAnyBlob> : IReadOnlyAny<BlobAssetReference<T>>
@@ -36,3 +37,5 @@ namespace Blob
         }
     }
 }
+
+#endif

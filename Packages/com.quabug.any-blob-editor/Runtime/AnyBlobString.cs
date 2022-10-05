@@ -4,12 +4,12 @@ using System;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Blob
+namespace AnySerialize.Blob
 {
     [Serializable]
     public class AnyBlobString : IReadOnlyAnyBlob<BlobString>
     {
-        [SerializeField] private string _value;
+        [SerializeField] private string _value = default!;
 
         public void Build(ref BlobBuilder builder, ref BlobString data)
         {

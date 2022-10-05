@@ -1,18 +1,17 @@
 #if USE_UNITY_BLOB
 
 using System;
-using AnySerialize;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Blob
+namespace AnySerialize.Blob
 {
     [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyArrayPriority)]
     public class AnyBlobArray<T, [AnyConstraintType] TAny> : IReadOnlyAnyBlob<BlobArray<T>>
         where T : unmanaged
         where TAny : IReadOnlyAnyBlob<T>
     {
-        [SerializeField] private TAny[] _value;
+        [SerializeField] private TAny[] _value = default!;
         
         public void Build(ref BlobBuilder builder, ref BlobArray<T> data)
         {

@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Blob
+namespace AnySerialize.Blob
 {
     public interface IReadOnlyAnyBlob<T> where T : unmanaged
     {

@@ -1,11 +1,10 @@
 #if USE_UNITY_BLOB
 
 using System;
-using AnySerialize;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Blob
+namespace AnySerialize.Blob
 {
     [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyValuePriority)]
     public class AnyBlobValue<T> : IReadOnlyAnyBlob<T> where T : unmanaged

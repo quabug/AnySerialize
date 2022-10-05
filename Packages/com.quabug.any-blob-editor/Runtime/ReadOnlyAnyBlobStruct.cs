@@ -1,12 +1,11 @@
 ﻿
 using System;
 using UnityEngine;
-using AnySerialize;
 using Unity.Assertions;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 
-namespace Blob
+namespace AnySerialize.Blob
 {
     [Serializable, AnySerializePriority(AnySerializePriorityAttribute.AnyClassPriority)]
     public class ReadOnlyAnyBlobStruct<T, [AnyFieldType(nameof(T))] T0, [AnyPropertyCodeGenOrConstraintType(nameof(T))] TAny0> : IReadOnlyAnyBlob<T>

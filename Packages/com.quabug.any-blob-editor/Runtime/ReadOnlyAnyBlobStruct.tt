@@ -2,12 +2,11 @@
 
 using System;
 using UnityEngine;
-using AnySerialize;
 using Unity.Assertions;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 
-namespace Blob
+namespace AnySerialize.Blob
 {
 <#
     for (var i = 1; i < 21; i++)

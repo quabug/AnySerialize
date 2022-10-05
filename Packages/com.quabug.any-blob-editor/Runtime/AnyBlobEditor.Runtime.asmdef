@@ -1,6 +1,6 @@
 {
     "name": "AnyBlobEditor.Runtime",
-    "rootNamespace": "",
+    "rootNamespace": "AnySerialize.Blob",
     "references": [
         "GUID:3ea4545e70041684b9bbf08dd5c6e257",
         "GUID:734d92eba21c94caba915361bd5ac177",
