@@ -3,20 +3,26 @@
     "rootNamespace": "AnySerialize",
     "references": [
         "GUID:c8a1986dcbf446bd9c54d4528d20455d",
+        "GUID:734d92eba21c94caba915361bd5ac177",
         "GUID:d8b63aba1907145bea998dd612889d6b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": true,
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [
         {
+            "name": "com.unity.entities",
+            "expression": "0.50.0",
+            "define": "USE_UNITY_BLOB"
+        },
+        {
             "name": "com.unity.mathematics",
             "expression": "1.0.0",
-            "define": "ENABLE_UNITY_MATHEMATICS"
+            "define": "USE_UNITY_MATHEMATICS"
         }
     ],
     "noEngineReferences": false

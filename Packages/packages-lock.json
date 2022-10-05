@@ -1,13 +1,5 @@
 {
   "dependencies": {
-    "com.quabug.any-blob-editor": {
-      "version": "file:com.quabug.any-blob-editor",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.quabug.any-serialize": "0.4.4"
-      }
-    },
     "com.quabug.any-processor": {
       "version": "file:com.quabug.any-processor",
       "depth": 0,
