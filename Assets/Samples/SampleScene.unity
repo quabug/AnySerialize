@@ -419,6 +419,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6627706994549177333, guid: 84b605a26b44cb44189fb5d73e5d9644, type: 3}
+      propertyPath: <NullableStruct>k__BackingField._value._field2._hasValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627706994549177333, guid: 84b605a26b44cb44189fb5d73e5d9644, type: 3}
+      propertyPath: <NullableStruct>k__BackingField._value._field3._hasValue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8029738355953872035, guid: 84b605a26b44cb44189fb5d73e5d9644, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -766,6 +774,70 @@ PrefabInstance:
     - target: {fileID: 8191402768809342334, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
       propertyPath: m_Name
       value: Blob
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <GuidBlob>k__BackingField._blob._value
+      value: 14963387-bbd6-4a30-9205-cce2cff65f75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <AccessModeBlob>k__BackingField._blob._value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field0._value
+      value: 321
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field2._value
+      value: aaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field1._value._value
+      value: fff
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field3._value.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field4._value.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field3._value.Array.data[0]._value
+      value: 222
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field3._value.Array.data[1]._value
+      value: 1111
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field4._value.Array.data[0]._value.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field4._value.Array.data[1]._value.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field4._value.Array.data[0]._value.Array.data[0]._value
+      value: a
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field4._value.Array.data[0]._value.Array.data[1]._value
+      value: b
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field4._value.Array.data[0]._value.Array.data[2]._value
+      value: c
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field4._value.Array.data[1]._value.Array.data[0]._value
+      value: d
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191402768809342335, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
+      propertyPath: <SampleBlob>k__BackingField._blob._field4._value.Array.data[1]._value.Array.data[1]._value
+      value: e
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 068cfeddbd6134af9bd1bf549397d66d, type: 3}
