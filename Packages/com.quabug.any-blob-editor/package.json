@@ -1,0 +1,11 @@
+{
+  "name": "com.quabug.any-blob-editor",
+  "description": "Unity Blob Editor based on code generator of any serialize",
+  "version": "0.1.0",
+  "unity": "2022.1",
+  "displayName": "AnyBlobEditor",
+  "type": "library",
+  "dependencies": {
+    "com.quabug.any-serialize": "0.4.4"
+  }
+}
