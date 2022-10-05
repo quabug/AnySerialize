@@ -1,0 +1,19 @@
+<#@ template language="C#" #>
+<#@ include file="../GenerateAnySerialize.ttinclude" #>
+using System.Collections.Generic;
+
+namespace AnySerialize
+{
+<#
+    GenerateAnySerialize(typeof(string));
+#>
+<#
+    foreach (var type in typeof(int).Assembly.GetTypes())
+    {
+        if (type.IsPrimitive)
+        {
+            GenerateAnySerialize(type);
+        }
+    }
+#>
+}

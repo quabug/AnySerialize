@@ -1,0 +1,27 @@
+<#@ template language="C#" #>
+<#@ output extension=".cs" #>
+<#@ include file="../GenerateAnySerialize.ttinclude" #>
+<# // @ assembly name="C:/Program Files/Unity/Hub/Editor/2021.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
+<#@ assembly name="/Applications/Unity/Hub/Editor/2021.3.9f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="UnityEngine" #>
+using System.Collections.Generic;
+
+namespace AnySerialize
+{
+    [System.Serializable] public class AnyValue_Object<T> : AnyValue<T> where T : UnityEngine.Object {}
+    [System.Serializable] public class AnyArray_Object<T> : AnyValue<T[]> where T : UnityEngine.Object {}
+    [System.Serializable] public class AnyList_Object<T> : AnyValue<List<T>> where T : UnityEngine.Object {}
+<#
+    foreach (var type in new []
+    {
+        typeof(Vector2), typeof(Vector3), typeof(Vector4),
+        typeof(Vector2Int), typeof(Vector3Int),
+        typeof(Quaternion), typeof(Matrix4x4),
+        typeof(Color), typeof(Rect), typeof(LayerMask)
+    })
+    {
+        GenerateAnySerialize(type);
+    }
+#>
+}

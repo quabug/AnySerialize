@@ -1,0 +1,11 @@
+<#+
+    void GenerateAnySerialize(Type type)
+    {
+#>
+
+    [System.Serializable] public class AnyValue_<#= type.Name #> : AnyValue<<#= type.FullName #>> {}
+    [System.Serializable] public class AnyArray_<#= type.Name #> : AnyValue<<#= type.FullName #>[]> {}
+    [System.Serializable] public class AnyList_<#= type.Name #> : AnyValue<List<<#= type.FullName #>>> {}
+<#+
+    }
+#>

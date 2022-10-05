@@ -1,0 +1,34 @@
+<#@ template language="C#" #>
+<#@ output extension=".cs" #>
+<#@ include file="../GenerateAnySerialize.ttinclude" #>
+<#@ assembly name="/Applications/Unity/Hub/Editor/2021.3.9f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
+<#@ assembly name="$(SolutionDir)/Library/ScriptAssemblies/Unity.Mathematics.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="Unity.Mathematics" #>
+#if USE_UNITY_MATHEMATICS
+
+using System.Collections.Generic;
+
+namespace AnySerialize
+{
+<#
+    foreach (var type in typeof(math).Assembly.GetTypes())
+    {
+        if (type.IsPublic && IsUnmanaged(type))
+        {
+            GenerateAnySerialize(type);
+        }
+    }
+#>
+}
+
+#endif
+
+<#+
+    class U<T> where T : unmanaged { }
+    public static bool IsUnmanaged(Type t)
+    {
+        try { typeof(U<>).MakeGenericType(t); return true; }
+        catch (Exception){ return false; }
+    }
+#>
