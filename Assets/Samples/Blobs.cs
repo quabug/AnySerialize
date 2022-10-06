@@ -1,3 +1,5 @@
+#if USE_UNITY_BLOB
+
 using System;
 using Unity.Entities;
 using UnityEngine;
@@ -36,3 +38,5 @@ namespace AnySerialize
         }
     }
 }
+
+#endif

@@ -16,6 +16,12 @@
     ],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+    "noEngineReferences": false,
+    "versionDefines": [
+        {
+            "name": "com.unity.entities",
+            "expression": "0.50.0",
+            "define": "USE_UNITY_BLOB"
+        }
+    ]
 }

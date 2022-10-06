@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="OneShot" Version="2.2.0" />
+      <PackageReference Include="OneShot" Version="2.6.2" />
     </ItemGroup>
 
 </Project>
