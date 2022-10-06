@@ -101,10 +101,18 @@ namespace AnyProcessor.CodeGen
             {
                 if (!genericParameter.HasConstraints) return true;
                 if (genericArgument.IsGenericParameter) return true;
-                return genericParameter.Constraints!
-                    .Select(constraint => constraint.ConstraintType)
-                    .All(genericArgument.IsDerivedFrom)
-                ;
+                foreach (var constraint in genericParameter.Constraints!)
+                {
+                    var constraintType = constraint.ConstraintType;
+                    if (constraintType is RequiredModifierType requiredModifierType)
+                    {
+                        constraintType = requiredModifierType.ElementType;
+                        // TODO: check unmanaged constraint
+                    }
+
+                    if (!genericArgument.IsDerivedFrom(constraintType)) return false;
+                }
+                return true;
             }
         }
 
@@ -118,11 +126,9 @@ namespace AnyProcessor.CodeGen
                 return derivedArray.Rank == baseArray.Rank && derivedArray.ElementType.IsDerivedFrom(baseArray.ElementType);
             if (derived.IsArray || @base.IsArray) return false;
             if (!derived.Resolve()!.IsDerivedFrom(@base.Resolve()!)) return false;
-            if (derived.GetGenericParametersOrArgumentsCount() != @base.GetGenericParametersOrArgumentsCount()) return false;
-            return derived.GetGenericParametersOrArguments()
-                .Zip(@base.GetGenericParametersOrArguments(), (d, b) => (d, b))
-                .All(t => t.d.TypeEquals(t.b))
-            ;
+            if (@base.GetGenericParametersOrArgumentsCount() == 0) return true;
+            if (derived.GetGenericParametersOrArgumentsCount() == 0) return true;
+            return derived.GetSelfAndAllBasesAndInterfacesWithConcreteGenericType().Any(type => type.TypeEquals(@base));
         }
         
         [Pure]
@@ -203,7 +209,7 @@ namespace AnyProcessor.CodeGen
         [Pure]
         public static TypeReference FillGenericTypesByReferenceGenericName(this TypeReference self, GenericInstanceType referenceGeneric)
         {
-            return self.FillGenericTypesByReferenceGenericName(referenceGeneric.ElementType!.GenericParameters!, referenceGeneric.GenericArguments!);
+            return self.FillGenericTypesByReferenceGenericName(referenceGeneric.Resolve()!.GenericParameters!, referenceGeneric.GenericArguments!);
         }
         
         [Pure]

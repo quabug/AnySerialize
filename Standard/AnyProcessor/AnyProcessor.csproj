@@ -7,9 +7,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <Compile Include="..\..\Packages\com.quabug.any-processor\**\*.cs">
-            <Link>%(FileName)%(Extension)</Link>
-        </Compile>
+        <Compile Include="..\..\Packages\com.quabug.any-processor\**\*.cs" />
     </ItemGroup>
     
     <ItemGroup>

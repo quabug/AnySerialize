@@ -19,8 +19,8 @@
       }
     },
     "com.quabug.one-shot-injection": {
-      "version": "2.2.0",
-      "depth": 1,
+      "version": "2.6.2",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"

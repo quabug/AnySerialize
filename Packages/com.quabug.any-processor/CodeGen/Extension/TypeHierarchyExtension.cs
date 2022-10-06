@@ -92,5 +92,17 @@ namespace AnyProcessor.CodeGen
                 yield return self;
             }
         }
+        
+        [Pure]
+        public static IEnumerable<TypeReference> GetSelfAndAllBasesAndInterfacesWithConcreteGenericType(this TypeReference type)
+        {
+            var self = type;
+            yield return self;
+            foreach (var @base in type.Resolve().GetAllBasesAndInterfaces())
+            {
+                self = self is GenericInstanceType genericInstanceType ? @base.FillGenericTypesByReferenceGenericName(genericInstanceType) : @base;
+                yield return self;
+            }
+        }
     }
 }

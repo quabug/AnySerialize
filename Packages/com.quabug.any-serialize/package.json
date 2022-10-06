@@ -1,13 +1,13 @@
 {
   "name": "com.quabug.any-serialize",
   "description": "Generate serializable code of any properties for Unity3D serializer",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "unity": "2021.3",
   "displayName": "AnySerialize",
   "type": "library",
   "dependencies": {
-    "com.quabug.any-processor": "0.1.4",
+    "com.quabug.any-processor": "0.1.5",
     "com.unity.nuget.mono-cecil": "1.11.4",
-    "com.quabug.one-shot-injection": "2.2.0"
+    "com.quabug.one-shot-injection": "2.6.2"
   }
 }

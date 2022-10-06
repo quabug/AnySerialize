@@ -1,20 +1,15 @@
 <#@ template language="C#" #>
 <#@ output extension=".cs" #>
-<#@ assembly name="C:/Program Files/Unity/Hub/Editor/2021.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
+<# // @ assembly name="C:/Program Files/Unity/Hub/Editor/2021.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
+<#@ assembly name="/Applications/Unity/Hub/Editor/2021.3.9f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CoreModule.dll" #>
 <#@ assembly name="$(SolutionDir)/Library/ScriptAssemblies/Unity.Mathematics.dll" #>
 <#@ import namespace="System" #>
 <#@ import namespace="Unity.Mathematics" #>
 <#@ import namespace="UnityEngine" #>
-using System.Collections.Generic;
+#if USE_UNITY_BLOB
 
-namespace AnySerialize
+namespace AnySerialize.Blob
 {
-
-#region String
-<#
-    GenerateAnySerialize(typeof(string));
-#>
-#endregion
 
 #region Primitive Types
 <#
@@ -22,7 +17,7 @@ namespace AnySerialize
     {
         if (type.IsPrimitive)
         {
-            GenerateAnySerialize(type);
+            GenerateAnyBlob(type);
         }
     }
 #>
@@ -30,9 +25,6 @@ namespace AnySerialize
 
 #region UnityEngine Types
 #if UNITY_2020_1_OR_NEWER
-    [System.Serializable] public class AnyValue_Object<T> : AnyValue<T> where T : UnityEngine.Object {}
-    [System.Serializable] public class AnyArray_Object<T> : AnyValue<T[]> where T : UnityEngine.Object {}
-    [System.Serializable] public class AnyList_Object<T> : AnyValue<List<T>> where T : UnityEngine.Object {}
 <#
     foreach (var type in new []
     {
@@ -42,26 +34,28 @@ namespace AnySerialize
         typeof(Color), typeof(Rect), typeof(LayerMask)
     })
     {
-        GenerateAnySerialize(type);
+        GenerateAnyBlob(type);
     }
 #>
 #endif
 #endregion
 
 #region Unity.Mathematics Types
-#if ENABLE_UNITY_MATHEMATICS
+#if USE_UNITY_MATHEMATICS
 <#
     foreach (var type in typeof(math).Assembly.GetTypes())
     {
         if (type.IsPublic && IsUnmanaged(type))
         {
-            GenerateAnySerialize(type);
+            GenerateAnyBlob(type);
         }
     }
 #>
 #endif
 #endregion
 }
+
+#endif
 
 <#+
     class U<T> where T : unmanaged { }
@@ -73,13 +67,10 @@ namespace AnySerialize
 #>
 
 <#+
-    void GenerateAnySerialize(Type type)
+    void GenerateAnyBlob(Type type)
     {
 #>
-
-    [System.Serializable] public class AnyValue_<#= type.Name #> : AnyValue<<#= type.FullName #>> {}
-    [System.Serializable] public class AnyArray_<#= type.Name #> : AnyValue<<#= type.FullName #>[]> {}
-    [System.Serializable] public class AnyList_<#= type.Name #> : AnyValue<List<<#= type.FullName #>>> {}
+    [System.Serializable] public class AnyBlobValue_<#= type.Name #> : AnyBlobValue<<#= type.FullName #>> {}
 <#+
     }
 #>
