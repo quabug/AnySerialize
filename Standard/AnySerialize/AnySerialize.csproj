@@ -7,12 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="..\..\Packages\com.quabug.any-serialize\CodeGen\*.cs" Exclude="..\..\Packages\com.quabug.any-serialize\CodeGen\AnySerializePostProcessor.cs">
-            <Link>%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Packages\com.quabug.any-serialize\Runtime\*.cs">
-            <Link>%(FileName)%(Extension)</Link>
-        </Compile>
+        <Compile Include="..\..\Packages\com.quabug.any-serialize\CodeGen\**\*.cs" Exclude="..\..\Packages\com.quabug.any-serialize\CodeGen\AnySerializePostProcessor.cs" />
+        <Compile Include="..\..\Packages\com.quabug.any-serialize\Runtime\**\*.cs" />
     </ItemGroup>
 
     <ItemGroup>

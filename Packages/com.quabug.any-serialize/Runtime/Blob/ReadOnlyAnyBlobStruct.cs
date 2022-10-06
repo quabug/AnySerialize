@@ -1,4 +1,5 @@
-﻿
+﻿#if USE_UNITY_BLOB
+
 using System;
 using UnityEngine;
 using Unity.Assertions;
@@ -1738,3 +1739,5 @@ namespace AnySerialize.Blob
     }
 
 }
+
+#endif

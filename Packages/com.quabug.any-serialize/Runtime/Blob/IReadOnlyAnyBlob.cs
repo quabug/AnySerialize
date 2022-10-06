@@ -1,3 +1,5 @@
+#if USE_UNITY_BLOB
+
 using Unity.Entities;
 
 namespace AnySerialize.Blob
@@ -7,3 +9,5 @@ namespace AnySerialize.Blob
         void Build(ref BlobBuilder builder, ref T data);
     }
 }
+
+#endif

@@ -1,4 +1,5 @@
-﻿
+﻿#if UNITY_2020_1_OR_NEWER
+
 using System.Collections.Generic;
 
 namespace AnySerialize
@@ -47,3 +48,5 @@ namespace AnySerialize
     [System.Serializable] public class AnyArray_LayerMask : AnyValue<UnityEngine.LayerMask[]> {}
     [System.Serializable] public class AnyList_LayerMask : AnyValue<List<UnityEngine.LayerMask>> {}
 }
+
+#endif
