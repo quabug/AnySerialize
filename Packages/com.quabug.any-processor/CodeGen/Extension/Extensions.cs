@@ -215,13 +215,20 @@ namespace AnyProcessor.CodeGen
             //     IL_0001: ldfld        class [AnySerialize]AnySerialize.AnyValue`1<object> TestAnySerialize::_value
             //     IL_0006: callvirt     instance !0/*object*/ class [AnySerialize]AnySerialize.AnyValue`1<object>::get_Value()
             //     IL_000b: ret
+            
+            // after(value type)
+            //     IL_0000: ldarg.0      // this
+            //     IL_0001: ldflda       valuetype AnySerialize.AnyDateTime AnySerialize.A::Field
+            //     IL_0006: call         instance valuetype [netstandard]System.DateTime AnySerialize.AnyDateTime::get_Value()
+            //     IL_000b: ret
             var instructions = property.GetMethod!.Body!.Instructions;
             var getValueMethod = serializedField.FieldType!.GetMethodReference(fieldMethodName, logger);
             getValueMethod = property.Module!.ImportReference(getValueMethod!);
+            var isValueTypeField = serializedField.FieldType.IsValueType;
             instructions!.Clear();
             instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
-            instructions.Add(Instruction.Create(OpCodes.Ldfld, serializedField));
-            instructions.Add(Instruction.Create(OpCodes.Callvirt, getValueMethod!));
+            instructions.Add(Instruction.Create(isValueTypeField ? OpCodes.Ldflda : OpCodes.Ldfld, serializedField));
+            instructions.Add(Instruction.Create(isValueTypeField ? OpCodes.Call : OpCodes.Callvirt, getValueMethod!));
             instructions.Add(Instruction.Create(OpCodes.Ret));
         }
         
