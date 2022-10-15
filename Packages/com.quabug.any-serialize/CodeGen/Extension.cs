@@ -13,9 +13,11 @@ namespace AnySerialize.CodeGen
         public static TypeReference? CreateConcreteTypeFrom(this Container container, TypeReference type)
         {
             var def = type.Resolve();
-            if (def == null || def.IsAbstract || def.GetConstructors()!.FirstOrDefault(ctor => !ctor.HasParameters) == null) return null;
+            if (def == null) return null;
+            if (def.IsAbstract) return null;
+            if (!def.IsValueType && def.GetConstructors()!.FirstOrDefault(ctor => !ctor.HasParameters) == null) return null;
             if (type.IsConcreteType()) return type;
-            
+
             if (type is not GenericInstanceType genericType)
                 throw new ArgumentException($"{nameof(type)}({type}) must be a {nameof(GenericInstanceType)}", nameof(type));
             
